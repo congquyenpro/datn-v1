@@ -43,6 +43,7 @@ class BaseRepository implements IBaseRepository
         return $this->model->destroy($id);
     }
 
+
     public function getByField($field, $value)
     {
         return $this->model->where($field, $value)->get();

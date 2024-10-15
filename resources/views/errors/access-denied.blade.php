@@ -17,7 +17,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Enlink - Admin Dashboard Template</title>
+    <title>Error</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{asset('admin_assets/assets/images/logo/favicon.png')}}">
@@ -45,7 +45,7 @@
                                 <p class="lead m-b-30">{{ session('error') }}</p>
                                 <a href="{{ url('/') }}" class="btn btn-primary btn-tone">Go Back</a>
                                 or
-                                <a href="{{ url('/') }}" class="btn btn-primary btn-tone">Log out</a>
+                                <a href="{{ route('manager.auth.logout') }}" class="btn btn-primary btn-tone">Log out</a>
                             </div>
                         </div>
                         <div class="col-md-6 m-l-auto">

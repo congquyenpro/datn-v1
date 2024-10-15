@@ -97,15 +97,35 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
 
+
+
 /* Admin */
 Route::prefix('admin')->group(function() {
+
+    /* Admin Auth */
+    Route::get('/auth/login','Manager\AuthController@login')->name('manager.auth.login');
+    Route::post('/auth/login','Manager\AuthController@postLogin')->name('manager.auth.postLogin');
+    Route::get('/auth/logout','Manager\AuthController@logout')->name('manager.auth.logout');
     
-    //admin.index
-    Route::group(['middleware' => ['auth:sanctum', 'permission.web:user_permission']], function() {
-        Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+    //admin.home
+    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.home']], function() {
+        Route::get('/', 'Manager\HomeController@display')->name('manager.home.display');
         Route::get('/check', function(Request $request) {
             return $request->user();
         });
+    });
+
+    //admin.product
+    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.product']], function() {
+        Route::get('/product', 'Manager\ProductController@showProducts')->name('manager.product');
+
+        Route::get('/product/category', 'Manager\ProductController@showCategories')->name('manager.category');
+        Route::post('/product/category', 'Manager\ProductController@addCategory')->name('manager.category.add');
+        Route::put('/product/category', 'Manager\ProductController@updateCategory')->name('manager.category.update');
+        Route::delete('/product/category', 'Manager\ProductController@deleteCategory')->name('manager.category.delete');
+        
+
+        Route::get('/product/deal', 'Manager\ProductController@showDeals')->name('manager.deal');
     });
 
     // Nhóm route khác cũng thuộc prefix 'admin'
@@ -115,4 +135,22 @@ Route::prefix('admin')->group(function() {
     });
 
     // Bạn có thể thêm nhiều nhóm route khác tại đây
+});
+
+
+
+//admin_test
+Route::prefix('admin2')->group(function() {
+    Route::get('/', function() {
+        return view('manager.home.index');
+    });
+    Route::get('/1', function() {
+        return view('manager.product.category');
+    });
+    Route::get('/{folder}.{view}', function($folder, $view) {
+        return view('manager.' . $folder . '.' . $view);
+    });
+    
+
+
 });
