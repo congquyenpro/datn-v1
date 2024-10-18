@@ -72,7 +72,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+{{--                         <tr>
                             <td>
                                 <div class="checkbox">
                                     <input id="check-item-1" type="checkbox">
@@ -175,7 +175,7 @@
                                     <i class="anticon anticon-delete"></i>
                                 </button>
                             </td>
-                        </tr>
+                        </tr> --}}
                     </tbody>
                 </table>
             </div>
@@ -231,15 +231,15 @@
                                         <label class="col-form-label col-sm-2 pt-0">Giới tính*</label>
                                         <div class="col-sm-10" style=" display: flex;">
                                             <div class="radio m-r-50">
-                                                <input type="radio" name="gender" id="gridRadios1" value="male" checked>
+                                                <input type="radio" name="gender" id="gridRadios1" value="1" checked>
                                                 <label for="gridRadios1">Male</label>
                                             </div>
                                             <div class="radio m-r-50">
-                                                <input type="radio" name="gender" id="gridRadios2" value="female">
+                                                <input type="radio" name="gender" id="gridRadios2" value="0">
                                                 <label for="gridRadios2">Female</label>
                                             </div>
                                             <div class="radio m-r-50">
-                                                <input type="radio" name="gender" id="gridRadios3" value="unisex">
+                                                <input type="radio" name="gender" id="gridRadios3" value="2">
                                                 <label for="gridRadios3">Unisex</label>
                                             </div>
                                         </div>
@@ -325,7 +325,7 @@
                         </div>
                         <div class="col-md-6 col-sm-12">
                             <div class="form-group">
-                                <label>Hình ảnh sản phẩm* (600x600) <span class="data-description-return"></span></label>   
+                                <label>Hình ảnh sản phẩm* (600x600) (Đinh dạng: jpeg/png/jpg/gif/svg/webp) <span class="data-description-return"></span></label>   
                                 <div class="image-item" style=" padding: 1rem; border: dotted 2px #1391c3; ">
                                     <div class="custom-file" style="display: none;">
                                         <input type="file" class="custom-file-input" id="customFile" accept="image/*" multiple>

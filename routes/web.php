@@ -118,11 +118,14 @@ Route::prefix('admin')->group(function() {
     //admin.product
     Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.product']], function() {
         Route::get('/product', 'Manager\Product\ProductController@showProducts')->name('manager.product');
+        Route::get('/product/get-all', 'Manager\Product\ProductController@getAllProducts')->name('manager.product.getAll');
+        Route::get('/product/get/{id}', 'Manager\Product\ProductController@getProductDetail')->name('manager.product.show');
+
         Route::post('/product', 'Manager\Product\ProductController@store')->name('manager.product.add');
+        Route::get('/product/delete/{id}', 'Manager\Product\ProductController@delete')->name('manager.product.delete');
 
 
         //Get attribute-value
-        Route::get('/product/getAllValues{attribute}', 'Manager\Product\ProductController@getAllValues');
         Route::get('/product/getAllAttributes', 'Manager\Product\ProductController@getAllAttributes');
         
         Route::get('/product/category', 'Manager\Product\CategoryController@showCategories')->name('manager.category');

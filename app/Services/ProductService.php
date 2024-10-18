@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\ProductRepository;
 use Illuminate\Support\Str;
 
+
 class ProductService
 {
     protected $productRepository;
@@ -14,10 +15,20 @@ class ProductService
         $this->productRepository = $productRepository;
     }
 
+    public function getAllProducts()
+    {
+        return $this->productRepository->getAllProducts();
+    }
+    public function getProductDetail($id)
+    {
+        return $this->productRepository->getProductDetail($id);
+    }
+
+
     public function addNewProduct($data)
     {
         // Tạo slug từ tên sản phẩm
-        $slug = Str::slug($data['product']['name']);
+        $slug = Str::slug($data['product_name']);
         
         // Tạo sản phẩm trước
         $product = $this->productRepository->createProduct($data);
@@ -41,5 +52,10 @@ class ProductService
         }
 
         return $slug;
+    }
+
+    public function deleteProduct($id)
+    {
+        return $this->productRepository->deleteProduct($id);
     }
 }

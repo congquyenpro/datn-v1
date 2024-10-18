@@ -1,65 +1,85 @@
 const Product = {
     productsList: {
-        show: () => { 
-            Api.Product.GetProductsList().then((response) => {
-                const tableBody = $('#productsTable tbody'); // Reference to the table body
-                tableBody.empty(); // Clear existing rows
-
-                response.forEach(product => {
-                    // Prepare product size details
-                    const productRows = product.product_size_list.map(size => `
-                        <div class="metadata-table-wrapper">
-                            <span class="badge badge-pill badge-blue m-r-10">Kích thước: ${size.size}</span>
-                            <span class="badge badge-pill badge-green m-r-10">Đơn giá: ${size.price}</span>
-                            <span class="badge badge-pill badge-orange m-r-10">Giảm giá: ${size.discount} %</span>
-                            <span class="badge badge-pill badge-red m-r-10">SL: ${size.quantity}</span>
-                        </div>
-                    `).join('');
-
-                    const trendingStatus = `
-                        <div class="d-flex align-items-center">
-                            <div class="switch m-t-5 m-l-10">
-                                <input type="checkbox" id="switch-${product.id}" ${product.trending ? 'checked' : ''}>
-                                <label for="switch-${product.id}"></label>
-                            </div>
-                        </div>
-                    `;
-
-                    // Construct the new row
-                    const newRow = `
-                        <tr>
-                            <td>
-                                <div class="checkbox">
+        show: function () {
+            $(document).ready(function () {
+                // Kiểm tra xem DataTable đã được khởi tạo chưa
+                let table;
+                if ($.fn.dataTable.isDataTable('#productsTable')) {
+                    table = $('#productsTable').DataTable();
+                } else {
+                    // Nếu chưa, khởi tạo DataTable
+                    table = $('#productsTable').DataTable({
+                        searching: true,
+                        paging: true,
+                        // Các tùy chọn khác nếu cần
+                    });
+                }
+    
+                // Lấy dữ liệu từ API
+                Api.Product.GetProductsList().then((response) => {
+                    // Làm sạch bảng trước khi thêm dữ liệu mới
+                    table.clear();
+    
+                    // Kiểm tra dữ liệu
+                    if (Array.isArray(response) && response.length > 0) {
+                        response.forEach(product => {
+                            // Chuẩn bị chi tiết kích thước sản phẩm
+                            const productRows = product.product_size_list.map(size => `
+                                <div class="metadata-table-wrapper">
+                                    <span class="badge badge-pill badge-blue m-r-10">Kích thước: ${size.size} ml</span>
+                                    <span class="badge badge-pill badge-green m-r-10">Đơn giá: ${size.price.toLocaleString()} VNĐ</span>
+                                    <span class="badge badge-pill badge-orange m-r-10">Giảm giá: ${size.discount} %</span>
+                                    <span class="badge badge-pill badge-red m-r-10">SL: ${size.quantity}</span>
+                                </div>
+                            `).join('');
+    
+                            const trendingStatus = `
+                                <div class="d-flex align-items-center">
+                                    <div class="switch m-t-5 m-l-10">
+                                        <input type="checkbox" id="switch-${product.id}" ${product.trending ? 'checked' : ''}>
+                                        <label for="switch-${product.id}"></label>
+                                    </div>
+                                </div>
+                            `;
+    
+                            // Tạo hàng mới
+                            const newRow = [
+                                `<div class="checkbox">
                                     <input id="check-item-${product.id}" type="checkbox">
                                     <label for="check-item-${product.id}" class="m-b-0"></label>
-                                </div>
-                            </td>
-                            <td>#${product.id}</td>
-                            <td>${product.name}</td>
-                            <td>${product.category_name}</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <img class="img-fluid rounded" src="${product.images}" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
-                                </div>
-                            </td>
-                            <td>${productRows}</td>
-                            <td>${trendingStatus}</td>
-                            <td class="text-right">
-                                <button class="btn btn-icon btn-hover btn-sm btn-rounded">
-                                    <i class="anticon anticon-eye"></i>
-                                </button>
-                                <button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
-                                    <i class="anticon anticon-edit"></i>
-                                </button>
-                                <button class="btn btn-icon btn-hover btn-sm btn-rounded">
-                                    <i class="anticon anticon-delete"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-
-                    // Append the new row to the table body
-                    tableBody.append(newRow);
+                                </div>`,
+                                `#${product.id}`,
+                                product.name,
+                                product.category_name,
+                                `<div class="d-flex align-items-center">
+                                    <img class="img-fluid rounded" src="${product.images}" style="border: dotted 1px #f0069d; max-width: 60px" alt="">
+                                </div>`,
+                                productRows,
+                                trendingStatus,
+                                `<div class="text-right">
+                                    <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+                                        <i class="anticon anticon-eye"></i>
+                                    </button>
+                                    <button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
+                                        <i class="anticon anticon-edit"></i>
+                                    </button>
+                                    <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+                                        <i class="anticon anticon-delete"></i>
+                                    </button>
+                                </div>`
+                            ];
+    
+                            // Thêm hàng mới vào DataTable
+                            table.row.add(newRow);
+                        });
+    
+                        // Cập nhật bảng với dữ liệu mới
+                        table.draw();
+                    } else {
+                        console.error('No products found');
+                    }
+                }).catch((error) => {
+                    console.error('Error fetching products:', error);
                 });
             });
         }
@@ -272,16 +292,22 @@ const Product = {
     formSubmit: {
         addProduct: () => {
             function handleSubmit() {
-                //Lấy tên + mô tả ngắn + giới tính + trạng thái sản phẩm
-                const productName = document.getElementById('formGroupExampleInput').value;
-                const shortDescription = document.querySelector('textarea[name="short_description"]').value;
-                const genderValue = document.querySelector('input[name="gender"]:checked').value;
-                const statusValue = document.querySelector('input[name="status"]:checked').value;
-
+                // Lấy tên + mô tả ngắn + giới tính + trạng thái sản phẩm
+                const productName = document.getElementById('formGroupExampleInput').value.trim();
+                const shortDescription = document.querySelector('textarea[name="short_description"]').value.trim();
+                const genderValue = document.querySelector('input[name="gender"]:checked')?.value;
+                const statusValue = document.querySelector('input[name="status"]:checked')?.value;
+        
                 // Lấy giá trị từ select 'inputState' (Category)
                 const categorySelect = document.getElementById('inputState');
                 const categoryValue = categorySelect.value;
-            
+        
+                // Kiểm tra các trường bắt buộc
+                if (!productName || !shortDescription || !genderValue || !categoryValue || !statusValue) {
+                    alert("Vui lòng điền đầy đủ thông tin sản phẩm!");
+                    return; // Trả về nếu không hợp lệ
+                }
+        
                 // Lấy dữ liệu từ các select thuộc tính
                 const brandValue = getSelectedOrNewValue('brandSelect', 'newBrandInput');
                 const concentrationValue = getSelectedOrNewValue('concentrationSelect', 'newConcentrationInput');
@@ -292,51 +318,78 @@ const Product = {
                 const ageGroupValue = getSelectedOrNewValue('ageGroupSelect', 'newAgeGroupInput');
                 const ingredientValue = getSelectedOrNewValue('ingredientSelect', 'newIngredientInput');
                 const countryValue = getSelectedOrNewValue('countrySelect', 'newCountryInput');
-            
+        
+                // Kiểm tra thuộc tính
+                const attributes = [
+                    { name: 'brand', value: brandValue },
+                    { name: 'concentration', value: concentrationValue },
+                    { name: 'style', value: styleValue },
+                    { name: 'fragrance_group', value: fragranceGroupValue },
+                    { name: 'fragrance_time', value: fragranceTimeValue },
+                    { name: 'fragrance_distance', value: fragranceDistanceValue },
+                    { name: 'age_group', value: ageGroupValue },
+                    { name: 'ingredients', value: ingredientValue },
+                    { name: 'country', value: countryValue },
+                ];
+        
+                for (const attribute of attributes) {
+                    if (!attribute.value) {
+                        alert(`Vui lòng chọn hoặc nhập ${attribute.name}!`);
+                        return; // Trả về nếu thuộc tính không hợp lệ
+                    }
+                }
+        
                 // Lấy dữ liệu từ các thẻ input khác
                 const summernoteContent = $('#summernote').summernote('code'); // Nội dung từ Summernote
-            
+        
                 // Lấy dữ liệu từ các thẻ ảnh đã chọn (previewContainer)
                 const files = document.getElementById('customFile').files;
-            
+        
                 // Lấy dữ liệu phân loại sản phẩm (size, price, discount, quantity)
                 const itemSizes = Array.from(document.querySelectorAll('#itemContainer .metadata-item')).map(item => ({
-                    size: item.querySelector('.data-size') ? item.querySelector('.data-size').value : null,
-                    price: item.querySelector('.data-prices') ? item.querySelector('.data-prices').value : null,
-                    discount: item.querySelector('.data-discount') ? item.querySelector('.data-discount').value : null,
-                    quantity: item.querySelector('.data-quantity') ? item.querySelector('.data-quantity').value || 0 : 0 // Mặc định là 0 nếu không nhập
-                })).filter(item => item.size && item.price && item.discount); // filter out incomplete items
-            
+                    size: item.querySelector('.data-size')?.value || null,
+                    price: item.querySelector('.data-prices')?.value || null,
+                    discount: item.querySelector('.data-discount')?.value || 0,
+                    quantity: item.querySelector('.data-quantity')?.value || 0 // Mặc định là 0 nếu không nhập
+                })).filter(item => item.size && item.price); // filter out incomplete items
+        
+                // Kiểm tra itemSizes
+                if (itemSizes.length === 0) {
+                    alert("Vui lòng thêm ít nhất một phân loại sản phẩm!");
+                    return; // Trả về nếu không có phân loại
+                }
+        
                 // Chuẩn bị dữ liệu để gửi lên server
                 const formData = new FormData();
-
+        
                 formData.append('product_name', productName);
                 formData.append('short_description', shortDescription);
                 formData.append('status', statusValue);
                 formData.append('gender', genderValue);
-
                 formData.append('category_id', categoryValue);
-                formData.append('brand', brandValue);
-                formData.append('concentration', concentrationValue);
-                formData.append('style', styleValue);
-                formData.append('fragrance_group', fragranceGroupValue);
-                formData.append('fragrance_time', fragranceTimeValue);
-                formData.append('fragrance_distance', fragranceDistanceValue);
-                formData.append('age_group', ageGroupValue);
-                formData.append('ingredients', ingredientValue);
-                formData.append('country', countryValue);
                 formData.append('description', summernoteContent);
-            
+        
+                // Thêm attribute
+                attributes.forEach((attribute, index) => {
+                    formData.append(`attributes[${index}][name]`, attribute.name);
+                    formData.append(`attributes[${index}][value_id]`, attribute.value);
+                });
+        
                 // Thêm các file ảnh vào formData
                 for (let i = 0; i < files.length; i++) {
                     formData.append('images[]', files[i]);
                 }
-            
+        
                 // Thêm dữ liệu phân loại sản phẩm vào formData
-                formData.append('product_variants', JSON.stringify(itemSizes));
-
+                itemSizes.forEach((variant, index) => {
+                    formData.append(`product_variants[${index}][size]`, variant.size);
+                    formData.append(`product_variants[${index}][price]`, variant.price);
+                    formData.append(`product_variants[${index}][discount]`, variant.discount || 0);
+                    formData.append(`product_variants[${index}][quantity]`, variant.quantity || 0);
+                });
+        
                 console.log("Form data to be sent:", formData);
-            
+        
                 // Gửi dữ liệu lên server bằng fetch hoặc axios
                 Api.Product.AddNewProduct(formData)
                     .then(response => {
@@ -350,22 +403,35 @@ const Product = {
                     .catch(error => {
                         // Xử lý lỗi
                         console.error("Error adding product:", error);
-                        alert("Có lỗi xảy ra khi thêm sản phẩm.");
+                        if (error.response && error.response.data && error.response.data.errors) {
+                            const errorMessages = [];
+                            
+                            // Duyệt qua các lỗi và tạo thông báo
+                            for (const [field, messages] of Object.entries(error.response.data.errors)) {
+                                errorMessages.push(`${field}: ${messages.join(', ')}`);
+                            }
+                    
+                            // Hiển thị tất cả thông báo lỗi trong một alert
+                            alert("Có lỗi xảy ra khi thêm sản phẩm:\n" + errorMessages.join('\n'));
+                        } else {
+                            alert("Có lỗi xảy ra khi thêm sản phẩm.");
+                        }
                     });
             }
-            
+        
             // Hàm để lấy giá trị đã chọn hoặc nhập mới
             function getSelectedOrNewValue(selectId, inputId) {
                 const selectElement = document.getElementById(selectId);
                 const inputElement = document.getElementById(inputId);
                 return (selectElement.value === 'other') ? inputElement.value : selectElement.value;
             }
-
+        
             // Attach handleSubmit to the save button
             document.getElementById('save-btn').addEventListener('click', function () {
                 handleSubmit();
             });
         },
+        
         editProduct: () => {
 
         },
@@ -381,10 +447,6 @@ Product.productsList.show();
 // Show modal add
 Product.productDetails.showModalAdd();
 
-// Remove the redundant jQuery event listener
-// $('#save-btn').click(function(){
-//     Product.formSubmit.addProduct();
-// });
 
 // Initialize form submission handler once
 Product.formSubmit.addProduct();

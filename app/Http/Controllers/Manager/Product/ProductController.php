@@ -24,35 +24,71 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         \Log::info('Store method called with data:', $request->all());
-        $validatedData = $request->validate([
-            'product.name' => 'required|string|max:255',
-            'product.price' => 'required|integer',
-            'product.gender' => 'required|integer',
-            'product.images' => 'required|string',
-            'product.short_description' => 'required|string',
-            'product.detail_description' => 'required|string',
-            'sizes.*.volume' => 'required|integer',
-            'sizes.*.quantity' => 'required|integer',
-            'sizes.*.price' => 'required|integer',
-            'sizes.*.discount' => 'nullable|integer',
-            'attributes.*.value_id' => 'required|integer',
-        ]);
+    
+        try {
+            // Xác thực dữ liệu
+            $validatedData = $request->validate([
+                'product_name' => 'required|string|max:255',
+                'category_id' => 'required|integer',
+                'gender' => 'required|integer',
+                'short_description' => 'required|string',
+                'description' => 'required|string',
 
-/*         $product = $this->productService->addNewProduct($validatedData);
+                'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048', // Hình ảnh hợp lệ với giới hạn kích thước 2MB
 
-        return response()->json(['message' => 'Product created successfully', 'product' => $product], 201); */
+                'attributes' => 'required|array',
+                'attributes.*.name' => 'required|string',
+                'attributes.*.value_id' => 'required|integer',
 
-        return response()->json(['message' => 'Product created successfully'], 201);
+                'product_variants' => 'required|array',
+                'product_variants.*.size' => 'required|integer',
+                'product_variants.*.price' => 'required|integer',
+                'product_variants.*.discount' => 'nullable|integer',
+                'product_variants.*.quantity' => 'required|integer',
+
+
+
+            ]);
+                // Lưu các hình ảnh
+/*                 $imagePaths = [];
+                if ($request->hasFile('images')) {
+                    foreach ($request->file('images') as $image) {
+                        $path = $image->store('images', 'public'); // Lưu ảnh vào thư mục 'public/images'
+                        $imagePaths[] = $path;
+                    }
+                } */
+    
+            // Thực hiện logic thêm sản phẩm nếu dữ liệu hợp lệ
+            $product = $this->productService->addNewProduct($validatedData);
+    
+            return response()->json(['message' => 'Product created successfully'], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Trả về lỗi dạng JSON nếu xác thực không thành công
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $e->errors() // Trả về các lỗi xác thực chi tiết
+            ], 422);
+        }
     }
+
+    public function getAllProducts(Request $request)
+    {
+        $products = $this->productService->getAllProducts();
+        return response()->json($products);
+    }
+    public function getProductDetail(Request $request, $id)
+    {
+        $product = $this->productService->getProductDetail($id);
+        return response()->json($product);
+    }
+    
     public function update(Request $request){
 
     }
     public function delete(Request $request){
-
+        $this->productService->deleteProduct($request->id);
     }
-    public function show(Request $request){
 
-    }
 
     public function getAllAttributes(Request $request)
     {
@@ -70,56 +106,6 @@ class ProductController extends Controller
 
         return response()->json($attributes, 200);
     }
-
-    public function getAllValues($attribute)
-    {
-        $method = 'getAll' . ucfirst($attribute);
-        
-        if (method_exists($this, $method)) {
-            return $this->$method();
-        }
-
-        // Xử lý khi không tìm thấy phương thức
-        return response()->json(['error' => 'Method not found'], 404);
-    }
-    public function getAllConcentration(Request $request){
-        $data = $this->attributeValueService->getAllValuesOfAttribute(1);
-        return response()->json($data, 200);
-    }
-    public function getAllStyle(Request $request){
-        $data = $this->attributeValueService->getAllValuesOfAttribute(2);
-        return response()->json($data, 200);
-    }
-    public function getAllFragGroup(Request $request){
-        $data = $this->attributeValueService->getAllValuesOfAttribute(3);
-        return response()->json($data, 200);
-    }
-    public function getAllFragTime(Request $request){
-        $data = $this->attributeValueService->getAllValuesOfAttribute(4);
-        return response()->json($data, 200);
-    }
-    public function getAllFragDistance(Request $request){
-        $data = $this->attributeValueService->getAllValuesOfAttribute(5);
-        return response()->json($data, 200);
-    }
-    public function getAllCountry(Request $request){
-        $data = $this->attributeValueService->getAllValuesOfAttribute(6);
-        return response()->json($data, 200);
-    }
-    public function getAllBrand(Request $request){
-        $data = $this->attributeValueService->getAllValuesOfAttribute(7);
-        return response()->json($data, 200);
-    }
-    public function getAllAgeGroup(Request $request){
-        $data = $this->attributeValueService->getAllValuesOfAttribute(8);
-        return response()->json($data, 200);
-    }
-/*     public function getAllIngredient(Request $request){
-        $data = $this->attributeValueService->getAllValuesOfAttribute(9);
-        return response()->json($data, 200);
-    } */
-
-
 
 
     

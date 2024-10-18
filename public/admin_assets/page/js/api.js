@@ -16,7 +16,7 @@ const Api = {
 
 //Product
 Api.Product.GetProductsList = () => $.ajax({
-    url: `http://127.0.0.1:3000/products_list`,
+    url: `/admin/product/get-all`,
     method: 'GET',
 });
 Api.Product.GetProductDetail = (id) => $.ajax({
@@ -33,19 +33,18 @@ Api.Product.GetAllCategories = () => $.ajax({
     method: 'GET',
 });
 
-Api.Product.AddNewProduct = (formData) => {
-    return $.ajax({
-        //url: 'http://127.0.0.1:3000/add-new-product',  // Thay bằng URL API của bạn
-        url: '/admin/product',
-        method: 'POST',
-        data: formData,
-        processData: false, // Đặt false để ngăn jQuery tự động chuyển đổi formData thành chuỗi query
-        contentType: false, // Đặt false để jQuery không đặt header `Content-Type` (formData sẽ tự thêm header đúng)
-    });
-};
 
-/* Api.Product.AddNewProduct = (formData) => {
-    for (let pair of formData.entries()) {
-        console.log(`${pair[0]}: ${pair[1]}`);
-    }
-} */
+
+Api.Product.AddNewProduct = (formData) => $.ajax({
+    url: '/admin/product',
+    method: 'POST',
+    data: formData,
+    processData: false, // Đặt false để ngăn jQuery tự động chuyển đổi formData thành chuỗi query
+    contentType: false, // Đặt false để jQuery không đặt header `Content-Type` (formData sẽ tự thêm header đúng)
+});
+
+/* Api.Product.AddNewProduct()
+    .then(res => console.log(res))
+    .catch(console.error); */
+
+    
