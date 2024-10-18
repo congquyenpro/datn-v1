@@ -1,52 +1,45 @@
 <?php 
+
 namespace App\Services;
-use App\Repositories\CategoryRepository;
+
+use App\Repositories\ProductRepository;
 use Illuminate\Support\Str;
 
 class ProductService
 {
-    protected $categoryRepository;
+    protected $productRepository;
 
-    public function __construct(CategoryRepository $categoryRepository)
+    public function __construct(ProductRepository $productRepository)
     {
-        $this->categoryRepository = $categoryRepository;
+        $this->productRepository = $productRepository;
     }
 
-    public function getAll()
+    public function addNewProduct($data)
     {
-        return $this->categoryRepository->all();
+        // Tạo slug từ tên sản phẩm
+        $slug = Str::slug($data['product']['name']);
+        
+        // Tạo sản phẩm trước
+        $product = $this->productRepository->createProduct($data);
+
+        // Cập nhật slug với ID sản phẩm để đảm bảo tính duy nhất
+        $product->slug = $this->generateUniqueSlug($slug, $product->id);
+        $product->save(); // Lưu thay đổi
+
+        return $product;
     }
 
-    public function getById($id)
+    private function generateUniqueSlug($slug, $productId)
     {
-        return $this->categoryRepository->find($id);
-    }
+        $baseSlug = $slug;
+        $count = 0;
 
-    public function create($data) {
-        // Tạo slug từ name
-        $data['slug'] = Str::slug($data['name']);
-    
-        // Kiểm tra slug duy nhất (nếu cần)
-        $this->checkSlugUniqueness($data['slug']); // Tùy chọn
-    
-        return $this->categoryRepository->create($data);
-    }
-    protected function checkSlugUniqueness($slug) {
-        if ($this->categoryRepository->exists($slug)) {
-            // Nếu slug đã tồn tại, tạo một slug mới (có thể thêm hậu tố)
-            $slug .= '-' . uniqid();
+        // Kiểm tra slug đã tồn tại chưa
+        while (\App\Models\Product::where('slug', $slug)->where('id', '<>', $productId)->exists()) {
+            $count++;
+            $slug = "{$baseSlug}-{$count}"; // Thêm số đếm vào slug
         }
+
         return $slug;
-    }
-    
-
-    public function update($id, $data)
-    {
-        return $this->categoryRepository->update($id, $data);
-    }
-
-    public function delete($id)
-    {
-        return $this->categoryRepository->delete($id);
     }
 }

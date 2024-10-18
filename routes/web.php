@@ -118,11 +118,19 @@ Route::prefix('admin')->group(function() {
     //admin.product
     Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.product']], function() {
         Route::get('/product', 'Manager\Product\ProductController@showProducts')->name('manager.product');
+        Route::post('/product', 'Manager\Product\ProductController@store')->name('manager.product.add');
 
+
+        //Get attribute-value
+        Route::get('/product/getAllValues{attribute}', 'Manager\Product\ProductController@getAllValues');
+        Route::get('/product/getAllAttributes', 'Manager\Product\ProductController@getAllAttributes');
+        
         Route::get('/product/category', 'Manager\Product\CategoryController@showCategories')->name('manager.category');
         Route::post('/product/category', 'Manager\Product\CategoryController@addCategory')->name('manager.category.add');
         Route::put('/product/category', 'Manager\Product\CategoryController@updateCategory')->name('manager.category.update');
         Route::delete('/product/category', 'Manager\Product\CategoryController@deleteCategory')->name('manager.category.delete');
+        /* api get all category */
+        Route::get('/product/category/getAll', 'Manager\Product\CategoryController@getAll')->name('manager.category.getAll');
         
 
         Route::get('/product/deal', 'Manager\Product\CategoryController@showDeals')->name('manager.deal');

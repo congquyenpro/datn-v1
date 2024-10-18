@@ -14,20 +14,6 @@ class CategoryController extends Controller
         $this->categoryService = $categoryService;
     }
 
-    /* Product*/
-    public function showProducts(){
-        return view('manager.product.products');
-    }
-    public function addProduct(){
-        
-    }
-    public function editProduct(){
-        
-    }
-    public function deleteProduct(){
-        
-    }
-
     /* Category */
     public function showCategories(){
         $data = $this->categoryService->getAll();
@@ -82,6 +68,12 @@ class CategoryController extends Controller
             ]);
         }
     }    
+
+    /* api get all */
+    public function getAll(){
+        $data = $this->categoryService->getAll();
+        return response()->json($data);
+    }
 
     /* Deal */
     public function showDeals(){
