@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Manager;
+namespace App\Http\Controllers\Manager\Product;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Services\CategoryService;
 
-class ProductController extends Controller
+class CategoryController extends Controller
 {
     protected $categoryService;
     public function __construct(CategoryService $categoryService) {

@@ -2,6 +2,10 @@
 @section('page_title', 'Sản phẩm')
 @section('page_css')
 <link href="{{asset('admin_assets/assets/vendors/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet">
+<link href="{{asset('admin_assets/page/css/product.css')}}" rel="stylesheet">
+
+<!-- summernote -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 @endsection
 
 @section('page_content')
@@ -82,7 +86,7 @@
                             <td>Luis Vuitton</td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <img class="img-fluid rounded" src="assets/images/others/thumb-9.jpg" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
+                                    <img class="img-fluid rounded" src="https://placehold.co/128x128" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
                                 </div>
                             </td>
                             <td>
@@ -140,7 +144,7 @@
                             <td>Luis Vuitton</td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <img class="img-fluid rounded" src="assets/images/others/thumb-9.jpg" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
+                                    <img class="img-fluid rounded" src="https://placehold.co/128x128" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
                                 </div>
                             </td>
                             <td>
@@ -186,7 +190,7 @@
                             <td>Luis Vuitton</td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <img class="img-fluid rounded" src="assets/images/others/thumb-9.jpg" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
+                                    <img class="img-fluid rounded" src="https://placehold.co/128x128" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
                                 </div>
                             </td>
                             <td>
@@ -232,7 +236,7 @@
                             <td>Luis Vuitton</td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <img class="img-fluid rounded" src="assets/images/others/thumb-9.jpg" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
+                                    <img class="img-fluid rounded" src="https://placehold.co/128x128" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
                                 </div>
                             </td>
                             <td>
@@ -285,59 +289,7 @@
                             <td>Luis Vuitton</td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <img class="img-fluid rounded" src="assets/images/others/thumb-9.jpg" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="metadata-table-wrapper">
-                                    <span class="badge badge-pill badge-blue m-r-10">Kích thước: 100 ml</span>
-                                    <span class="badge badge-pill badge-green m-r-10">Đơn giá: 50,000</span>
-                                    <span class="badge badge-pill badge-orange m-r-10">Giảm giá: 50 %</span>
-                                    <span class="badge badge-pill badge-red m-r-10">SL: 753</span>
-                                </div>
-                                <div class="metadata-table-wrapper">
-                                    <span class="badge badge-pill badge-blue m-r-10">Kích thước: 100 ml</span>
-                                    <span class="badge badge-pill badge-green m-r-10">Đơn giá: 50,000</span>
-                                    <span class="badge badge-pill badge-orange m-r-10">Giảm giá: 50 %</span>
-                                    <span class="badge badge-pill badge-red m-r-10">SL: 753</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="switch m-t-5 m-l-10">
-                                        <input type="checkbox" id="switch-fb" checked="">
-                                        <label for="switch-fb"></label>
-                                    </div>
-                                </div>
-                            </td>
-
-                            <td class="text-right">
-                                <button class="btn btn-icon btn-hover btn-sm btn-rounded">
-                                    <i class="anticon anticon-eye"></i>
-                                </button>
-                                <button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
-                                    <i class="anticon anticon-edit"></i>
-                                </button>
-                                <button class="btn btn-icon btn-hover btn-sm btn-rounded">
-                                    <i class="anticon anticon-delete"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="checkbox">
-                                    <input id="check-item-1" type="checkbox">
-                                    <label for="check-item-1" class="m-b-0"></label>
-                                </div>
-                            </td>
-                            <td>
-                                #31
-                            </td>
-                            <td>Nước hoa province</td>
-                            <td>Luis Vuitton</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <img class="img-fluid rounded" src="assets/images/others/thumb-9.jpg" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
+                                    <img class="img-fluid rounded" src="https://placehold.co/128x128" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
                                 </div>
                             </td>
                             <td>
@@ -389,16 +341,10 @@
                             <td>Luis Vuitton</td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <img class="img-fluid rounded" src="assets/images/others/thumb-9.jpg" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
+                                    <img class="img-fluid rounded" src="https://placehold.co/128x128" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
                                 </div>
                             </td>
                             <td>
-                                <div class="metadata-table-wrapper">
-                                    <span class="badge badge-pill badge-blue m-r-10">Kích thước: 100 ml</span>
-                                    <span class="badge badge-pill badge-green m-r-10">Đơn giá: 50,000</span>
-                                    <span class="badge badge-pill badge-orange m-r-10">Giảm giá: 50 %</span>
-                                    <span class="badge badge-pill badge-red m-r-10">SL: 753</span>
-                                </div>
                                 <div class="metadata-table-wrapper">
                                     <span class="badge badge-pill badge-blue m-r-10">Kích thước: 100 ml</span>
                                     <span class="badge badge-pill badge-green m-r-10">Đơn giá: 50,000</span>
@@ -447,7 +393,7 @@
                             <td>Luis Vuitton</td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <img class="img-fluid rounded" src="assets/images/others/thumb-9.jpg" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
+                                    <img class="img-fluid rounded" src="https://placehold.co/128x128" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
                                 </div>
                             </td>
                             <td>
@@ -505,7 +451,7 @@
                             <td>Luis Vuitton</td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <img class="img-fluid rounded" src="assets/images/others/thumb-9.jpg" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
+                                    <img class="img-fluid rounded" src="https://placehold.co/128x128" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
                                 </div>
                             </td>
                             <td>
@@ -563,7 +509,7 @@
                             <td>Luis Vuitton</td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <img class="img-fluid rounded" src="assets/images/others/thumb-9.jpg" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
+                                    <img class="img-fluid rounded" src="https://placehold.co/128x128" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
                                 </div>
                             </td>
                             <td>
@@ -621,7 +567,7 @@
                             <td>Luis Vuitton</td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <img class="img-fluid rounded" src="assets/images/others/thumb-9.jpg" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
+                                    <img class="img-fluid rounded" src="https://placehold.co/128x128" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
                                 </div>
                             </td>
                             <td>
@@ -679,7 +625,65 @@
                             <td>Luis Vuitton</td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <img class="img-fluid rounded" src="assets/images/others/thumb-9.jpg" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
+                                    <img class="img-fluid rounded" src="https://placehold.co/128x128" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="metadata-table-wrapper">
+                                    <span class="badge badge-pill badge-blue m-r-10">Kích thước: 100 ml</span>
+                                    <span class="badge badge-pill badge-green m-r-10">Đơn giá: 50,000</span>
+                                    <span class="badge badge-pill badge-orange m-r-10">Giảm giá: 50 %</span>
+                                    <span class="badge badge-pill badge-red m-r-10">SL: 753</span>
+                                </div>
+                                <div class="metadata-table-wrapper">
+                                    <span class="badge badge-pill badge-blue m-r-10">Kích thước: 100 ml</span>
+                                    <span class="badge badge-pill badge-green m-r-10">Đơn giá: 50,000</span>
+                                    <span class="badge badge-pill badge-orange m-r-10">Giảm giá: 50 %</span>
+                                    <span class="badge badge-pill badge-red m-r-10">SL: 753</span>
+                                </div>
+                                <div class="metadata-table-wrapper">
+                                    <span class="badge badge-pill badge-blue m-r-10">Kích thước: 100 ml</span>
+                                    <span class="badge badge-pill badge-green m-r-10">Đơn giá: 50,000</span>
+                                    <span class="badge badge-pill badge-orange m-r-10">Giảm giá: 50 %</span>
+                                    <span class="badge badge-pill badge-red m-r-10">SL: 753</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="switch m-t-5 m-l-10">
+                                        <input type="checkbox" id="switch-fb" checked="">
+                                        <label for="switch-fb"></label>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td class="text-right">
+                                <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+                                    <i class="anticon anticon-eye"></i>
+                                </button>
+                                <button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
+                                    <i class="anticon anticon-edit"></i>
+                                </button>
+                                <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+                                    <i class="anticon anticon-delete"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="checkbox">
+                                    <input id="check-item-1" type="checkbox">
+                                    <label for="check-item-1" class="m-b-0"></label>
+                                </div>
+                            </td>
+                            <td>
+                                #31
+                            </td>
+                            <td>Nước hoa province</td>
+                            <td>Luis Vuitton</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img class="img-fluid rounded" src="https://placehold.co/128x128" style="border: dotted 1px #f0069d;max-width: 60px" alt="">
                                 </div>
                             </td>
                             <td>
@@ -746,7 +750,7 @@
                             <form>
                                 <div class="form-group">
                                     <label for="formGroupExampleInput">Tên sản phẩm*</label>
-                                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input">
+                                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Tên sản phẩm">
                                 </div>
                                 <div class="form-group">
                                     <div class="row" style=" display: block;">
@@ -775,7 +779,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputState">Thương hiệu*</label>
+                                    <label for="inputState">Danh mục*</label>
                                     <select id="inputState" class="form-control">
                                         <option selected>Choose...</option>
                                         <option>Luis Vuitton</option>
@@ -898,13 +902,135 @@
             </div>
         </div>
     </div>
-    
+
 @endsection
 
 @section('page_js')
 <script src="{{asset('admin_assets/assets/vendors/datatables/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('admin_assets/assets/vendors/datatables/dataTables.bootstrap.min.js')}}"></script>
 <script src="{{asset('admin_assets/assets/js/pages/e-commerce-order-list.js')}}"></script>
+<script src="{{asset('admin_assets/summernote/summernote-lite.min.js')}}"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.bd-example-modal-xl').modal('show');
+    });
+</script>
+
+<script>
+    $('#summernote').summernote({
+        tabsize: 2,
+        height: 120,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+          ]
+        });
+</script>
+
+<!-- Xử lý ảnh tải lên -->
+<script>
+    document.getElementById('uploadButton').addEventListener('click', function() {
+        document.getElementById('customFile').click();
+    });
+
+    document.getElementById('customFile').addEventListener('change', function() {
+        var label = document.querySelector('.custom-file-label');
+        var files = this.files;
+        label.textContent = files.length > 0 ? files.length + ' file(s) selected' : 'Choose files';
+
+        // Xóa các ảnh preview cũ
+        var previewContainer = document.getElementById('previewContainer');
+        previewContainer.innerHTML = '';
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var reader = new FileReader();
+
+            reader.onload = (function(file) {
+                return function(e) {
+                    // Tạo thẻ div để chứa ảnh và nút xóa
+                    var imgContainer = document.createElement('div');
+                    imgContainer.style.position = 'relative'; // Để định vị biểu tượng
+                    imgContainer.style.margin = '5px';
+
+                    // Tạo thẻ img cho từng ảnh
+                    var img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '100px'; // Kích thước tối đa cho ảnh preview
+                    img.style.padding = '5px';
+                    img.style.border = 'solid 2px #1391c3';
+                    img.style.borderRadius = '5px'; // Bo tròn góc cho ảnh
+
+                    // Tạo biểu tượng để xóa
+                    var removeIcon = document.createElement('span');
+                    removeIcon.innerHTML = '<i class="anticon anticon-close-circle" style="font-size: 18px; color: red; cursor: pointer; position: absolute; top: 10px; right: 1px;"></i>';
+
+                    removeIcon.onclick = function() {
+                        imgContainer.remove(); // Xóa ảnh và biểu tượng khỏi container
+                    };
+
+                    // Thêm ảnh và biểu tượng vào container
+                    imgContainer.appendChild(img);
+                    imgContainer.appendChild(removeIcon);
+                    previewContainer.appendChild(imgContainer); // Thêm ảnh vào container
+                };
+            })(file);
+
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+
+<!-- Thêm phân loại -->
+<script>
+    document.getElementById('addItemButton').addEventListener('click', function() {
+        const newItem = `
+            <div class="col-md-6 col-sm-12 m-b-15">
+                <div class="metadata-item p-3 border border-dotted" style="border-color: #1391c3;">
+                    <div class="form-group">
+                        <label>Dung lượng *</label>
+                        <input type="text" class="form-control data-size number-type" placeholder="ml">
+                    </div>
+                    <div class="form-group">
+                        <label>Đơn giá *</label>
+                        <input type="text" class="form-control data-prices number-type" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label>Giảm giá *</label>
+                        <input type="text" class="form-control data-discount number-type" placeholder="%">
+                    </div>
+                    <div class="form-group">
+                        <label>Số lượng * (Mặc định 0)</label>
+                        <input type="text" class="form-control data-quantity number-type" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-danger metadata-remove" atr="Delete">Xóa thuộc tính</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Thêm item mới vào container đã có sẵn
+        const itemContainer = document.getElementById('itemContainer');
+        itemContainer.insertAdjacentHTML('beforeend', newItem); // Thêm HTML mới vào cuối
+    });
+
+    // Lắng nghe sự kiện click cho nút xóa
+    document.getElementById('itemContainer').addEventListener('click', function(e) {
+        if (e.target.classList.contains('metadata-remove')) {
+            const itemToRemove = e.target.closest('.col-md-6'); // Tìm phần tử cha tương ứng
+            if (itemToRemove) {
+                itemToRemove.remove(); // Xóa phần tử
+            }
+        }
+    });
+</script>
 
 
 

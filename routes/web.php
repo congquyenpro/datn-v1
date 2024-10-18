@@ -117,15 +117,15 @@ Route::prefix('admin')->group(function() {
 
     //admin.product
     Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.product']], function() {
-        Route::get('/product', 'Manager\ProductController@showProducts')->name('manager.product');
+        Route::get('/product', 'Manager\Product\ProductController@showProducts')->name('manager.product');
 
-        Route::get('/product/category', 'Manager\ProductController@showCategories')->name('manager.category');
-        Route::post('/product/category', 'Manager\ProductController@addCategory')->name('manager.category.add');
-        Route::put('/product/category', 'Manager\ProductController@updateCategory')->name('manager.category.update');
-        Route::delete('/product/category', 'Manager\ProductController@deleteCategory')->name('manager.category.delete');
+        Route::get('/product/category', 'Manager\Product\CategoryController@showCategories')->name('manager.category');
+        Route::post('/product/category', 'Manager\Product\CategoryController@addCategory')->name('manager.category.add');
+        Route::put('/product/category', 'Manager\Product\CategoryController@updateCategory')->name('manager.category.update');
+        Route::delete('/product/category', 'Manager\Product\CategoryController@deleteCategory')->name('manager.category.delete');
         
 
-        Route::get('/product/deal', 'Manager\ProductController@showDeals')->name('manager.deal');
+        Route::get('/product/deal', 'Manager\Product\CategoryController@showDeals')->name('manager.deal');
     });
 
     // Nhóm route khác cũng thuộc prefix 'admin'
