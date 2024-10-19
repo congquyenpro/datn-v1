@@ -105,8 +105,7 @@ class ProductRepository extends BaseRepository
         // Lấy các thuộc tính và giá trị cho sản phẩm cụ thể
         $attributes = $product->productAttributes->map(function ($attribute) {
             return [
-                'attribute_value_id' => $attribute->attribute_value_id,
-                'value' => $this->getValueByAttributeId($attribute->attribute_value_id), // Lấy giá trị cho mỗi thuộc tính
+                'attribute_value' => $this->getValueByAttributeId($attribute->attribute_value_id), // Lấy giá trị cho mỗi thuộc tính
             ];
         });
     
@@ -118,10 +117,13 @@ class ProductRepository extends BaseRepository
             'images' => $product->images,
             'short_description' => $product->short_description,
             'description' => $product->detail_description,
+            'affiliate' => $product->affiliate,
+            'status' => $product->status,
+            'gender' => $product->gender,
             'product_sizes' => $product->productSizes->map(function ($size) {
                 return [
                     'id' => $size->id,
-                    'size' => $size->size,
+                    'size' => $size->volume,
                     'price' => $size->price,
                     'discount' => $size->discount,
                     'quantity' => $size->quantity,
@@ -156,6 +158,62 @@ class ProductRepository extends BaseRepository
         return '';
     }
 
+
+    //update product
+    public function updateProduct($id, $data)
+    {
+        return DB::transaction(function () use ($id, $data) {
+            // Tìm sản phẩm cần cập nhật
+            $product = Product::findOrFail($id);
+    
+            // Xử lý ảnh tải lên, nếu có hình ảnh mới
+            if (isset($data['images'])) {
+                $imagesString = $this->handleImageUpload($data['images']);
+                $product->images = $imagesString; // Cập nhật hình ảnh
+            }
+    
+            // Cập nhật thông tin sản phẩm
+            $product->name = $data['product_name'];
+            $product->category_id = $data['category_id'];
+            $product->gender = $data['gender'];
+            $product->short_description = $data['short_description'];
+            $product->detail_description = $data['description'];
+            $product->trending = $data['trending'] ?? 0;
+            $product->affiliate = $data['affiliate'] ?? 1;
+            $product->status = $data['status'] ?? 1;
+    
+            // Lưu thay đổi của sản phẩm
+            $product->save();
+    
+            // Cập nhật kích thước sản phẩm
+            // Xóa kích thước cũ
+            ProductSize::where('product_id', $product->id)->delete();
+    
+            foreach ($data['product_variants'] as $variant) {
+                ProductSize::create([
+                    'product_id' => $product->id,
+                    'volume' => $variant['size'],
+                    'quantity' => $variant['quantity'],
+                    'price' => $variant['price'],
+                    'discount' => $variant['discount'] ?? 0,
+                ]);
+            }
+    
+            // Cập nhật thuộc tính
+            // Xóa thuộc tính cũ
+            ProductAttribute::where('product_id', $product->id)->delete();
+    
+            foreach ($data['attributes'] as $attribute) {
+                ProductAttribute::create([
+                    'product_id' => $product->id,
+                    'attribute_value_id' => $attribute['value_id'],
+                ]);
+            }
+    
+            return $product; // Đảm bảo trả về sản phẩm đã được cập nhật
+        });
+    }
+    
 
     public function deleteProduct($id)
     {

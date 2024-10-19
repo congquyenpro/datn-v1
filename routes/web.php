@@ -124,6 +124,8 @@ Route::prefix('admin')->group(function() {
         Route::post('/product', 'Manager\Product\ProductController@store')->name('manager.product.add');
         Route::get('/product/delete/{id}', 'Manager\Product\ProductController@delete')->name('manager.product.delete');
 
+        //update product
+        Route::post('/product/update', 'Manager\Product\ProductController@update')->name('manager.product.update');
 
         //Get attribute-value
         Route::get('/product/getAllAttributes', 'Manager\Product\ProductController@getAllAttributes');

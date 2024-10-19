@@ -58,4 +58,18 @@ class ProductService
     {
         return $this->productRepository->deleteProduct($id);
     }
+
+    public function editProduct($id, $data)
+    {
+        // Cập nhật sản phẩm
+        $product = $this->productRepository->updateProduct($id, $data);
+        
+        // Không cập nhật slug, chỉ cần lưu lại sản phẩm
+        $product->save(); // Lưu thay đổi
+        
+        return $product;
+    }
+    
+    
+
 }

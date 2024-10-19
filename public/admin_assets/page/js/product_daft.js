@@ -318,7 +318,6 @@ const Product = {
                 // Đổi tên modal
                 $('.modal-title').text('Chỉnh sửa sản phẩm');
                 $('#modal-add-edit').attr('data-action', 'edit');
-                $('#modal-add-edit').attr('data-product-id', productId);
         
                 // Lấy dữ liệu chi tiết sản phẩm và điền vào form
                 Api.Product.GetProductDetail(productId).then((response) => {
@@ -549,278 +548,163 @@ const Product = {
         deleteProduct: () => {}
     },
     formSubmit: {
-        handleInput: () => {
-            const productName = document.getElementById('formGroupExampleInput').value.trim();
-            const shortDescription = document.querySelector('textarea[name="short_description"]').value.trim();
-            const genderValue = document.querySelector('input[name="gender"]:checked')?.value;
-            const statusValue = document.querySelector('input[name="status"]:checked')?.value;
-            const categoryValue = document.getElementById('inputState').value;
-    
-            // Kiểm tra các trường bắt buộc
-            if (!productName || !shortDescription || !genderValue || !categoryValue || !statusValue) {
-                alert("Vui lòng điền đầy đủ thông tin sản phẩm!");
-                return null; // Trả về null nếu không hợp lệ
-            }
-    
-            // Lấy dữ liệu từ các select thuộc tính
-            const attributes = Product.formSubmit.getAttributes();
-    
-            // Kiểm tra thuộc tính
-            for (const attribute of attributes) {
-                if (!attribute.value) {
-                    alert(`Vui lòng chọn hoặc nhập ${attribute.name}!`);
-                    return null; // Trả về null nếu thuộc tính không hợp lệ
-                }
-            }
-    
-            // Lấy dữ liệu từ Summernote và các input
-            const summernoteContent = $('#summernote').summernote('code');
-            const files = document.getElementById('customFile').files;
-    
-            // Lấy dữ liệu phân loại sản phẩm
-            const itemSizes = Array.from(document.querySelectorAll('#itemContainer .metadata-item')).map(item => ({
-                size: item.querySelector('.data-size')?.value || null,
-                price: item.querySelector('.data-prices')?.value || null,
-                discount: item.querySelector('.data-discount')?.value || 0,
-                quantity: item.querySelector('.data-quantity')?.value || 0
-            })).filter(item => item.size && item.price); // filter out incomplete items
-    
-            // Kiểm tra itemSizes
-            if (itemSizes.length === 0) {
-                alert("Vui lòng thêm ít nhất một phân loại sản phẩm!");
-                return null; // Trả về null nếu không có phân loại
-            }
-    
-            return {
-                productName,
-                shortDescription,
-                genderValue,
-                statusValue,
-                categoryValue,
-                summernoteContent,
-                files,
-                attributes,
-                itemSizes
-            };
-        },
-    
         addProduct: () => {
             function handleSubmit(isEdit = false) {
-                const inputData = Product.formSubmit.handleInput();
-                if (!inputData) return; // Kiểm tra xem dữ liệu có hợp lệ không
+                // Lấy tên + mô tả ngắn + giới tính + trạng thái sản phẩm
+                const productName = document.getElementById('formGroupExampleInput').value.trim();
+                const shortDescription = document.querySelector('textarea[name="short_description"]').value.trim();
+                const genderValue = document.querySelector('input[name="gender"]:checked')?.value;
+                const statusValue = document.querySelector('input[name="status"]:checked')?.value;
     
+                // Lấy giá trị từ select 'inputState' (Category)
+                const categorySelect = document.getElementById('inputState');
+                const categoryValue = categorySelect.value;
+    
+                // Kiểm tra các trường bắt buộc
+                if (!productName || !shortDescription || !genderValue || !categoryValue || !statusValue) {
+                    alert("Vui lòng điền đầy đủ thông tin sản phẩm!");
+                    return; // Trả về nếu không hợp lệ
+                }
+    
+                // Lấy dữ liệu từ các select thuộc tính
+                const attributes = getAttributes();
+    
+                // Kiểm tra thuộc tính
+                for (const attribute of attributes) {
+                    if (!attribute.value) {
+                        alert(`Vui lòng chọn hoặc nhập ${attribute.name}!`);
+                        return; // Trả về nếu thuộc tính không hợp lệ
+                    }
+                }
+    
+                // Lấy dữ liệu từ các thẻ input khác
+                const summernoteContent = $('#summernote').summernote('code'); // Nội dung từ Summernote
+    
+                // Lấy dữ liệu từ các thẻ ảnh đã chọn (previewContainer)
+                const files = document.getElementById('customFile').files;
+    
+                // Lấy dữ liệu phân loại sản phẩm (size, price, discount, quantity)
+                const itemSizes = Array.from(document.querySelectorAll('#itemContainer .metadata-item')).map(item => ({
+                    size: item.querySelector('.data-size')?.value || null,
+                    price: item.querySelector('.data-prices')?.value || null,
+                    discount: item.querySelector('.data-discount')?.value || 0,
+                    quantity: item.querySelector('.data-quantity')?.value || 0 // Mặc định là 0 nếu không nhập
+                })).filter(item => item.size && item.price); // filter out incomplete items
+    
+                // Kiểm tra itemSizes
+                if (itemSizes.length === 0) {
+                    alert("Vui lòng thêm ít nhất một phân loại sản phẩm!");
+                    return; // Trả về nếu không có phân loại
+                }
+    
+                // Chuẩn bị dữ liệu để gửi lên server
                 const formData = new FormData();
-                formData.append('product_name', inputData.productName);
-                formData.append('short_description', inputData.shortDescription);
-                formData.append('status', inputData.statusValue);
-                formData.append('gender', inputData.genderValue);
-                formData.append('category_id', inputData.categoryValue);
-                formData.append('description', inputData.summernoteContent);
+    
+                formData.append('product_name', productName);
+                formData.append('short_description', shortDescription);
+                formData.append('status', statusValue);
+                formData.append('gender', genderValue);
+                formData.append('category_id', categoryValue);
+                formData.append('description', summernoteContent);
     
                 // Thêm attribute
-                inputData.attributes.forEach((attribute, index) => {
+                attributes.forEach((attribute, index) => {
                     formData.append(`attributes[${index}][name]`, attribute.name);
                     formData.append(`attributes[${index}][value_id]`, attribute.value);
                 });
-
-                // Nếu là chỉnh sửa, thêm ảnh đã có vào formData
-                if (isEdit) {
-                    const existingImages = document.querySelectorAll('#imageContainer img');
-                    existingImages.forEach(img => {
-                        formData.append('existing_images[]', img.src); // Gửi đường dẫn hình ảnh hiện có
-                    });
-                }
     
                 // Thêm các file ảnh vào formData
-                for (let i = 0; i < inputData.files.length; i++) {
-                    formData.append('images[]', inputData.files[i]);
+                for (let i = 0; i < files.length; i++) {
+                    formData.append('images[]', files[i]);
                 }
     
                 // Thêm dữ liệu phân loại sản phẩm vào formData
-                inputData.itemSizes.forEach((variant, index) => {
+                itemSizes.forEach((variant, index) => {
                     formData.append(`product_variants[${index}][size]`, variant.size);
                     formData.append(`product_variants[${index}][price]`, variant.price);
                     formData.append(`product_variants[${index}][discount]`, variant.discount || 0);
                     formData.append(`product_variants[${index}][quantity]`, variant.quantity || 0);
                 });
     
+                console.log("Form data to be sent:", formData);
+    
+                // Gửi dữ liệu lên server bằng fetch hoặc axios
                 const apiMethod = isEdit ? Api.Product.EditProduct : Api.Product.AddNewProduct;
-                if (isEdit) {
-                    let currentProductId = $('#modal-add-edit').data('product-id'); // Lấy giá trị từ data-product-id
-                    formData.append('product_id', currentProductId); // Thêm product_id vào formData
-                }
                 apiMethod(formData)
                     .then(response => {
+                        // Xử lý thành công
+                        console.log("Product processed successfully:", response);
                         alert(`Sản phẩm đã được ${isEdit ? 'cập nhật' : 'thêm'} thành công!`);
+                        // Có thể đóng modal và cập nhật danh sách sản phẩm
                         $('.bd-example-modal-xl').modal('hide');
                         Product.productsList.show(); // Refresh danh sách sản phẩm
                     })
                     .catch(error => {
+                        // Xử lý lỗi
                         console.error("Error processing product:", error);
-                        // Xử lý lỗi như trước
+                        if (error.response && error.response.data && error.response.data.errors) {
+                            const errorMessages = [];
+                            
+                            // Duyệt qua các lỗi và tạo thông báo
+                            for (const [field, messages] of Object.entries(error.response.data.errors)) {
+                                errorMessages.push(`${field}: ${messages.join(', ')}`);
+                            }
+    
+                            // Hiển thị tất cả thông báo lỗi trong một alert
+                            alert("Có lỗi xảy ra khi xử lý sản phẩm:\n" + errorMessages.join('\n'));
+                        } else {
+                            alert("Có lỗi xảy ra khi xử lý sản phẩm.");
+                        }
                     });
             }
     
-            // Gắn sự kiện cho nút lưu
+            // Hàm để lấy giá trị đã chọn hoặc nhập mới
+            function getSelectedOrNewValue(selectId, inputId) {
+                const selectElement = document.getElementById(selectId);
+                const inputElement = document.getElementById(inputId);
+                return (selectElement.value === 'other') ? inputElement.value : selectElement.value;
+            }
+    
+            // Hàm lấy thuộc tính sản phẩm
+            function getAttributes() {
+                return [
+                    { name: 'brand', value: getSelectedOrNewValue('brandSelect', 'newBrandInput') },
+                    { name: 'concentration', value: getSelectedOrNewValue('concentrationSelect', 'newConcentrationInput') },
+                    { name: 'style', value: getSelectedOrNewValue('styleSelect', 'newStyleInput') },
+                    { name: 'fragrance_group', value: getSelectedOrNewValue('fragranceGroupSelect', 'newFragranceGroupInput') },
+                    { name: 'fragrance_time', value: getSelectedOrNewValue('fragranceTimeSelect', 'newFragranceTimeInput') },
+                    { name: 'fragrance_distance', value: getSelectedOrNewValue('fragranceDistanceSelect', 'newFragranceDistanceInput') },
+                    { name: 'age_group', value: getSelectedOrNewValue('ageGroupSelect', 'newAgeGroupInput') },
+                    { name: 'ingredients', value: getSelectedOrNewValue('ingredientSelect', 'newIngredientInput') },
+                    { name: 'country', value: getSelectedOrNewValue('countrySelect', 'newCountryInput') },
+                ];
+            }
+    
+            // Attach handleSubmit to the save button
             document.getElementById('save-btn').addEventListener('click', function () {
-
-                //lấy ra data-action ở id="modal-add-edit" => kiểm tra xem trạng thái của save là add hay edit
-                const isEdit2 = document.getElementById('modal-add-edit').getAttribute('data-action') === 'edit'; // Kiểm tra action
-                console.log(isEdit2);
-
-                const isEdit = this.getAttribute('data-action') === 'edit'; // Kiểm tra action
-                handleSubmit(isEdit2); // Gọi handleSubmit với isEdit
+                handleSubmit();
             });
         },
     
         editProduct: () => {
-            function handleSubmit(isEdit) {
-                const formData = new FormData();
-            
-                // Lấy dữ liệu từ form
-                formData.append('product_name', document.getElementById('formGroupExampleInput').value);
-                formData.append('short_description', document.querySelector('textarea[name="short_description"]').value);
-                formData.append('gender', document.querySelector('input[name="gender"]:checked').value);
-                formData.append('status', document.querySelector('input[name="status"]:checked').value);
-                formData.append('category_id', document.getElementById('inputState').value);
-                formData.append('description', $('#summernote').summernote('code'));
-            
-                // Lấy các thuộc tính
-                const attributes = document.querySelectorAll('.metadata-item');
-                attributes.forEach(attr => {
-                    const size = attr.querySelector('.data-size').value;
-                    const price = attr.querySelector('.data-prices').value;
-                    const discount = attr.querySelector('.data-discount').value;
-                    const quantity = attr.querySelector('.data-quantity').value;
-            
-                    // Thêm thuộc tính vào formData
-                    formData.append('product_variants[]', JSON.stringify({ size, price, discount, quantity }));
-                });
-            
-                // Nếu là chỉnh sửa, thêm ảnh đã có vào formData
-                if (isEdit) {
-                    const existingImages = document.querySelectorAll('#imageContainer img');
-                    existingImages.forEach(img => {
-                        formData.append('existing_images[]', img.src); // Gửi đường dẫn hình ảnh hiện có
-                    });
-                }
-            
-                // Thêm các file ảnh mới vào formData
-                const files = document.getElementById('customFile').files;
-                for (let i = 0; i < files.length; i++) {
-                    formData.append('images[]', files[i]);
-                }
-            
-                // Gọi API để lưu sản phẩm
-                Api.Product.SaveProduct(formData, isEdit)
-                    .then(response => {
-                        alert("Sản phẩm đã được lưu thành công.");
-                        // Xử lý sau khi lưu thành công
-                    })
-                    .catch(error => {
-                        console.error("Error saving product:", error);
-                        alert("Có lỗi xảy ra khi lưu sản phẩm.");
-                    });
-            }
-            
-            function handleEdit() {
-                const productId = $('#modal-add-edit').data('product-id');
-        
-                Api.Product.GetProductById(productId)
-                    .then(response => {
-                        const product = response.data;
-                        // Cập nhật các trường trong form với thông tin sản phẩm hiện tại
-                        document.getElementById('formGroupExampleInput').value = product.product_name;
-                        document.querySelector('textarea[name="short_description"]').value = product.short_description;
-                        document.querySelector(`input[name="gender"][value="${product.gender}"]`).checked = true;
-                        document.querySelector(`input[name="status"][value="${product.status}"]`).checked = true;
-                        document.getElementById('inputState').value = product.category_id;
-        
-                        $('#summernote').summernote('code', product.description);
-        
-                        // Cập nhật thuộc tính sản phẩm
-                        const attributes = product.attributes || [];
-                        attributes.forEach(attr => {
-                            const selectElement = document.getElementById(attr.name + 'Select');
-                            const inputElement = document.getElementById('new' + attr.name.charAt(0).toUpperCase() + attr.name.slice(1) + 'Input');
-        
-                            if (selectElement) {
-                                selectElement.value = attr.value_id;
-                            } else if (inputElement) {
-                                inputElement.value = attr.value;
-                            }
-                        });
-        
-                        // Cập nhật thông tin phân loại sản phẩm
-                        const itemContainer = document.getElementById('itemContainer');
-                        itemContainer.innerHTML = '';
-        
-                        product.product_variants.forEach(variant => {
-                            const variantHTML = `
-                                <div class="metadata-item">
-                                    <input type="text" class="data-size" value="${variant.size}" placeholder="Size" required />
-                                    <input type="number" class="data-prices" value="${variant.price}" placeholder="Price" required />
-                                    <input type="number" class="data-discount" value="${variant.discount}" placeholder="Discount" />
-                                    <input type="number" class="data-quantity" value="${variant.quantity}" placeholder="Quantity" />
-                                </div>
-                            `;
-                            itemContainer.insertAdjacentHTML('beforeend', variantHTML);
-                        });
-        
-                        // Cập nhật hình ảnh hiện có
-                        const imageContainer = document.getElementById('imageContainer');
-                        imageContainer.innerHTML = ''; // Xóa hình ảnh cũ nếu có
-                        product.images.forEach(imageUrl => {
-                            const imgElement = document.createElement('img');
-                            imgElement.src = imageUrl; // Đường dẫn hình ảnh hiện có
-                            imgElement.alt = "Product Image";
-                            imgElement.style.width = '100px'; // Kích thước tùy chỉnh
-                            imgElement.style.marginRight = '10px';
-                            imageContainer.appendChild(imgElement);
-                        });
-        
-                        // Gắn lại sự kiện cho nút lưu để sửa sản phẩm
-                        const saveBtn = document.getElementById('save-btn');
-                        saveBtn.setAttribute('data-action', 'edit');
-                        saveBtn.onclick = function () {
-                            handleSubmit(true); // Gọi hàm handleSubmit với isEdit = true
-                        };
-        
-                        $('.bd-example-modal-xl').modal('show');
-                    })
-                    .catch(error => {
-                        console.error("Error fetching product:", error);
-                        alert("Có lỗi xảy ra khi lấy thông tin sản phẩm.");
-                    });
-            }
-        
-            // Gọi hàm handleEdit để thực hiện chỉnh sửa sản phẩm
-            handleEdit();
-        },
-        
-        
-        
-        getAttributes: () => {
-            return [
-                { name: 'brand', value: Product.formSubmit.getSelectedOrNewValue('brandSelect', 'newBrandInput') },
-                { name: 'concentration', value: Product.formSubmit.getSelectedOrNewValue('concentrationSelect', 'newConcentrationInput') },
-                { name: 'style', value: Product.formSubmit.getSelectedOrNewValue('styleSelect', 'newStyleInput') },
-                { name: 'fragrance_group', value: Product.formSubmit.getSelectedOrNewValue('fragranceGroupSelect', 'newFragranceGroupInput') },
-                { name: 'fragrance_time', value: Product.formSubmit.getSelectedOrNewValue('fragranceTimeSelect', 'newFragranceTimeInput') },
-                { name: 'fragrance_distance', value: Product.formSubmit.getSelectedOrNewValue('fragranceDistanceSelect', 'newFragranceDistanceInput') },
-                { name: 'age_group', value: Product.formSubmit.getSelectedOrNewValue('ageGroupSelect', 'newAgeGroupInput') },
-                { name: 'ingredients', value: Product.formSubmit.getSelectedOrNewValue('ingredientSelect', 'newIngredientInput') },
-                { name: 'country', value: Product.formSubmit.getSelectedOrNewValue('countrySelect', 'newCountryInput') },
-            ];
-        },
+            function handleEdit(productId) {
+                // Tương tự như handleSubmit trong addProduct nhưng cần thêm productId để chỉnh sửa
+                // Thêm logic để lấy thông tin sản phẩm hiện tại và điền vào form trước khi gửi
     
-        getSelectedOrNewValue: (selectId, inputId) => {
-            const selectElement = document.getElementById(selectId);
-            const inputElement = document.getElementById(inputId);
-            return (selectElement.value === 'other') ? inputElement.value : selectElement.value;
+                // Sau khi đã lấy được thông tin sản phẩm hiện tại, bạn có thể gọi handleSubmit với isEdit = true
+                handleSubmit(true);
+                
+            }
+    
+            // Ví dụ sử dụng: Gọi handleEdit với ID sản phẩm cụ thể
+            const productId = 123; // Thay thế bằng ID sản phẩm thực tế
+            handleEdit(productId);
+        },
+
+        handleInput: () => {
+
         },
     }
-    
     
 }
 

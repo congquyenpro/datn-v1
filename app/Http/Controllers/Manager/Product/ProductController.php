@@ -82,9 +82,42 @@ class ProductController extends Controller
         return response()->json($product);
     }
     
-    public function update(Request $request){
+    public function update(Request $request)
+    {
+        \Log::info('Update method called with data:', $request->all());
+        $id = $request->product_id;
+        try {
+            // Xác thực dữ liệu
+            $validatedData = $request->validate([
+                'product_name' => 'required|string|max:255',
+                'category_id' => 'required|integer',
+                'gender' => 'required|integer',
+                'short_description' => 'required|string',
+                'description' => 'required|string',
+                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048', // Hình ảnh hợp lệ
+                'attributes' => 'required|array',
+                'attributes.*.name' => 'required|string',
+                'attributes.*.value_id' => 'required|integer',
+                'product_variants' => 'required|array',
+                'product_variants.*.size' => 'required|integer',
+                'product_variants.*.price' => 'required|integer',
+                'product_variants.*.discount' => 'nullable|integer',
+                'product_variants.*.quantity' => 'required|integer',
+            ]);
+    
+            // Thực hiện logic cập nhật sản phẩm nếu dữ liệu hợp lệ
+            $product = $this->productService->editProduct($id, $validatedData);
+    
+            return response()->json(['message' => 'Product updated successfully'], 200);
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        }
     }
+    
     public function delete(Request $request){
         $this->productService->deleteProduct($request->id);
     }

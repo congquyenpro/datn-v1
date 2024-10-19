@@ -20,7 +20,7 @@ Api.Product.GetProductsList = () => $.ajax({
     method: 'GET',
 });
 Api.Product.GetProductDetail = (id) => $.ajax({
-    url: `http://127.0.0.1:3000/product_detail/${id}`,
+    url: `/admin/product/get/${id}`,
     method: 'GET',
 });
 
@@ -42,9 +42,13 @@ Api.Product.AddNewProduct = (formData) => $.ajax({
     processData: false, // Đặt false để ngăn jQuery tự động chuyển đổi formData thành chuỗi query
     contentType: false, // Đặt false để jQuery không đặt header `Content-Type` (formData sẽ tự thêm header đúng)
 });
+Api.Product.EditProduct = (formData) => $.ajax({
+    url: '/admin/product/update',
+    method: 'POST',
+    data: formData,
+    processData: false, // Đặt false để ngăn jQuery tự động chuyển đổi formData thành chuỗi query
+    contentType: false, // Đặt false để jQuery không đặt header `Content-Type` (formData sẽ tự thêm header đúng)
+});
 
-/* Api.Product.AddNewProduct()
-    .then(res => console.log(res))
-    .catch(console.error); */
 
     

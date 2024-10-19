@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div class="col-lg-4 text-right">
-                    <button class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl">
+                    <button class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl" id="btn-add-product">
                         <i class="anticon anticon-plus-circle m-r-5"></i>
                         <span>Sản phẩm</span>
                     </button>
@@ -64,7 +64,7 @@
                             </th>
                             <th>ID</th>
                             <th>Tên</th>
-                            <th>Thương hiệu</th>
+                            <th>Danh mục</th>
                             <th>Hình ảnh</th>
                             <th>Phân loại</th>
                             <th>Trending</th>
@@ -184,7 +184,7 @@
 </div>
 
     <!-- Modal Add -->
-    <div class="modal fade bd-example-modal-xl">
+    <div class="modal fade bd-example-modal-xl" id="modal-add-edit">
         <div class="modal-dialog modal-dialog-scrollable" style="max-width: 90%;">
             <div class="modal-content">
                 <div class="modal-header">
@@ -206,15 +206,15 @@
                                         <label class="col-form-label col-sm-2 pt-0">Trạng thái</label>
                                         <div class="col-sm-10" style=" display: flex;">
                                             <div class="radio m-r-50">
-                                                <input type="radio" name="status" id="status4" value="public" checked>
+                                                <input type="radio" name="status" id="status4" value="1" checked>
                                                 <label for="status4">Công khai</label>
                                             </div>
                                             <div class="radio m-r-50">
-                                                <input type="radio" name="status" id="status5" value="hidden">
+                                                <input type="radio" name="status" id="status5" value="0">
                                                 <label for="status5">Ẩn</label>
                                             </div>
                                             <div class="radio m-r-50">
-                                                <input type="radio" name="status" id="status6" value="out_of_stock">
+                                                <input type="radio" name="status" id="status6" value="2">
                                                 <label for="status6">Hết hàng</label>
                                             </div>
                                         </div>
@@ -232,11 +232,11 @@
                                         <div class="col-sm-10" style=" display: flex;">
                                             <div class="radio m-r-50">
                                                 <input type="radio" name="gender" id="gridRadios1" value="1" checked>
-                                                <label for="gridRadios1">Male</label>
+                                                <label for="gridRadios1">Nam</label>
                                             </div>
                                             <div class="radio m-r-50">
                                                 <input type="radio" name="gender" id="gridRadios2" value="0">
-                                                <label for="gridRadios2">Female</label>
+                                                <label for="gridRadios2">Nữ</label>
                                             </div>
                                             <div class="radio m-r-50">
                                                 <input type="radio" name="gender" id="gridRadios3" value="2">
@@ -379,6 +379,7 @@
             </div>
         </div>
     </div>
+
 
 @endsection
 
