@@ -201,13 +201,13 @@
                                     <a href="{{route('manager.product')}}">Sản phẩm</a>
                                 </li>
                                 <li>
-                                    <a href="{{route('manager.deal')}}">Chương trình khuyến mãi</a>
+                                    <a href="{{route('manager.promotion')}}">Chương trình khuyến mãi</a>
                                 </li>
 
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="dropdown-toggle" href="javascript:void(0);">
+                            <a class="dropdown-toggle" href="{{route('manager.order')}}">
                                 <span class="icon-holder">
 									<i class="fas fa-shopping-cart"></i>
 								</span>

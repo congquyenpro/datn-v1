@@ -70,6 +70,22 @@ class ProductService
         return $product;
     }
     
+
+    //for customer
+    public function getProductByType($type)
+    {
+        return $this->productRepository->getProductByType($type);
+    }
+    public function getProductBySlug($slug)
+    {
+        return $this->productRepository->getProductBySlug($slug);
+    }
+    public function getRelatedProduct($product_id)
+    {
+
+        return $this->productRepository->getRelatedProduct($product_id);
+    }
+
     
 
 }

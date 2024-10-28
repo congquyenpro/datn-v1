@@ -17,6 +17,7 @@ class ProductRepository extends BaseRepository
     public function __construct(Product $product) 
     {
         parent::__construct($product);
+        $this->product = $product;
     }
 
     public function createProduct($data)
@@ -246,6 +247,85 @@ class ProductRepository extends BaseRepository
             return Product::destroy($id);
         });
     }
+    
+    public function getProductByType($type,$limit = 12)
+    {
+        switch ($type) {
+            case 'new':
+                return $this->product
+                ->with('productSizes') // Tải trước mối quan hệ productSizes
+                ->limit($limit) // Giới hạn số lượng sản phẩm
+                ->get()
+                ->map(function ($product) {
+                    // Gán giá của sản phẩm bằng giá của kích thước đầu tiên
+                    if ($product->productSizes->isNotEmpty()) {
+                        $firstSize = $product->productSizes->first();
+                        $product->product_id = $product->id;
+                        $product->product_name = $product->name;
+                        $product->price = $firstSize->price; // Gán giá bằng giá của kích thước đầu tiên
+                        $product->product_size_id = $firstSize->id; // Gán ID kích thước đầu tiên
+                        $product->size = $firstSize->volume; // Gán kích thước
+                        $product->discount = $firstSize->discount; // Gán giảm giá
+                    }
+                    // Chỉ lấy ảnh đầu tiên từ chuỗi images
+                    $imagesArray = explode(',', $product->images); // Chia chuỗi thành mảng
+                    $product->image = trim($imagesArray[0]); // Lấy ảnh đầu tiên và loại bỏ khoảng trắng
+                    /* dùng only: trả về mảng, không phải collection */
+                    return $product->only(['product_id','slug', 'product_name', 'product_size_id','size', 'image', 'price','discount']); // Chỉ lấy các trường cần thiết
+                });
+
+        }
+    }
+    public function getProductBySlug($slug)
+    {
+        $product = Product::where('slug', $slug)
+            ->with('productSizes', 'productAttributes.attributeValue') // Eager load relationships
+            ->first(); // Or use firstOrFail() for 404
+    
+        // set giá mặc định = giá first size
+        if ($product && $product->productSizes->isNotEmpty()) {
+            $product->price = $product->productSizes->first()->price;
+        } else {
+            $product->price = null; // Handle case when no sizes are available
+        }
+    
+        return $product;
+    }
+    public function getRelatedProduct($product_id)
+    {
+        $product = $this->product->find($product_id);
+        if (!$product) {
+            return null;
+        }
+    
+        $categoryId = $product->category_id;
+    
+        return $this->product
+            ->where('category_id', $categoryId)
+            ->with('productSizes') // Load productSizes relationship
+            ->limit(5)
+            ->get()
+            ->map(function ($product) {
+                // Set price to the first size's price
+                if ($product->productSizes->isNotEmpty()) {
+                    $firstSize = $product->productSizes->first();
+                    $product->price = $firstSize->price;
+                    $product->product_size_id = $firstSize->id;
+                    $product->discount = $firstSize->discount;
+                    $product->discounted_price = $firstSize->price - $firstSize->price*$firstSize->discount/100;
+                }
+    
+                // Get only the first image from the images string
+                $imagesArray = explode(',', $product->images);
+                $product->image = trim($imagesArray[0]);
+    
+                // Trả về các trường mong muốn
+                return $product->only(['id', 'slug', 'name', 'product_size_id', 'image', 'price', 'discount','discounted_price']);
+            });
+    }
+    
+    
+    
     
 
     

@@ -140,6 +140,13 @@ class ProductController extends Controller
         return response()->json($attributes, 200);
     }
 
+    //get product by type
+    public function getProductByType(Request $request)
+    {
+        $products = $this->productService->getProductByType($request->type);
+        return response()->json($products);
+    }
+
 
     
 }

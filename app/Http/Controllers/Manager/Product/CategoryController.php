@@ -75,10 +75,7 @@ class CategoryController extends Controller
         return response()->json($data);
     }
 
-    /* Deal */
-    public function showDeals(){
-        return view('manager.product.deals');
-    }
+
 
     
 }

@@ -1,6 +1,7 @@
 const Api = {
     Category: {},
     Product: {},
+    Order: {},
 };
 (() => {
     $.ajaxSetup({
@@ -51,4 +52,10 @@ Api.Product.EditProduct = (formData) => $.ajax({
 });
 
 
-    
+
+
+Api.Order.GetOrdersList = (order_status) => $.ajax({
+    //url: `http://127.0.0.1:3000/orders_list`,
+    url : `/admin/order/all?order_status=${order_status}`,
+    method: 'GET',
+});

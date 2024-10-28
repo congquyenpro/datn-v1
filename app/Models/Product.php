@@ -19,8 +19,11 @@ class Product extends Model
         'status',
     ];
 
+    /*Có thể tự định nghĩa khóa ngoại nếu ko đặt tên chuẩn return $this->hasOne(Phone::class, 'foreign_key'); */
+
     public function category()
     {
+        //không truyền 'foreign_key' mặc định khóa ngoại 'Tên Model'+_id
         return $this->belongsTo(Category::class);
     }
 

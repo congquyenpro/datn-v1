@@ -1,12 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\PermissionController;
-use App\Http\Controllers\UserController;
 
 use Illuminate\Http\Request;
 
@@ -21,29 +15,22 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 
-// Route cho trang đăng nhập
-Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('login', [LoginController::class, 'login']);
-Route::get('/error', function () {
-    return view('errors.access-denied');
-})->name('error.page');
-Route::get('logout', 'Auth\LoginController@logout');
+
+// error page
+Route::get('/error', function () {return view('errors.access-denied');})->name('error.page');
 
 
+//Test: phân quyền theo role
 Route::group(['middleware' => ['auth:sanctum', 'role.web:admin']], function() {
-    Route::get('/admin2', [AdminController::class, 'index'])->name('admin.index');
     Route::get('admin2/check', function(Request $request) {
         return $request->user();
     });
 });
 
+//Test: phân quyền theo permission
 Route::group(['middleware' => ['auth:sanctum', 'permission.web:edit_products']], function() {
-    Route::post('/products/edit', [ProductController::class, 'edit'])->name('products.edit');
     Route::get('/products/check', function(Request $request) {
         return $request->user();
     });
@@ -53,46 +40,42 @@ Route::group(['middleware' => ['auth:sanctum', 'permission.web:edit_products']],
 
 });
 
-/* 
-Route::get('/roles', [RoleController::class, 'index'])->middleware(['auth:sanctum', 'role.web:admin','permission.web:user_permission'])->name('roles.index');
-*/
+
+//Role & Permission
+Route::prefix('role-permission')->group(function() {
+    // Home page of "Manage Role & Permission"
+    Route::get('/roles', 'Admin\RoleController@index')->middleware(['auth:sanctum', 'role.web:admin'])->name('roles.index');
+    // Create new role name
+    Route::post('/roles', 'Admin\RoleController@store')->middleware(['auth:sanctum'])->name('roles.store');
+    // Assign permissions to role
+    Route::post('/roles/assign/{roleId}', 'Admin\RoleController@assignPermissions')->middleware(['auth:sanctum'])->name('roles.assignPermissions');
+    //update role name
+    Route::get('/roles/{role}', 'Admin\RoleController@show')->middleware(['auth:sanctum']);
+    Route::put('/roles/update', 'Admin\RoleController@update')->name('roles.update')->middleware(['auth:sanctum']);
+    Route::post('/permissions', 'Admin\PermissionController@store')->middleware(['auth:sanctum'])->name('permissions.store');
+
+    Route::delete('/roles', 'Admin\RoleController@deleteRole')->middleware(['auth:sanctum'])->name('roles.delete');
+    Route::delete('/permissions', 'Admin\PermissionController@deletePermission')->middleware(['auth:sanctum'])->name('permissions.delete');
 
 
-Route::get('/roles', [RoleController::class, 'index'])->middleware(['auth:sanctum', 'role.web:admin'])->name('roles.index');
-Route::post('/roles', [RoleController::class, 'store'])->middleware(['auth:sanctum'])->name('roles.store');
-Route::post('/roles/assign/{roleId}', [RoleController::class, 'assignPermissions'])->middleware(['auth:sanctum'])->name('roles.assignPermissions');
-//update role name
-Route::get('/roles/{role}', [RoleController::class, 'show'])->middleware(['auth:sanctum']);
-Route::put('/roles/update', [RoleController::class, 'update'])->name('roles.update')->middleware(['auth:sanctum']);
+    // Home Page of "Manage users' roles"
+    Route::get('/users/manage-roles', 'UserController@manageRoles')->middleware(['auth:sanctum'])->name('users.manageRoles');
 
-//Assign or delete role for user
-// Route để hiển thị quản lý role của người dùng
-Route::get('/users/manage-roles', [UserController::class, 'manageRoles'])
-    ->middleware(['auth:sanctum'])
-    ->name('users.manageRoles');
-
-// Route để gán role cho người dùng
-Route::post('/users/{user}/assign-roles', [UserController::class, 'assignRoles'])
-    ->middleware(['auth:sanctum'])
-    ->name('users.assignRoles');
-
-// Route để xóa role của người dùng
-Route::post('/users/{user}/remove-roles', [UserController::class, 'removeRoles'])
-    ->middleware(['auth:sanctum'])
-    ->name('users.removeRoles');
-    
-Route::get('/users/{user}/roles', [UserController::class, 'getRoles'])->middleware(['auth:sanctum'])->name('users.getRoles');
+    //Get roles of user
+    Route::get('/users/{user}/roles', 'UserController@getRoles')->middleware(['auth:sanctum'])->name('users.getRoles');
+    // Assign roles to users => lỗi
+    Route::post('/users/{user}/assign-roles', 'UserController@assignRoles')->middleware(['auth:sanctum'])->name('users.assignRoles');
+    // Delete roles from users => lỗi
+    Route::post('/users/{user}/remove-roles', 'UserController@removeRoles')->middleware(['auth:sanctum'])->name('users.removeRoles');
+});
 
 
-Route::post('/permissions', [PermissionController::class, 'store'])->middleware(['auth:sanctum'])->name('permissions.store');
 
-Route::delete('/roles', [RoleController::class, 'deleteRole'])->middleware(['auth:sanctum'])->name('roles.delete');
-Route::delete('/permissions', [PermissionController::class, 'deletePermission'])->middleware(['auth:sanctum'])->name('permissions.delete');
 
 //sử dụng middleware động để khi thêm role mới sẽ không bị ảnh hưởng như trường hợp sử dụng 'role.web:admin', vì gia sử thêm 1 route mới thì không thể sử dụng middleware tĩnh 'role.web:admin','role.web:edittor',...
 //nếu hệ thống phân quyền không quá phức tạp hoặc không cho người dùng tự tạo role, chỉ dùng những role có sẵn thì có thể sử dụng 'role.web:admin', 'role.web:edittor',... => tức role tĩnh trong code
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/roles2', [RoleController::class, 'index'])->middleware('permission.web:user_permission')->name('roles.index');
+    Route::get('/roles2', 'Admin\RoleController@index')->middleware('permission.web:user_permission')->name('roles.index');
     Route::get('/role-check-2', function(){return 'co quyen xem';})->middleware('permission.web:user_permission')->name('roles.index');
 });
 
@@ -137,33 +120,69 @@ Route::prefix('admin')->group(function() {
         /* api get all category */
         Route::get('/product/category/getAll', 'Manager\Product\CategoryController@getAll')->name('manager.category.getAll');
         
-
-        Route::get('/product/deal', 'Manager\Product\CategoryController@showDeals')->name('manager.deal');
     });
 
-    // Nhóm route khác cũng thuộc prefix 'admin'
-    Route::group(['middleware' => ['auth:sanctum']], function() {
-        Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
-        // Thêm các route khác tại đây
+    //admin promotion
+    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.promotion']], function() {
+        Route::prefix('promotions')->group(function() {
+            Route::get('/', 'Manager\Product\PromotionController@showAll')->name('manager.promotion');
+            Route::post('/store', 'Manager\Product\PromotionController@store')->name('manager.promotion.store');
+            Route::get('/delete/{id}', 'Manager\Product\PromotionController@delete')->name('manager.promotion.delete');
+        });
     });
 
-    // Bạn có thể thêm nhiều nhóm route khác tại đây
+    //admin order
+    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.order']], function() {
+        Route::prefix('order')->group(function() {
+            Route::get('/', 'Manager\Order\OrderController@index')->name('manager.order');
+            Route::get('/all', 'Manager\Order\OrderController@getOrders')->name('manager.order.getAll');
+            Route::get('/type/{id}', 'Manager\Order\OrderController@getType')->name('manager.order.getType');
+        });
+    });
+
+
 });
 
 
 
-//admin_test
-Route::prefix('admin2')->group(function() {
-    Route::get('/', function() {
-        return view('manager.home.index');
-    });
-    Route::get('/1', function() {
-        return view('manager.product.category');
-    });
-    Route::get('/{folder}.{view}', function($folder, $view) {
-        return view('manager.' . $folder . '.' . $view);
-    });
-    
 
 
+
+//Customer
+Route::prefix('/')->group(function() {
+    /* Test */
+    Route::get('/test', 'TestController@test');
+
+    /* Route API */
+    Route::prefix('api-v1')->group(function() {
+        Route::get('/product/type/{type}', 'Customer\ProductController@getProductByType');
+        Route::get('/product/detail/{slug}', 'Customer\ProductController@getProductDetail');
+        Route::get('/product/related/{product_id}', 'Customer\ProductController@getRelatedProduct');
+
+        /* Order */
+        Route::post('/order', 'Customer\OrderController@createOrder');
+
+
+        /* Promotion */
+        Route::get('/promotion/deal-of-day', 'Manager\Product\PromotionController@getDealOfDay');
+    });
+
+
+    /* Login */
+    Route::get('/login','Customer\AuthController@login')->name('customer.auth.login');
+    Route::post('/login','Customer\AuthController@postLogin')->name('customer.auth.postLogin');
+    Route::get('/logout','Customer\AuthController@logout')->name('customer.auth.logout');
+    Route::get('/register','Customer\AuthController@register')->name('customer.auth.register');
+    Route::post('/register','Customer\AuthController@postRegister')->name('customer.auth.postRegister');
+
+
+    /* Home */
+    Route::get('/','Customer\DisplayController@displayHome')->name('customer.home');
+    Route::get('/nuoc-hoa/{slug}','Customer\DisplayController@displayProduct')->name('customer.product');
+
+    /* Cart and Checkout */
+    Route::get('/checkout','Customer\DisplayController@checkout')->name('customer.checkout');
+    Route::get('/order-success','Customer\DisplayController@orderSuccess')->name('customer.order-success');
+    Route::get('/order-detail','Customer\DisplayController@orderDetail')->name('customer.order-detail');
 });
+

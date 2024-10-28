@@ -61,7 +61,7 @@
         <hr>
 
         <!-- Add new permission form -->
-        <h3>Add New Permission</h3>
+        <h3>Add New Permission (Chỉ dành cho Dev: liên quan đến permission trong route)</h3>
         <form action="{{ route('permissions.store') }}" method="POST">
             @csrf
             <label for="permission_name">Permission Name:</label>
