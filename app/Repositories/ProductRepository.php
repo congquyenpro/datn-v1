@@ -248,34 +248,64 @@ class ProductRepository extends BaseRepository
         });
     }
     
-    public function getProductByType($type,$limit = 12)
+    public function getProductByType($type, $limit = 12)
     {
         switch ($type) {
             case 'new':
-                return $this->product
-                ->with('productSizes') // Tải trước mối quan hệ productSizes
-                ->limit($limit) // Giới hạn số lượng sản phẩm
-                ->get()
-                ->map(function ($product) {
-                    // Gán giá của sản phẩm bằng giá của kích thước đầu tiên
-                    if ($product->productSizes->isNotEmpty()) {
-                        $firstSize = $product->productSizes->first();
-                        $product->product_id = $product->id;
-                        $product->product_name = $product->name;
-                        $product->price = $firstSize->price; // Gán giá bằng giá của kích thước đầu tiên
-                        $product->product_size_id = $firstSize->id; // Gán ID kích thước đầu tiên
-                        $product->size = $firstSize->volume; // Gán kích thước
-                        $product->discount = $firstSize->discount; // Gán giảm giá
-                    }
-                    // Chỉ lấy ảnh đầu tiên từ chuỗi images
-                    $imagesArray = explode(',', $product->images); // Chia chuỗi thành mảng
-                    $product->image = trim($imagesArray[0]); // Lấy ảnh đầu tiên và loại bỏ khoảng trắng
-                    /* dùng only: trả về mảng, không phải collection */
-                    return $product->only(['product_id','slug', 'product_name', 'product_size_id','size', 'image', 'price','discount']); // Chỉ lấy các trường cần thiết
-                });
-
+                return $this->getProducts($limit);
+    
+            case 'best':
+                // Lấy sản phẩm từ bảng order_item (giả sử có phương thức để lấy best-seller)
+                $productIds = $this->getBestSellerProductIds($limit); // Hàm giả định để lấy ID sản phẩm bán chạy
+                return $this->getProducts($limit, $productIds);
+    
+            // Thêm các case khác nếu cần
         }
     }
+    
+    public function getProducts($limit, $productIds = null)
+    {
+        $query = $limit = null ? $this->product->with('productSizes')->limit($limit) : $this->product;
+        //$query = $this->product->with('productSizes')->limit($limit);
+    
+        if ($productIds) {
+            $query->whereIn('id', $productIds); // Thêm điều kiện nếu có productIds
+        }
+    
+        return $query->get()->map(function ($product) {
+            if ($product->productSizes->isNotEmpty()) {
+                $firstSize = $product->productSizes->first();
+                $product->product_id = $product->id;
+                $product->product_name = $product->name;
+                $product->price = $firstSize->price; // Gán giá bằng giá của kích thước đầu tiên
+                $product->product_size_id = $firstSize->id; // Gán ID kích thước đầu tiên
+                $product->size = $firstSize->volume; // Gán kích thước
+                $product->discount = $firstSize->discount; // Gán giảm giá
+            }
+            $imagesArray = explode(',', $product->images); // Chia chuỗi thành mảng
+            $product->image = trim($imagesArray[0]); // Lấy ảnh đầu tiên và loại bỏ khoảng trắng
+            return $product->only(['product_id', 'slug', 'product_name', 'product_size_id', 'size', 'image', 'price', 'discount']);
+        });
+    }
+    protected function getBestSellerProductIds($limit)
+    {
+        // Lấy product_size_id bán chạy nhất
+        $bestSellerProductSizeIds = \DB::table('order_items')
+            ->select('product_size_id')
+            ->groupBy('product_size_id')
+            ->orderByRaw('SUM(quantity) DESC')
+            ->limit($limit)
+            ->pluck('product_size_id');
+
+        // Lấy product_id tương ứng từ product_sizes
+        return \DB::table('product_sizes')
+            ->whereIn('id', $bestSellerProductSizeIds)
+            ->pluck('product_id')
+            ->unique(); // Trả về danh sách product_id duy nhất
+    }
+
+
+    
     public function getProductBySlug($slug)
     {
         $product = Product::where('slug', $slug)

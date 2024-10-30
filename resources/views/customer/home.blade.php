@@ -83,7 +83,7 @@
                                         <div class="description">
                                             Adipiscing elit curabitur senectus sem
                                         </div>
-                                        <a href="gridproducts_leftsidebar.html" class="button btn-lets-do-it">Shop now</a>
+                                        <a href="{{route('customer.shop')}}" class="button btn-lets-do-it">Shop now</a>
                                     </div>
                                 </div>
                             </div>

@@ -16,6 +16,10 @@ class OrderRepository extends BaseRepository implements IBaseRepository
         parent::__construct($order);
         $this->order = $order;
     }
+    public function getOrdersByStatus($status)
+    {
+        return $this->order->where('status', $status)->get();
+    }
 
     public function createOrder($data)
     {

@@ -155,9 +155,14 @@ Route::prefix('/')->group(function() {
 
     /* Route API */
     Route::prefix('api-v1')->group(function() {
+
+        /* product */
         Route::get('/product/type/{type}', 'Customer\ProductController@getProductByType');
         Route::get('/product/detail/{slug}', 'Customer\ProductController@getProductDetail');
         Route::get('/product/related/{product_id}', 'Customer\ProductController@getRelatedProduct');
+
+        /* Attribute-Value */
+        Route::get('/attribute-value/all', 'Customer\ProductController@getAllAttributes');
 
         /* Order */
         Route::post('/order', 'Customer\OrderController@createOrder');
@@ -184,5 +189,9 @@ Route::prefix('/')->group(function() {
     Route::get('/checkout','Customer\DisplayController@checkout')->name('customer.checkout');
     Route::get('/order-success','Customer\DisplayController@orderSuccess')->name('customer.order-success');
     Route::get('/order-detail','Customer\DisplayController@orderDetail')->name('customer.order-detail');
+
+    /* Shop */
+    Route::get('/shop','Customer\ProductController@shop')->name('customer.shop');
 });
+
 

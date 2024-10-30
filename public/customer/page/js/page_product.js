@@ -20,10 +20,9 @@ const PageProduct = {
             return Api.Atrributes.getAll()
                 .done((data) => {
                     PageProduct.Attributes1 = data.data; 
-                    //console.log(PageProduct.Attributes1);
 
                     /* start sidebar */
-                    const Attributes = data.data; //0-brand, 1-gender, 2-volume, 3-price, 4-country, 5-age, 6-concentration, 7-style, 8-frag_group, 9-frag_time, 10-frag_distance
+                    const Attributes = data.data; //Fakde data: 0-brand, 1-gender, 2-volume, 3-price, 4-country, 5-age, 6-concentration, 7-style, 8-frag_group, 9-frag_time, 10-frag_distance
                     
                     // Hàm để đánh dấu các checkbox dựa trên tham số URL
                     const markCheckboxes = (idName) => {
@@ -42,7 +41,7 @@ const PageProduct = {
                     };                      
 
                     /* start brand */
-                    const brand = Attributes[0].data; //lấy ra các values của attribute brand
+                    const brand = Attributes.brand; //lấy ra các values của attribute brand
                     const brand_values = $('#filter-brand');
                     brand.forEach(element => {
                         brand_values.append(`
@@ -55,40 +54,134 @@ const PageProduct = {
                     markCheckboxes('filter-brand');
 
                     /* start gender */
-                    const gender = Attributes[0].data; //lấy ra các values của attribute gender
+                    const gender = Attributes.brand; //lấy ra các values của attribute gender
                     const gender_values = $('#filter-gender');
                     gender.forEach(element => {
                         gender_values.append(`
                             <li>
-                                <input type="checkbox" id="${element.id}a">
-                                <label for="${element.id}a" class="label-text">${element.value}a</label>
+                                <input type="checkbox" id="${element.id}">
+                                <label for="${element.id}" class="label-text">${element.value}a</label>
                             </li>
                         `);
                     });
                     markCheckboxes('filter-gender');
-                    
-                    /* start volume */
-                    const volume = Attributes[0].data; //lấy ra các values của attribute volume
-                    const volume_values = $('#filter-volume');
-                    volume.forEach(element => {
-                        volume_values.append(`
+                
+                    /* start country */
+                    const country = Attributes.country; //lấy ra các values của attribute country
+                    const country_values = $('#filter-country');
+                    country.forEach(element => {
+                        country_values.append(`
                             <li>
-                                <input type="checkbox" id="${element.id}b">
-                                <label for="${element.id}b" class="label-text">${element.value}b</label>
+                                <input type="checkbox" id="${element.id}">
+                                <label for="${element.id}" class="label-text">${element.value}</label>
                             </li>
                         `);
                     });
-                    markCheckboxes('filter-volume');
+                    markCheckboxes('filter-country');
+
+                    /* start age-group */
+                    const age = Attributes.age_group; //lấy ra các values của attribute age
+                    const age_values = $('#filter-age_group');
+                    age.forEach(element => {
+                        age_values.append(`
+                            <li>
+                                <input type="checkbox" id="${element.id}">
+                                <label for="${element.id}" class="label-text">${element.value}</label>
+                            </li>
+                        `);
+                    });
+                    markCheckboxes('filter-age_group');
+
+                    /* start concentration */
+                    const concentration = Attributes.concentration; //lấy ra các values của attribute concentration
+                    const concentration_values = $('#filter-concentration');
+                    concentration.forEach(element => {
+                        concentration_values.append(`
+                            <li>
+                                <input type="checkbox" id="${element.id}">
+                                <label for="${element.id}" class="label-text">${element.value}</label>
+                            </li>
+                        `);
+                    });
+                    markCheckboxes('filter-concentration');
+
+                    /* start style */
+                    const style = Attributes.style; //lấy ra các values của attribute style
+                    const style_values = $('#filter-style');
+                    style.forEach(element => {
+                        style_values.append(`
+                            <li>
+                                <input type="checkbox" id="${element.id}">
+                                <label for="${element.id}" class="label-text">${element.value}</label>
+                            </li>
+                        `);
+                    });
+                    markCheckboxes('filter-style');
+
+                    /* start frag-group */
+                    const frag_group = Attributes.frag_group; //lấy ra các values của attribute frag_group
+                    const frag_group_values = $('#filter-frag_group');
+                    frag_group.forEach(element => {
+                        frag_group_values.append(`
+                            <li>
+                                <input type="checkbox" id="${element.id}">
+                                <label for="${element.id}" class="label-text">${element.value}</label>
+                            </li>
+                        `);
+                    });
+                    markCheckboxes('filter-frag_group');
+
+                    /* start frag-time */
+                    const frag_time = Attributes.frag_time; //lấy ra các values của attribute frag_time
+                    const frag_time_values = $('#filter-frag_time');
+                    frag_time.forEach(element => {
+                        frag_time_values.append(`
+                            <li>
+                                <input type="checkbox" id="${element.id}">
+                                <label for="${element.id}" class="label-text">${element.value}</label>
+                            </li>
+                        `);
+                    });
+                    markCheckboxes('filter-frag_time');
+
+                    /* start frag-distance */
+                    const frag_distance = Attributes.frag_distance; //lấy ra các values của attribute frag_distance
+                    const frag_distance_values = $('#filter-frag_distance');
+                    frag_distance.forEach(element => {
+                        frag_distance_values.append(`
+                            <li>
+                                <input type="checkbox" id="${element.id}">
+                                <label for="${element.id}" class="label-text">${element.value}</label>
+                            </li>
+                        `);
+                    });
+                    markCheckboxes('filter-frag_distance');
+
 
 
                     // Thiết lập tìm kiếm cho các thuộc tính
                     PageProduct.default.search('#brand-search', '#filter-brand li');
-                    PageProduct.default.search('#volume-search', '#filter-volume li');
+                    PageProduct.default.search('#country-search', '#filter-country li');
+                    PageProduct.default.search('#age-group-search', '#filter-age_group li');
+                    PageProduct.default.search('#concentration-search', '#filter-concentration li');
+                    PageProduct.default.search('#style-search', '#filter-style li');
+                    PageProduct.default.search('#frag-group-search', '#filter-frag_group li');
+                    PageProduct.default.search('#frag-time-search', '#filter-frag_time li');
+                    PageProduct.default.search('#frag-distance-search', '#filter-frag_distance li');
+
 
                     //get selected value
                     PageProduct.default.getSelectedValue('filter-brand');
                     PageProduct.default.getSelectedValue('filter-gender');
-                    PageProduct.default.getSelectedValue('filter-volume');
+                    PageProduct.default.getSelectedValue('filter-country');
+                    PageProduct.default.getSelectedValue('filter-age_group');
+                    PageProduct.default.getSelectedValue('filter-concentration');
+                    PageProduct.default.getSelectedValue('filter-style');
+                    PageProduct.default.getSelectedValue('filter-frag_group');
+                    PageProduct.default.getSelectedValue('filter-frag_time');
+                    PageProduct.default.getSelectedValue('filter-frag_distance');
+
+                    
                     
 
                 })
@@ -130,7 +223,7 @@ const PageProduct = {
                     }
         
                     //tạo link
-                    const link = `/gridproducts_leftsidebar.html?${urlParams.toString()}`;
+                    const link = `/shop?${urlParams.toString()}`;
                     history.pushState(null, '', link);
         
                 });
@@ -162,14 +255,7 @@ const PageProduct = {
 
     products : {
         getDefaultProducts : function (page, page_size, field, order) {
-            //page:1 , page_size: 20, field: price, order: asc
-/*             const urlParams = new URLSearchParams(window.location.search);
-            urlParams.set('page', page);
-            urlParams.set('page_size', page_size);
-            urlParams.set('field', field);
-            urlParams.set('order', order);
-            const link = `/gridproducts_leftsidebar.html?${urlParams.toString()}`;
-            history.pushState(null, '', link); */
+
             const urlParams = new URLSearchParams(window.location.search);
             const paramsArray = [];
             // Lặp qua từng tham số và thêm vào mảng
@@ -189,13 +275,14 @@ const PageProduct = {
             Api.Product.GetProducts(filter).done(response => {
                 // Xử lý dữ liệu sản phẩm trả về (data, pagination)
                 console.log(response.data); 
+                console.log(response.pagination);
                 
                 product_list = response.data;
                 const productContainer = $('#product-list');
                 productContainer.empty();
                 product_list.forEach(product => {
                     productContainer.append(`
-                    <li class="product-item  col-lg-4 col-md-6 col-sm-6 col-xs-6 col-ts-12 style-1" data-id-size="${product.product_size_id}" data-id="${product.id}">
+                    <li class="product-item  col-lg-4 col-md-6 col-sm-6 col-xs-6 col-ts-12 style-1" data-id-size="${product.product_size_id}" data-id="${product.id}" data-size="${product.size}">
                     <div class="product-inner equal-element">
                         <div class="product-top">
                             <div class="flash">
@@ -209,7 +296,7 @@ const PageProduct = {
                         <div class="product-thumb">
                             <div class="thumb-inner">
                                 <a href="productdetails-rightsidebar.html">
-                                    <img src="https://placehold.co/268x268" alt="img">
+                                    <img src="${product.images}" alt="img">
                                 </a>
                                 <div class="thumb-group">
                                     <div class="yith-wcwl-add-to-wishlist">
@@ -320,7 +407,7 @@ const PageProduct = {
                 if (page) {
                     const urlParams = new URLSearchParams(window.location.search);
                     urlParams.set('page', page);
-                    const link = `/gridproducts_leftsidebar.html?${urlParams.toString()}`;
+                    const link = `/shop?${urlParams.toString()}`;
                     history.pushState(null, '', link);
                     PageProduct.products.getDefaultProducts(page);
                 }
@@ -423,7 +510,7 @@ PageProduct.default.setDefault().then(() => {
     
 });
 
-PageProduct.products.getDefaultProducts(5, 20, 'price', 'asc');
+PageProduct.products.getDefaultProducts(1, 9, 'price', 'asc');
 
 
 

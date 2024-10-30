@@ -29,7 +29,8 @@ Api.Product.GetDealOfDay = () => $.ajax({
 });
 
 Api.Product.GetBestSeller = () => $.ajax({
-    url: `http://127.0.0.1:3000/best-seller`,
+    /* url: `http://127.0.0.1:3000/best-seller`, */
+    url: `/api-v1/product/type/best`,
     method: 'GET',
 });
 
@@ -61,40 +62,17 @@ Api.Product.GetValueByCriteria = (criteria_name) => $.ajax({
 
 //get all attributes and values
 Api.Atrributes.getAll = () => $.ajax({
-    url: `http://127.0.0.1:3000/all-attributes`,
+    /* url: `http://127.0.0.1:3000/all-attributes`, */
+    url: `/api-v1/attribute-value/all`,
     method: 'GET',
 });
 
 //get products from filter to paginate and order
 Api.Product.GetProducts = (filter) => $.ajax({
-    url: `http://127.0.0.1:3000/products?${filter}`, //?field=price&order=asc&brand=6&gender=3a&volume=6b
+    //url: `http://127.0.0.1:3000/products?${filter}`, //?field=price&order=asc&brand=6&gender=3a&volume=6b
+    url: `/test?${filter}`,
     method: 'GET',
 });
-/* 
- Dữ liệu trả về có dạng
- {
-    "data": [
-        {
-            "id": 1,
-            "name": "Product A",
-
-        },
-        {
-            "id": 2,
-            "name": "Product B",
-
-        }
-    ],
-    "pagination": {
-        "currentPage": 1,
-        "totalPages": 10,
-        "totalItems": 100,
-        "itemsPerPage": 10
-    }
-}
- */
-
-
 
 /* Comment */
 Api.Comment.getAll = (product_id) => $.ajax({

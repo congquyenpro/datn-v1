@@ -14,12 +14,29 @@ class OrderService
     {
         $this->orderRepository = $orderRepository;
     }
+
+    //Admin
+    public function getOrders($order_status)
+    {
+        switch ($order_status) {
+            case 1202:
+                $orders = $this->orderRepository->all();
+                break;
+            default:
+                $orders = $this->orderRepository->getOrdersByStatus($order_status);
+                break;
+        }
+        return $orders;
+    }
+
+
+    //Customer
     public function createOrder($data)
     {
   
         switch ($data['payment_method']) {
             case 'Online':
-                
+                /* optional */
                 break;
             default:
                 $data['status'] = 0;
@@ -28,6 +45,8 @@ class OrderService
         }
         return $order;
     }
+
+
 
 
 }

@@ -214,7 +214,7 @@
                                 <span class="title">Đơn hàng</span>
                             </a>
                         </li>
-                        <li class="nav-item dropdown">
+{{--                         <li class="nav-item dropdown">
                             <a class="dropdown-toggle" href="javascript:void(0);">
                                 <span class="icon-holder">
                                     <i class="fas fa-shipping-fast"></i>
@@ -232,7 +232,7 @@
                                     <a href="carousel.html">Đối soát COD và phí</a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> --}}
                         <li class="nav-item dropdown">
                             <a class="dropdown-toggle" href="javascript:void(0);">
                                 <span class="icon-holder">
@@ -241,7 +241,7 @@
                                 <span class="title">Kho hàng</span>
                             </a>
                         </li>
-                        <li class="nav-item dropdown">
+{{--                         <li class="nav-item dropdown">
                             <a class="dropdown-toggle" href="javascript:void(0);">
                                 <span class="icon-holder">
                                     <i class="fas fa-users"></i>
@@ -256,7 +256,7 @@
                                 </span>
                                 <span class="title">Nhân viên</span>
                             </a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item dropdown">
                             <a class="dropdown-toggle" href="javascript:void(0);">
                                 <span class="icon-holder">
@@ -279,7 +279,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item dropdown">
+{{--                         <li class="nav-item dropdown">
                             <a class="dropdown-toggle" href="javascript:void(0);">
                                 <span class="icon-holder">
                                     <i class="fas fa-toolbox"></i>
@@ -300,7 +300,7 @@
                                     <a href="carousel.html">Thông báo</a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> --}}
                         <li class="nav-item dropdown">
                             <a class="dropdown-toggle" href="javascript:void(0);">
                                 <span class="icon-holder">
