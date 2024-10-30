@@ -1,22 +1,11 @@
-// /products?age=20&fragrance_group=floral&fragrance_note=rose&_page=2&_limit=10&_sort=price&_order=asc&
-//https://example.com/search?category_id=1&min_price=200&max_price=600&style[]=3&style[]=4&concentration[]=5&longevity[]=6&longevity[]=7
 
 
-//Chú ý Danh mục có thể # thương hiệu
-//VD: Danh mục (Sản phẩm lẻ, Hàng mới về: auto khi thêm sp, Hàng hot, Combo, Set quà tặng, Dịp lễ, Hàng chính hãng, xách tay, Rep 1....) => khác biệt: phân danh mục rõ ràng
-
-//Dự kiến: CHo danh mục thì dùng slug: /category-slug?brand=$gender=&
-//ex : /all?brand=?  /for-you?gender=&min_price=&max_price=&
-
-//Định dạng chuẩn /category-slug?criteria1=value1&criteria2=value2&criteria3=value3&criteria4=value4&criteria5=value5&criteria6=value6&criteria7=value7&criteria8=value8&criteria9=value9&criteria10=value10
-
-//Thứ tự chuẩn: /category-slug?brand=v1&gender=v2&volume=v3&price=v6&age=v7&concentration=v8&frag_group=v9&frag_time=v10&frag_distance=v11&style=v12   v:dạng id
-//Mặc định: /all
 const PageProduct = {
     Attributes1: {},
     default : {
         /* Default khi truy cập */
         setDefault : function () {
+            PageProduct.default.getSortValue();
             return Api.Atrributes.getAll()
                 .done((data) => {
                     PageProduct.Attributes1 = data.data; 
@@ -203,6 +192,7 @@ const PageProduct = {
         
             oneChoiceWidgets.forEach(checkbox => {
                 checkbox.addEventListener('change', () => {
+                    
                     const attName = idName.split('-')[1]; // filter-brand => brand
                     
                     // Lấy tất cả tham số hiện tại từ URL
@@ -225,8 +215,35 @@ const PageProduct = {
                     //tạo link
                     const link = `/shop?${urlParams.toString()}`;
                     history.pushState(null, '', link);
+
+                    //const cur_page = urlParams.get('page') || 1;
+                    //mỗi lần chọn  thuộc tính # thì tự động về page 1
+                    if(urlParams.has('page')){
+                        urlParams.delete('page');
+                        //cập nhật lại link
+                        const link = `/shop?${urlParams.toString()}`;
+                        history.pushState(null, '', link);
+                    }
+
+                    PageProduct.products.getDefaultProducts(1, 9, 'price', 'asc'); 
         
                 });
+            });
+        },
+        getSortValue: function () {
+            $('#sort').on('change', function() {
+                console.log($(this).val());
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.set('sort', $(this).val());
+                const link = `/shop?${urlParams.toString()}`;
+                history.pushState(null, '', link);
+            });
+            $('#sort-by').on('change', function() {
+                console.log($(this).val());
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.set('sort-by', $(this).val());
+                const link = `/shop?${urlParams.toString()}`;
+                history.pushState(null, '', link);
             });
         },
 
@@ -248,8 +265,6 @@ const PageProduct = {
                 });
             });
         },
-        
-
         
     },
 
@@ -295,7 +310,7 @@ const PageProduct = {
                         </div>
                         <div class="product-thumb">
                             <div class="thumb-inner">
-                                <a href="productdetails-rightsidebar.html">
+                                <a href="/nuoc-hoa/${product.slug}">
                                     <img src="${product.images}" alt="img">
                                 </a>
                                 <div class="thumb-group">
@@ -414,43 +429,51 @@ const PageProduct = {
             });
         }
     },
+
+    showAdvancedFilter: function () {
+        // Set mặc định ẩn
+        $('#advanced-filter').hide();
     
+        $('#view-advanced-filter').on('click', function() {
+            const filterContainer = $('#advanced-filter');
+            // Đổi tên button
+            if (filterContainer.is(':visible')) {
+                $(this).html(`
+                    <div style="margin-bottom: 10px; cursor:pointer;" id="view-advanced-filter">
+                        <div style="border: 1px dotted;padding: 4px;text-align: center;font-weight: bold;font-size: 14px;color: #ab8e66;">Lọc nâng cao</div>
+                    </div>
+                `);
+                filterContainer.hide(); // Ẩn phần tử
+            } else {
+                $(this).html(`
+                    <div style="margin-bottom: 10px; cursor:pointer;" id="view-advanced-filter">
+                        <div style="border: 1px dotted;padding: 4px;text-align: center;font-weight: bold;font-size: 14px;color: #ab8e66;">Tắt lọc nâng cao</div>
+                    </div>
+                `);
+                filterContainer.show(); // Hiển thị phần tử
+            }
+        });
 
-    criteria : {
-        /* Basic Filter / Category=Tag*/ 
-        getByCategory: function (value) {   
-        },
-        getByBrand: function (value) {   
-        },
-        getByGender: function (value) {
-        },
-        getByVolume: function (value) {
-        },
-        getByPrice: function (value) {
-        },
-        /* Advanced Filter */
-        getByCountry: function (value) {
-        },
-        getByAge: function (value) {
-        },
-        getByConcentration : function (value) {
-            //Nồng độ
-        },
-        getByStyle : function (value) {
-        },
-        getByFragGroup: function (value) {
-            //Nhóm hương
-        },
-        getByFragTime: function (value) {
-            //Thời gian lưu hương
-        },
-        getByFragDistance: function (value) {
-            //Độ tỏa hương
-        },
+        //Delete all filter
+        $('#delete-all-filter').on('click', function() {
+            const urlParams = new URLSearchParams(window.location.search);
 
+            // Xóa tất cả tham số
+            urlParams.forEach((value, key) => {
+                urlParams.delete(key);
+            });
+            
+            // Cập nhật URL
+            const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+            history.pushState(null, '', newUrl);
 
+            //uncheck all checkbox .list-categories input[type="checkbox"]
+            $('.list-categories input[type="checkbox"]').prop('checked', false);
 
+        });
     },
+    
+    
 
     Cart: {
         init: function () {
@@ -465,12 +488,64 @@ const PageProduct = {
                 const productCard = button.closest('.product-item');
                 const productId = productCard.data('id');
                 const productSizeId = productCard.data('id-size');
+                const sizeValue = productCard.data('size');
     
-                this.updateCart(productId, productSizeId,productSizeId);
+                // Extract image, name, and price
+                const productImage = productCard.find('img').attr('src');
+                const productName = productCard.find('.product-name a').text();
+
+                const productPrice = productCard.find('.price ins').text().replace('$', ''); // Remove dollar sign
+    
+                this.updateCart(productId,productSizeId, sizeValue, productImage, productPrice, productName);
+                this.showCart();
                 alert('Product added to cart!');
             });
+            $(document).on('click', '.product-remove', (event) => {
+                const button = $(event.target);
+                const productId = button.closest('.product-remove').data('id');
+                this.deleteProduct(productId);
+                this.showCart();
+            });
         },
-        updateCart: function (productId, productImage, productPrice) {
+        showCart: function (){
+            let total = 0;
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let cartContent = document.getElementById('cart-content');
+            cartContent.innerHTML = '';
+            cart.forEach(product => {
+                total += product.price * product.quantity;
+                cartContent.innerHTML += `
+                    <li class="product-cart mini_cart_item">
+                        <a href="#" class="product-media">
+                            <img src="${product.image}" alt="img">
+                        </a>
+                        <div class="product-details">
+                            <h5 class="product-name">
+                                <a href="#">${product.name}</a>
+                            </h5>
+                            <div class="variations">
+                                <span class="attribute_size">
+                                            <a href="#">${product.size}ml</a>
+                                        </span>
+                            </div>
+                            <span class="product-price">
+                                        <span class="price">
+                                            <span>${product.price}</span>
+                                        </span>
+                                    </span>
+                            <span class="product-quantity">
+                                        (x${product.quantity})
+                                    </span>
+                            <div class="product-remove" data-id="${product.id}">
+                                <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </li>
+                `;
+            });
+            $('.total-price .Price-amount').text(total + ' ₫');
+        },
+        updateCart: function (productId,productSizeId, sizeValue, productImage, productPrice, productName) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
     
             let existingProduct = cart.find(item => item.id === productId);
@@ -479,8 +554,11 @@ const PageProduct = {
             } else {
                 const product = {
                     id: productId,
+                    size_id : productSizeId,
+                    size: sizeValue,
                     image: productImage,
-                    price: productPrice,
+                    price: parseFloat(productPrice), // Ensure price is a number
+                    name: productName, // Include product name
                     quantity: 1
                 };
                 cart.push(product);
@@ -490,9 +568,27 @@ const PageProduct = {
             $('#cart-count').text(this.cartCount);
             $('#cart-count-2').text(this.cartCount);
             localStorage.setItem('cart', JSON.stringify(cart));
-        }
-    }, 
+        },
+        deleteProduct: function (productId) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let cartCount = cart.length;
+            let existingProduct = cart.find(item => item.id === productId);
 
+            if (existingProduct) {
+                cart = cart.filter(item => item.id !== productId);
+                cartCount--;
+                $('#cart-count').text(this.cartCount);
+                $('#cart-count-2').text(this.cartCount);
+                localStorage.setItem('cart', JSON.stringify(cart));
+
+                $('#cart-count').text(cartCount);
+                $('#cart-count-2').text(cartCount);
+
+                this.showCart();
+            }
+        }
+
+    },
 
 
     sortFunction : {
@@ -510,8 +606,14 @@ PageProduct.default.setDefault().then(() => {
     
 });
 
-PageProduct.products.getDefaultProducts(1, 9, 'price', 'asc');
+//kiểm tra trên url có tham số page không
+const init_urlParams = new URLSearchParams(window.location.search);
+const init_page = init_urlParams.get('page') || 1;
 
+PageProduct.products.getDefaultProducts(init_page, 9, 'price', 'asc');
 
+PageProduct.Cart.init();
+//PageProduct.Cart.show();
 
-//return axios.get('/products?category=' + category + '&_limit=10&_sort=price&_order=asc')
+PageProduct.showAdvancedFilter();
+

@@ -41,22 +41,18 @@
                     <div class="shop-top-control">
                         <form class="select-item select-form">
                             <span class="title">Sort</span>
-                            <select title="sort" data-placeholder="12 Products/Page" class="chosen-select">
-                                <option value="1">12 Products/Page</option>
-                                <option value="2">9 Products/Page</option>
-                                <option value="3">10 Products/Page</option>
-                                <option value="4">8 Products/Page</option>
-                                <option value="5">6 Products/Page</option>
+                            <select title="sort" id="sort" data-placeholder="12 Products/Page" class="chosen-select">
+                                <option value="1">9 Products/Page</option>
+                                <option value="2">15 Products/Page</option>
                             </select>
                         </form>
                         <form class="filter-choice select-form">
                             <span class="title">Sort by</span>
-                            <select title="sort-by" data-placeholder="Price: Low to High" class="chosen-select">
+                            <select id="sort-by" title="sort-by" data-placeholder="Price: Low to High" class="chosen-select">
                                 <option value="1">Price: Low to High</option>
-                                <option value="2">Sort by popularity</option>
-                                <option value="3">Sort by average rating</option>
+                                <option value="2">Price: High to Low</option>
+                                <option value="3">Sort by popularity</option>
                                 <option value="4">Sort by newness</option>
-                                <option value="5">Sort by price: low to high</option>
                             </select>
                         </form>
                         <div class="grid-view-mode">
@@ -117,8 +113,11 @@
                                 </li>
                             </ul>
                         </div>
+                        <div style="margin-bottom: 10px; cursor:pointer;" id="delete-all-filter">
+                            <div style="border: 1px dotted;padding: 4px;text-align: center;font-weight: bold;font-size: 14px;color: #ab8e66;">Xóa bộ lọc</div>
+                        </div>
                         <div class="widget widget-categories" id="filter-by-brand">
-                            <h3 class="widgettitle">Brands</h3>
+                            <h3 class="widgettitle">Thương hiệu</h3>
                             
                             <!-- Search bar -->
                             <input type="text" id="brand-search" placeholder="Tìm thương hiệu..." class="search-bar">
@@ -148,64 +147,71 @@
                             </div>
                         </div>
                         <!-- Advanced Filter -->
-                        <div class="widget widget-categories" id="filter-by-country">
-                            <h3 class="widgettitle">Xuất xứ</h3>
-                            
-                            <!-- Search bar -->
-                            <input type="text" id="country-search" placeholder="Tìm xuất xứ..." class="search-bar">
+                        <div style="margin-bottom: 10px; cursor:pointer;" id="view-advanced-filter">
+                            <div style="border: 1px dotted;padding: 4px;text-align: center;font-weight: bold;font-size: 14px;color: #ab8e66;">Lọc nâng cao</div>
+                        </div>
                         
-                            <!-- Scrollable category list -->
-                            <ul class="list-categories" id="filter-country">
-                            </ul>
-                        </div>
-                        <div class="widget widget-categories" id="filter-by-age">
-                            <h3 class="widgettitle">Độ tuổi</h3>
-
-                            <input type="text" id="age-group-search" placeholder="Tìm độ tuổi..." class="search-bar">
-                            <!-- Scrollable category list -->
-                            <ul class="list-categories" id="filter-age_group">
-                                <!-- More items can be added here -->
-                            </ul>
-                        </div>
-                        <div class="widget widget-categories" id="filter-by-concentration">
-                            <h3 class="widgettitle">Nồng độ</h3>
-                            <!-- Search bar -->
-                            <input type="text" id="concentration-search" placeholder="Tìm nồng độ..." class="search-bar">                            
-                            <ul class="list-categories" id="filter-concentration">
-       
-                            </ul>
-                        </div>
-                        <div class="widget widget-categories" id="filter-by-style">
-                            <h3 class="widgettitle">Phong cách</h3>
-                            <!-- Search bar -->
-                            <input type="text" id="style-search" placeholder="Tìm phong cách..." class="search-bar">                            
-                            <ul class="list-categories" id="filter-style">
-                     
-                            </ul>
-                        </div>
-                        <div class="widget widget-categories" id="filter-by-frag-group">
-                            <h3 class="widgettitle">Nhóm hương</h3>
-                            <!-- Search bar -->
-                            <input type="text" id="frag-group-search" placeholder="Tìm nhóm hương..." class="search-bar">
-                            <ul class="list-categories" id="filter-frag_group">
-
-                            </ul>
-                        </div>
-                        <div class="widget widget-categories" id="filter-by-frag-time">
-                            <h3 class="widgettitle">Độ lưu hương</h3>
-                            <!-- Search bar -->
-                            <input type="text" id="frag-time-search" placeholder="Tìm độ lưu hương..." class="search-bar">
-                            <ul class="list-categories" id="filter-frag_time">
+                        <div id="advanced-filter">
+                            <div class="widget widget-categories" id="filter-by-country">
+                                <h3 class="widgettitle">Xuất xứ</h3>
+                                
+                                <!-- Search bar -->
+                                <input type="text" id="country-search" placeholder="Tìm xuất xứ..." class="search-bar">
                             
-                            </ul>
+                                <!-- Scrollable category list -->
+                                <ul class="list-categories" id="filter-country">
+                                </ul>
+                            </div>
+                            <div class="widget widget-categories" id="filter-by-age">
+                                <h3 class="widgettitle">Độ tuổi</h3>
+    
+                                <input type="text" id="age-group-search" placeholder="Tìm độ tuổi..." class="search-bar">
+                                <!-- Scrollable category list -->
+                                <ul class="list-categories" id="filter-age_group">
+                                    <!-- More items can be added here -->
+                                </ul>
+                            </div>
+                            <div class="widget widget-categories" id="filter-by-concentration">
+                                <h3 class="widgettitle">Nồng độ</h3>
+                                <!-- Search bar -->
+                                <input type="text" id="concentration-search" placeholder="Tìm nồng độ..." class="search-bar">                            
+                                <ul class="list-categories" id="filter-concentration">
+           
+                                </ul>
+                            </div>
+                            <div class="widget widget-categories" id="filter-by-style">
+                                <h3 class="widgettitle">Phong cách</h3>
+                                <!-- Search bar -->
+                                <input type="text" id="style-search" placeholder="Tìm phong cách..." class="search-bar">                            
+                                <ul class="list-categories" id="filter-style">
+                         
+                                </ul>
+                            </div>
+                            <div class="widget widget-categories" id="filter-by-frag-group">
+                                <h3 class="widgettitle">Nhóm hương</h3>
+                                <!-- Search bar -->
+                                <input type="text" id="frag-group-search" placeholder="Tìm nhóm hương..." class="search-bar">
+                                <ul class="list-categories" id="filter-frag_group">
+    
+                                </ul>
+                            </div>
+                            <div class="widget widget-categories" id="filter-by-frag-time">
+                                <h3 class="widgettitle">Độ lưu hương</h3>
+                                <!-- Search bar -->
+                                <input type="text" id="frag-time-search" placeholder="Tìm độ lưu hương..." class="search-bar">
+                                <ul class="list-categories" id="filter-frag_time">
+                                
+                                </ul>
+                            </div>
+                            <div class="widget widget-categories" id="filter-by-frag-distance">
+                                <h3 class="widgettitle">Độ tỏa hương</h3>
+                                <input type="text" id="frag-distance-search" placeholder="Tìm độ tỏa hương..." class="search-bar">
+                                <ul class="list-categories" id="filter-frag_distance">
+                                  
+                                </ul>
+                            </div>
                         </div>
-                        <div class="widget widget-categories" id="filter-by-frag-distance">
-                            <h3 class="widgettitle">Độ tỏa hương</h3>
-                            <input type="text" id="frag-distance-search" placeholder="Tìm độ tỏa hương..." class="search-bar">
-                            <ul class="list-categories" id="filter-frag_distance">
-                              
-                            </ul>
-                        </div>
+
                     </div>
                     <div class="widget newsletter-widget">
                         <div class="newsletter-form-wrap ">
@@ -410,7 +416,7 @@ window.onload = function() {
             urlParams.set('price_min', minPrice);
             urlParams.set('price_max', maxPrice);
 
-            const link = `/gridproducts_leftsidebar.html?${urlParams.toString()}`;
+            const link = `/shop?${urlParams.toString()}`;
             history.pushState(null, '', link);
         }
 
