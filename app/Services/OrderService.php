@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Repositories\OrderRepository;
 use Illuminate\Support\Str;
 
+use App\Services\ShippingService;
+
 
 class OrderService
 {
@@ -37,6 +39,13 @@ class OrderService
     {
         $order = $this->orderRepository->update($order_id, $data);
         return $order;
+    }
+
+    //Kết  nối đơn vị vận chuyển
+    public function connectShipping($order)
+    {
+        $ship = new ShippingService();
+        $ship->createShippingOrder($order);
     }
 
 

@@ -76,7 +76,7 @@ const Order = {
                         case 1:
                             Order.template.showPendingPage();
                             Order.update.updateDefaultStatus();
-                            //Order.update.updatePendingStatus();
+                            Order.update.updatePendingStatus();
                             break;
                         case 2:
                             Order.template.showPackagPage();
@@ -220,7 +220,7 @@ const Order = {
                 </div>
             </div>
                 `);
-                $('#save-order-btn').attr('data-id', id);
+                $('#save-order-btn').attr('data-id', response.id);
             });
         },
         showPendingPage: () => {
@@ -447,7 +447,7 @@ const Order = {
                                     <input name="" type="text" class="form-control" id="coupon" placeholder="Nhập mã hỗ trợ từ GHN" value="">
                                 </div>
                                 <hr>
-                                <button id="save-order-btn" type="button" class="btn btn-primary push-modal2" atr="Push2" data-toggle="modal" data-target="#exampleModalCenter">Xác nhận</button>
+                                <button id="create-order-ticket" type="button" class="btn btn-primary push-modal2" atr="Push2" data-toggle="modal" data-target="#exampleModalCenter">Xác nhận</button>
                             </div>
                         </div>
                     </div>
@@ -737,14 +737,15 @@ const Order = {
                 console.log('Button clicked 1!');
 
                 //lấy id order từ data-id của button save
-                var id = $(this).data('id');
+                var id = $('#save-order-btn').attr('data-id');
+                console.log('id order: ' + id);
                 var data = {
                     status: $('#order_status_update').val(),
                     note: $('#order_note').val() || ''
                 };
                 console.log(data);
                 Api.Order.UpdateOrder(id, data).done((response) => {
-                    console.log('Button clicked2!');
+                    console.log('Button clicked2 id:', id);
 
                     if (response.status == 200) {
                         $('.alert.alert-success').show();
@@ -758,6 +759,8 @@ const Order = {
                         }, 3000);
                     }
                     $('.bd-example-modal-xl').modal('hide');
+
+                    //Order.orderList.show();
                     
                 }).fail((response) => {
                     $('.alert.alert-danger').show();
@@ -770,7 +773,7 @@ const Order = {
             });
         },
         updatePendingStatus: () => {
-            $(document).on('click', '#save-order-btn', function() {
+            $(document).on('click', '#create-order-ticket', function() {
                 var id = $(this).data('id');
                 var data = {
                     status: $('#order_status_update').val(),
@@ -808,7 +811,7 @@ const Order = {
                 };
 
                 console.log(data);
-                Api.Order.UpdateOrderStatus(id, data).done((response) => {
+                Api.Order.UpdateOrder(id, data).done((response) => {
                     console.log(response);
                     $('.bd-example-modal-xl').modal('hide');
                 });

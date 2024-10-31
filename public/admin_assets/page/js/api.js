@@ -66,8 +66,8 @@ Api.Order.GetOrderDetail = (id) => $.ajax({
     method: 'GET',
 });
 
-Api.Order.UpdateOrder = (id,data) => $.ajax({
+Api.Order.UpdateOrder = (id, data) => $.ajax({
     url: `/admin/order/update-order`,
     method: 'POST',
-    data: {id,data},
+    data: { id, data },
 });
