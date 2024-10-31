@@ -20,6 +20,45 @@ class OrderRepository extends BaseRepository implements IBaseRepository
     {
         return $this->order->where('status', $status)->get();
     }
+    public function getOrderDetail($order_id)
+    {
+        $order = $this->order->with('orderItems')->find($order_id);
+        $order->address = json_decode($order->address);
+        $order->log = json_decode($order->log);
+        $order->order_items = $order->orderItems->map(function ($item) {
+            $item->product_size_info = json_decode($item->product_size_info);
+            return $item;
+        });
+        return $order;
+        //return $this->order->with('orderItems')->find($order_id);
+    }
+    public function update($order_id, $data)
+    {
+        $order = $this->order->find($order_id);
+        $order->status = $data['status'];
+        $data_log_index = [
+            0 => 'Chờ xử lý',
+            1 => 'Đã xác nhận',
+            2 => 'Đã hoàn thiện',
+            3 => 'Chờ lấy hàng',
+            4 => 'Đang giao hàng',
+            5 => 'Đã giao hàng',
+            6 => 'Đã hủy',
+        ];
+        // Lấy log cũ
+        $log = json_decode($order->log);
+
+        // Kiểm tra xem log đã được khởi tạo thành mảng chưa
+        if (!is_array($log)) {
+            $log = []; // Khởi tạo lại thành mảng nếu không phải
+        }
+
+        // Thêm log mới
+        $log[] = date('Y-m-d H:i:s') . ' - ' . $data_log_index[$data['status']];
+        $order->log = json_encode($log);
+        $order->save();
+        return $order;
+    }
 
     public function createOrder($data)
     {
@@ -39,7 +78,7 @@ class OrderRepository extends BaseRepository implements IBaseRepository
             'name' => $data['name'],
             'phone' => $data['phone'],
             'address' => json_encode($data['address']),
-            'note' => $data['description'] ?? '',
+            'description' => $data['note'] ?? '',
 
             'order_date' => date('Y-m-d H:i:s'),
             'payment_status' => 0,
@@ -60,7 +99,8 @@ class OrderRepository extends BaseRepository implements IBaseRepository
                 'product_id' => $product->id,
                 'product_name' => $product->name,
                 'product_size_id' => $product_size->id,
-                'product_size_name' => $product_size->size,
+                'product_size_name' => $product_size->volume,
+                'product_size_discount' => $product_size->discount,
                 'product_size_price' => $product_size->price,
             ]);
             $orderItem->quantity = $item['quantity'];

@@ -39,4 +39,22 @@ class OrderController extends Controller
         
         return response()->json($orders);
     }
+
+    public function getOrderDetail(Request $request){
+        $order_id = $request->id;
+        $order = $this->orderService->getOrderDeatil($order_id);
+        return response()->json($order);
+    }
+
+    public function updateOrder(Request $request){
+        $order_id = $request->id;
+        $data = $request->data;
+        try {
+            $order = $this->orderService->updateOrder($order_id, $data);
+            return response()->json(['status' => 200, 'message' => 'Cập nhật đơn hàng thành công']);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), 500);
+        }
+
+    }
 }

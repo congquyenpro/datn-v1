@@ -21,6 +21,24 @@
                 <div class="m-l-15">
                     <h4 class="m-b-0">Đơn hàng</h4>
                 </div>
+                <div class="alert alert-success" style="display:none">
+                    <div class="d-flex align-items-center justify-content-start">
+                        <span class="alert-icon">
+                            <i class="anticon anticon-close-o"></i>
+                        </span>
+                        <span>Cập nhật đơn hàng thành công !</span>
+                    </div>
+                </div>
+                <div class="alert alert-danger" style="display:none">
+                    <div class="d-flex align-items-center justify-content-start">
+                        <span class="alert-icon">
+                            <i class="anticon anticon-close-o"></i>
+                        </span>
+                        <span>Đã có lỗi xảy ra: </span> <br>
+                        <span id="error_detail"></span>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -28,86 +46,77 @@
         <div class="col-sm-12 col-md-2 col-lg-2">
             <div class="card">
                 <div class="card-body">
-                    <div class="status-event is-select" atr="Pending" data-id="0">
+                    <div class="status-event" atr="Pending" data-id="1202">
                         <div class="d-flex align-items-center">
                             <div class="badge badge-primary badge-dot m-r-10"></div>
                             <div>Tất cả</div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div>(333.045)</div>
+                            <div>(333)</div>
                         </div>
                     </div>
-                    <div class="status-event" atr="Pending" data-id="1">
+                    <div class="status-event is-select" atr="Pending" data-id="0">
                         <div class="d-flex align-items-center">
                             <div class="badge badge-warning badge-dot m-r-10"></div>
                             <div>Chờ xử lý</div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div>(333.045)</div>
+                            <div>(20)</div>
+                        </div>
+                    </div>
+                    <div class="status-event" atr="Pending" data-id="1">
+                        <div class="d-flex align-items-center">
+                            <div class="badge badge-warning badge-dot m-r-10"></div>
+                            <div>Đã xác nhận</div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <div>(10)</div>
                         </div>
                     </div>
                     <div class="status-event" atr="Pending" data-id="2">
-                        <div class="d-flex align-items-center">
-                            <div class="badge badge-warning badge-dot m-r-10"></div>
-                            <div>Chưa hoàn thiện</div>
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            <div>(333.045)</div>
-                        </div>
-                    </div>
-                    <div class="status-event" atr="Pending" data-id="3">
                         <div class="d-flex align-items-center">
                             <div class="badge badge-info badge-dot m-r-10"></div>
                             <div>Đã hoàn thiện</div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div>(333.045)</div>
+                            <div>(5)</div>
                         </div>
                     </div>
-                    <div class="status-event" atr="Pending" data-id="4">
+                    <div class="status-event" atr="Pending" data-id="3">
                         <div class="d-flex align-items-center">
                             <div class="badge badge-secondary badge-dot m-r-10"></div>
                             <div>Chờ lấy hàng</div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div>(333.045)</div>
+                            <div>(66)</div>
                         </div>
                     </div>
-                    <div class="status-event" atr="Pending" data-id="5">
+                    <div class="status-event" atr="Pending" data-id="4">
                         <div class="d-flex align-items-center">
                             <div class="badge badge-secondary badge-dot m-r-10"></div>
                             <div>Đang giao hàng</div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div>(333.045)</div>
+                            <div>(20)</div>
                         </div>
                     </div>
-                    <div class="status-event" atr="Pending" data-id="6">
+                    <div class="status-event" atr="Pending" data-id="5">
                         <div class="d-flex align-items-center">
                             <div class="badge badge-info badge-dot m-r-10"></div>
                             <div>Đã giao hàng</div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div>(333.045)</div>
+                            <div>(280)</div>
                         </div>
                     </div>
-<!--                <div class="status-event" atr="Pending" data-id="7">
-                        <div class="d-flex align-items-center">
-                            <div class="badge badge-success badge-dot m-r-10"></div>
-                            <div>Hoàn thành</div>
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            <div>(333.045)</div>
-                        </div>
-                    </div> 
--->
-                    <div class="status-event" atr="Pending" data-id="8">
+
+                    <div class="status-event" atr="Pending" data-id="6">
                         <div class="d-flex align-items-center">
                             <div class="badge badge-danger badge-dot m-r-10"></div>
                             <div>Hủy đơn</div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div>(333.045)</div>
+                            <div>(60)</div>
                         </div>
                     </div>
 
@@ -141,101 +150,7 @@
                             </div>
                         </div>
                     </div>
-{{--
-                    <div class="table-responsive">
-                        <table id="products_table" class="table table-hover e-commerce-table">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <div class="checkbox">
-                                            <input id="checkAll" type="checkbox">
-                                            <label for="checkAll" class="m-b-0"></label>
-                                        </div>
-                                    </th>
-                                    <th>ID</th>
-                                    <th>Khách hàng</th>
-                                    <th>Đơn hàng</th>
-                                    <th>Ngày đặt</th>
-                                    <th>Trạng thái</th>
-                                    <th>Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <input id="check-item-1" type="checkbox">
-                                            <label for="check-item-1" class="m-b-0"></label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        #31
-                                    </td>
-                                    <td>
-                                        <p><i class="far fa-user m-r-10"></i>Quyền Nguyễn</p>
-                                        <p><i class="far fa-address-book m-r-10"></i>22, Hoàng Mai, Hà Nội</p>
-                                        <p><i class="fas fa-phone-alt m-r-10"></i>0966320416</p>
-                                    </td>
-                                    <td>
-                                        2.200.000₫
-                                    </td>
-                                    <td>
-                                        06-10-2024
-                                    </td>
-                                    <td>
-                                        <span class="badge m-b-5 badge-warning badge-pill">Chờ xử lý</span>
-                                        <span class="badge m-b-5 badge-pill badge-green">Đã thanh toán</span>
-                                        <span class="badge m-b-5 "></span>
-                                    </td>
-                                    <td class="text-right">
-                                        <button class="btn btn-icon btn-hover btn-sm btn-rounded">
-                                            <i class="anticon anticon-eye"></i>
-                                        </button>
-                                        <button class="btn btn-icon btn-hover btn-sm btn-rounded">
-                                            <i class="anticon anticon-delete"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <input id="check-item-1" type="checkbox">
-                                            <label for="check-item-1" class="m-b-0"></label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        #31
-                                    </td>
-                                    <td>
-                                        <p><i class="far fa-user m-r-10"></i>Minh Hoàn</p>
-                                        <p><i class="far fa-address-book m-r-10"></i>44, Nguyễn An Ninh, Hoàng Mai Hà Nội</p>
-                                        <p><i class="fas fa-phone-alt m-r-10"></i>0966320416</p>
-                                    </td>
-                                    <td>
-                                        2.200.000₫
-                                    </td>
-                                    <td>
-                                        06-10-2024
-                                    </td>
-                                    <td>
-                                        <span class="badge m-b-5 badge-warning badge-pill">Chờ xử lý</span>
-                                        <span class="badge badge-pill badge-magenta">Chưa thanh toán</span>
-                                        <span class="badge m-b-5 "></span>
-                                    </td>
-                                    <td class="text-right">
-                                        <button class="btn btn-icon btn-hover btn-sm btn-rounded">
-                                            <i class="anticon anticon-eye"></i>
-                                        </button>
-                                        <button class="btn btn-icon btn-hover btn-sm btn-rounded">
-                                            <i class="anticon anticon-delete"></i>
-                                        </button>
-                                    </td>
-                                </tr>
 
-                            </tbody>
-                        </table>
-                    </div>
---}}
                     <div class="table-responsive">
                         <table class="table table-hover" id="orders_list">
                             <thead>
@@ -256,7 +171,6 @@
             </div>
         </div>
     </div>
-
     <div class="modal fade bd-example-modal-xl" style="padding-left: 20px !important;">
         <div class="modal-dialog modal-dialog-scrollable" style="max-width: 95%;">
             <div class="modal-content">
@@ -266,8 +180,8 @@
                         <i class="anticon anticon-close"></i>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <div class="row border m-b-15" style=" padding: 15px; ">
+                <div class="modal-body" id="order-detail-body">
+<!--                     <div class="row border m-b-15" style=" padding: 15px; ">
                         <div class="col-md-6 col-lg-6">
                             <div class="d-md-flex align-items-center">
                                 <div class="text-center text-sm-left ">
@@ -369,12 +283,64 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary">Cập nhật</button>
+                    <button type="button" class="btn btn-primary" id="save-order-btn">Cập nhật</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="modal fade" id="exampleModalCenter">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Xác nhận tạo đơn</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <i class="anticon anticon-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-3 col-md-3 col-lg-3 text-bold">Người gửi:</div>
+                        <div id="from_name_cf" class="col-sm-3 col-md-3 col-lg-3">Bk-Eshop</div>
+                        <div id="from_phone_cf" class="col-sm-3 col-md-3 col-lg-3">0888388888</div>
+                        <div id="from_address_cf" class="col-sm-3 col-md-3 col-lg-3">167 Trương Định</div>
+                    </div>
+                   
+                    <div class="row">
+                        <div class="col-sm-3 col-md-3 col-lg-3 text-bold">Người nhận:</div>
+                        <div id="to_name_cf" class="col-sm-3 col-md-3 col-lg-3">Cong Quyen</div>
+                        <div id="to_phone_cf" class="col-sm-3 col-md-3 col-lg-3">0888388888</div>
+                        <div id="to_address_cf" class="col-sm-3 col-md-3 col-lg-3">72 Thành Thái, Phường 14, Quận 10, Hồ Chí Minh, Vietnam</div>
+                    </div>
+                    <hr>
+                    <div class="p-10" style="background-color: rgb(204 213 221 / 50%);">
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-lg-4 text-bold">COD:</div>
+                                <div id="COD_cf" class="col-sm-4 col-md-4 col-lg-4">200.000</div>
+                            </div>
+    <!--                                                 <div class="row">
+                                <div class="col-sm-4 col-md-4 col-lg-4 text-bold">GTB thu tiền:</div>
+                                <div class="col-sm-4 col-md-4 col-lg-4">20000</div>
+                            </div> -->
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-lg-4 text-bold">Trả phí:</div>
+                                <div class="col-sm-4 col-md-4 col-lg-4">Bên gửi trả phí</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-lg-4 text-bold">Tổng phí:</div>
+                                <div class="col-sm-4 col-md-4 col-lg-4">44.000đ</div>
+                            </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary">Tạo đơn</button>
                 </div>
             </div>
         </div>

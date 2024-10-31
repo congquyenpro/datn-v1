@@ -10,7 +10,7 @@ class AuthController extends Controller
 {
     public function login(){
         if (Auth::check()) {
-            return redirect()->route('admin.index');
+            return redirect()->route('manager.home.display');
         }
         return view('manager.auth.login');
     }

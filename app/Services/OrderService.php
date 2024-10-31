@@ -28,6 +28,16 @@ class OrderService
         }
         return $orders;
     }
+    public function getOrderDeatil($order_id)
+    {
+        $order = $this->orderRepository->getOrderDetail($order_id);
+        return $order;
+    }
+    public function updateOrder($order_id, $data)
+    {
+        $order = $this->orderRepository->update($order_id, $data);
+        return $order;
+    }
 
 
     //Customer

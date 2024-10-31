@@ -136,7 +136,11 @@ Route::prefix('admin')->group(function() {
         Route::prefix('order')->group(function() {
             Route::get('/', 'Manager\Order\OrderController@index')->name('manager.order');
             Route::get('/all', 'Manager\Order\OrderController@getOrders')->name('manager.order.getAll');
+            Route::get('/detail/{id}', 'Manager\Order\OrderController@getOrderDetail')->name('manager.order.detail');
             Route::get('/type/{id}', 'Manager\Order\OrderController@getType')->name('manager.order.getType');
+
+            Route::post('/update-order', 'Manager\Order\OrderController@updateOrder')->name('manager.order.update');
+
         });
     });
 

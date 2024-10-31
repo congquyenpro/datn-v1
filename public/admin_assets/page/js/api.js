@@ -59,3 +59,15 @@ Api.Order.GetOrdersList = (order_status) => $.ajax({
     url : `/admin/order/all?order_status=${order_status}`,
     method: 'GET',
 });
+
+Api.Order.GetOrderDetail = (id) => $.ajax({
+    //url: `http://127.0.0.1:3000/order_detail?id=${id}`,
+    url : `/admin/order/detail/${id}`,
+    method: 'GET',
+});
+
+Api.Order.UpdateOrder = (id,data) => $.ajax({
+    url: `/admin/order/update-order`,
+    method: 'POST',
+    data: {id,data},
+});
