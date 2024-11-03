@@ -222,3 +222,15 @@ Route::prefix('/')->group(function() {
 });
 
 
+
+//Payment
+Route::prefix('payment')->group(function() {
+    Route::get('/create', 'PaymentController@createPayment');
+    Route::get('/status', 'PaymentController@getPaymentStatus');
+    Route::get('/refund', 'PaymentController@refundPayment');
+    Route::get('/webhook', 'PaymentController@handleWebhook');
+    Route::get('/get-all', 'PaymentController@getAllTransactions');
+    Route::get('/cron', 'PaymentController@cron');
+});
+
+
