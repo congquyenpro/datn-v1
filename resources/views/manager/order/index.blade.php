@@ -305,29 +305,28 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-3 col-md-3 col-lg-3 text-bold">Người gửi:</div>
-                        <div id="from_name_cf" class="col-sm-3 col-md-3 col-lg-3">Bk-Eshop</div>
-                        <div id="from_phone_cf" class="col-sm-3 col-md-3 col-lg-3">0888388888</div>
-                        <div id="from_address_cf" class="col-sm-3 col-md-3 col-lg-3">167 Trương Định</div>
-                    </div>
-                   
-                    <div class="row">
-                        <div class="col-sm-3 col-md-3 col-lg-3 text-bold">Người nhận:</div>
-                        <div id="to_name_cf" class="col-sm-3 col-md-3 col-lg-3">Cong Quyen</div>
-                        <div id="to_phone_cf" class="col-sm-3 col-md-3 col-lg-3">0888388888</div>
-                        <div id="to_address_cf" class="col-sm-3 col-md-3 col-lg-3">72 Thành Thái, Phường 14, Quận 10, Hồ Chí Minh, Vietnam</div>
+                    <div id="sender-receiver-info">
+                        <div class="row">
+                            <div class="col-sm-3 col-md-3 col-lg-3 text-bold">Người gửi:</div>
+                            <div id="from_name_cf" class="col-sm-3 col-md-3 col-lg-3">Bk-Eshop</div>
+                            <div id="from_phone_cf" class="col-sm-3 col-md-3 col-lg-3">0888388888</div>
+                            <div id="from_address_cf" class="col-sm-3 col-md-3 col-lg-3">167 Trương Định</div>
+                        </div>
+                       
+                        <div class="row">
+                            <div class="col-sm-3 col-md-3 col-lg-3 text-bold">Người nhận:</div>
+                            <div id="to_name_cf" class="col-sm-3 col-md-3 col-lg-3">Cong Quyen</div>
+                            <div id="to_phone_cf" class="col-sm-3 col-md-3 col-lg-3">0888388888</div>
+                            <div id="to_address_cf" class="col-sm-3 col-md-3 col-lg-3">72 Thành Thái, Phường 14, Quận 10, Hồ Chí Minh, Vietnam</div>
+                        </div>
                     </div>
                     <hr>
-                    <div class="p-10" style="background-color: rgb(204 213 221 / 50%);">
+                    <div id="fee-info">
+                        <div class="p-10" style="background-color: rgb(204 213 221 / 50%);">
                             <div class="row">
                                 <div class="col-sm-4 col-md-4 col-lg-4 text-bold">COD:</div>
                                 <div id="COD_cf" class="col-sm-4 col-md-4 col-lg-4">200.000</div>
                             </div>
-    <!--                                                 <div class="row">
-                                <div class="col-sm-4 col-md-4 col-lg-4 text-bold">GTB thu tiền:</div>
-                                <div class="col-sm-4 col-md-4 col-lg-4">20000</div>
-                            </div> -->
                             <div class="row">
                                 <div class="col-sm-4 col-md-4 col-lg-4 text-bold">Trả phí:</div>
                                 <div class="col-sm-4 col-md-4 col-lg-4">Bên gửi trả phí</div>
@@ -336,11 +335,13 @@
                                 <div class="col-sm-4 col-md-4 col-lg-4 text-bold">Tổng phí:</div>
                                 <div class="col-sm-4 col-md-4 col-lg-4">44.000đ</div>
                             </div>
+                        </div>
                     </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary">Tạo đơn</button>
+                    <button type="button" class="btn btn-primary" id="submit-order-ticket">Tạo đơn</button>
                 </div>
             </div>
         </div>

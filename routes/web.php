@@ -141,6 +141,14 @@ Route::prefix('admin')->group(function() {
 
             Route::post('/update-order', 'Manager\Order\OrderController@updateOrder')->name('manager.order.update');
 
+            //Shipping connect
+            Route::post('/create-ticket', 'Manager\Order\OrderController@createTicket')->name('manager.order.createTicket');
+            Route::post('/submit-ticket', 'Manager\Order\OrderController@submitTicket')->name('manager.order.submitTicket');
+
+            Route::get('/get-address', 'Manager\Order\OrderController@getAddress')->name('manager.order.getAddress');
+
+            //print order
+            Route::get('/print-order/{id}', 'Manager\Order\OrderController@printOrder')->name('manager.order.print');
         });
     });
 
@@ -159,6 +167,8 @@ Route::prefix('/')->group(function() {
 
     /* Route API */
     Route::prefix('api-v1')->group(function() {
+        //get user info
+        Route::get('/user/infor', 'Customer\DisplayController@getUserJson')->middleware(['customer']);
 
         /* product */
         Route::get('/product/type/{type}', 'Customer\ProductController@getProductByType');
@@ -196,6 +206,19 @@ Route::prefix('/')->group(function() {
 
     /* Shop */
     Route::get('/shop','Customer\ProductController@shop')->name('customer.shop');
+
+
+    /* User Profile */
+    Route::get('/profile','Customer\DisplayController@userProfile')->name('customer.profile')->middleware(['customer']);
+    Route::post('/profile','Customer\AuthController@updateUserProfile')->name('customer.profile.update')->middleware(['customer']);
+
+    Route::get('/profile/security','Customer\DisplayController@userSecurity')->name('customer.profile.security')->middleware(['customer']);
+    Route::post('/profile/security','Customer\AuthController@changePassword')->name('customer.profile.security.update')->middleware(['customer']);
+
+    Route::get('/profile/order','Customer\DisplayController@userOrder')->name('customer.profile.order')->middleware(['customer']);
+    Route::get('/profile/order/all','Customer\OrderController@getOrderByUser')->name('customer.profile.order.detail')->middleware(['customer']);
+
+    Route::get('/profile/order-detail','Customer\DisplayController@userOrderDetail')->name('customer.profile.order-detail')->middleware(['customer']);
 });
 
 

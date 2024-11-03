@@ -67,5 +67,7 @@ class Kernel extends HttpKernel
         'permission' => \App\Http\Middleware\CheckPermission::class,
         'role.web' => \App\Http\Middleware\CheckRoleWeb::class,
         'permission.web' => \App\Http\Middleware\CheckPermissionWeb::class,
+        'customer' => \App\Http\Middleware\CustomerMiddleware::class,
+
     ];
 }

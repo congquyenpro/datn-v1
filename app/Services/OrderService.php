@@ -42,10 +42,10 @@ class OrderService
     }
 
     //Kết  nối đơn vị vận chuyển
-    public function connectShipping($order)
+    public function connectShipping($data)
     {
         $ship = new ShippingService();
-        $ship->createShippingOrder($order);
+        $ship->createShippingOrder($data);
     }
 
 
@@ -63,6 +63,11 @@ class OrderService
                 break;
         }
         return $order;
+    }
+    public function getOrderByUser($user_id,$status)
+    {
+        $orders = $this->orderRepository->getOrderByUser($user_id,$status);
+        return $orders;
     }
 
 

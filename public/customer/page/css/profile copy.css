@@ -1,0 +1,186 @@
+.profile-nav {
+    margin-bottom: 3rem;
+}
+.profile-nav a i{
+    margin-right: 3rem;
+}
+.rounded img{
+    border-radius: 50%;
+}
+
+.card{
+    border: dashed 1px #ab8e66;
+}
+.card-body{
+    padding: 2rem;
+}
+.order-list{
+    margin-top: 1rem;
+}
+.order-list .order-item{
+    /* border: dotted 1px #ab8e66; */
+    margin-top: 1rem;
+}
+.order-list .order-item .item-content{
+    padding: 1rem;
+}
+
+.total{
+    display: flex;
+    justify-content: end;
+}
+
+
+.order-item {
+    margin-bottom: 20px;
+}
+
+.item-content {
+    padding: 10px;
+    border: 1px solid #ab8e66;
+    border-radius: 5px;
+}
+
+.item-status {
+    text-align:end;
+    font-weight: bold;
+    padding-top: inherit;
+
+}
+
+.product-row {
+    display: flex;
+    align-items: center; /* Căn giữa theo chiều dọc */
+}
+
+.product-image {
+    text-align: center;
+}
+
+.product-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Căn giữa nội dung trong product-details */
+}
+
+.product-name, .product-quantity {
+    /* text-align: center; */ /* Căn giữa nội dung theo chiều ngang */
+    margin-bottom: 5px;
+}
+
+.product-price {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #ee4d2d;
+}
+
+.total {
+    text-align: right;
+    font-weight: bold;
+    margin-top: 10px;
+    color:#ee4d2d;
+}
+
+
+.order-info {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.product-info {
+    text-align: right;
+    padding: 10px;
+}
+
+hr {
+    border-top: 1px solid #ccc;
+}
+
+.profile-fill{
+    width: 100%;
+    height: 5px;
+    background-image: repeating-linear-gradient(45deg, #6fa6d6, #6fa6d6 33px, transparent 0, transparent 41px, #f18d9b 0, #f18d9b 74px, transparent 0, transparent 82px);
+}
+
+
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.order-detail {
+    display: flex;
+    margin: 20px;
+}
+
+
+.tracking-info {
+    /* width: 100%; */
+    border-left: 2px solid #ddd;
+    padding-left: 20px;
+}
+
+.tracking-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.tracking-item {
+    display: flex;
+    margin-bottom: 10px;
+    position: relative;
+    align-items: flex-start; /* Đảm bảo thời gian và trạng thái luôn bắt đầu từ phía trên */
+}
+
+.tracking-item::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    background: #ddd;
+    border-radius: 50%;
+    position: absolute;
+    left: -27px;
+    top: 10px;
+}
+
+.tracking-item.completed::before {
+    background: #4CAF50;
+}
+
+.tracking-time {
+    width: 150px;
+    font-size: 14px;
+    color: #555;
+    flex-shrink: 0; /* Ngăn thời gian bị co lại */
+}
+
+.tracking-status {
+    flex-grow: 1;
+}
+.tracking-status strong {
+    font-weight: bold;
+    color: #333;
+}
+
+.tracking-status p {
+    margin: 0;
+    color: #777;
+}
+
+.tracking-status a {
+    color: #1E90FF;
+    text-decoration: none;
+}
+
+.order-summary {
+    margin-top: 20px;
+    color: #555;
+}
+
+.order-summary div {
+    margin-bottom: 5px;
+}
+
+

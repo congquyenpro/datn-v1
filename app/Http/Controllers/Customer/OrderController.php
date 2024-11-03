@@ -63,6 +63,14 @@ class OrderController extends Controller
         return response()->json($order); */
     }
 
+    public function getOrderByUser(Request $request)
+    {
+        $user_id = $request->user()->id ?? 3; //3 là id của Viewer Users
+        $status = $request->status;
+        $orders = $this->orderService->getOrderByUser($user_id,$status);
+        return response()->json($orders);
+    }
+
 
 
 

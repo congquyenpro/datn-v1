@@ -2,6 +2,8 @@ const Api = {
     Category: {},
     Product: {},
     Order: {},
+    Address: {},
+    User: {},
 };
 (() => {
     $.ajaxSetup({
@@ -70,4 +72,58 @@ Api.Order.UpdateOrder = (id, data) => $.ajax({
     url: `/admin/order/update-order`,
     method: 'POST',
     data: { id, data },
+});
+
+
+/* Connect Shipping Partner */
+Api.Order.createTicket = (id,data) => $.ajax({
+    url: `/admin/order/create-ticket`,
+    method: 'POST',
+    data: { id, data },
+});
+Api.Order.submitTicket = (id,data) => $.ajax({
+    url: `/admin/order/submit-ticket`,
+    method: 'POST',
+    data: { id, data },
+});
+Api.Order.printTicket = (id) => $.ajax({
+    url: `/admin/order/print-order/${id}`,
+    method: 'GET',
+});
+
+
+
+/* Address */
+Api.Address.getProvince = () => $.ajax({
+    url: `https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province`,
+    method: 'GET',
+    headers: {
+        'token': 'a26e2748-971a-11ee-b1d4-92b443b7a897',
+        'Content-Type': 'application/json',
+    },
+});
+
+Api.Address.getDistrict = (provinceId) => $.ajax({
+    url: `https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=${provinceId}`,
+    method: 'GET',
+    headers: {
+        'token': 'a26e2748-971a-11ee-b1d4-92b443b7a897',
+        'Content-Type': 'application/json',
+    },
+});
+
+Api.Address.getWard = (districtId) => $.ajax({
+    url: `https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=${districtId}`,
+    method: 'GET',
+    headers: {
+        'token': 'a26e2748-971a-11ee-b1d4-92b443b7a897',
+        'Content-Type': 'application/json',
+    },
+});
+
+/* User */
+Api.User.checkAuth = () => $.ajax({
+    //url: `http://127.0.0.1:3000/user_infor2`,
+    url: `/api-v1/user/infor`,
+    method: 'GET',
 });

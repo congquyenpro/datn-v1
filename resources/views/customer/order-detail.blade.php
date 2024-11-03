@@ -12,60 +12,47 @@
     <div class="container" style="margin-top: 50px;">
         <div class="card">
             <div class="card-body">
-              <h4 class="card-title">Chi tiết đơn hàng <b>OD2888</b></h4>
-              <p class="card-text">SPX Express - SPXVN046726188888</p>
+              <h4 class="card-title">Chi tiết đơn hàng <b>OD{{$order['id']}}</b></h4>
+              <p class="card-text">{{$order['delivery_company_code']}} - {{$order['shipping_code']}} </p>
               <div class="profile-fill"></div>
               <div class="order-detail">
-                <div class="row">
+                <div class="row" style=" margin-top: 10px; ">
                     <div class="col-sm-12 col-md-4">
                         <div class="delivery-address">
                             <!-- <h4>Địa Chỉ Nhận Hàng</h4> -->
-                            <p><strong>Nguyễn Quyền</strong></p>
-                            <p>(+84) 888666888</p>
-                            <p>66 Nguyễn Trãi, Thanh Xuân, Hà Nội</p>
+                            <p><strong>{{$order['name']}}</strong></p>
+                            <p>{{$order['phone']}}</p>
+                            @php
+                                // Giả sử $order là một đối tượng stdClass
+                                $formattedAddress = str_replace('/', ', ', $order['address']->address);
+                            @endphp
+                        <p>{{ $formattedAddress }}</p>
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-8">
                         <div class="tracking-info">
                             <ul class="tracking-list">
-                                <li class="tracking-item completed">
-                                    <div class="tracking-time">08:18 04-09-2024</div>
-                                    <div class="tracking-status">
-                                        <strong>Đã giao</strong>
-                                        <p>Đơn hàng sẽ sớm được giao, vui lòng chú ý điện thoại</p>
-                                    </div>
-                                </li>
-                                <li class="tracking-item">
-                                    <div class="tracking-time">08:18 04-09-2024</div>
-                                    <div class="tracking-status">
-                                        <strong>Đang vận chuyển</strong>
-                                        <p>Đơn hàng sẽ sớm được giao, vui lòng chú ý điện thoại</p>
-                                    </div>
-                                </li>
-                                <li class="tracking-item">
-                                    <div class="tracking-time">08:18 04-09-2024</div>
-                                    <div class="tracking-status">
-                                        <strong>Đang vận chuyển</strong>
-                                        <p>Đơn hàng sẽ sớm được giao, vui lòng chú ý điện thoại</p>
-                                    </div>
-                                </li>
-                                <li class="tracking-item">
-                                    <div class="tracking-time">08:18 04-09-2024</div>
-                                    <div class="tracking-status">
-                                        <strong>Đã xác nhận</strong>
-                                        <p>Đơn hàng sẽ sớm được giao, vui lòng chú ý điện thoại</p>
-                                    </div>
-                                </li>
-                                <li class="tracking-item">
-                                    <div class="tracking-time">08:18 04-09-2024</div>
-                                    <div class="tracking-status">
-                                        <strong>Đặt thành công</strong>
-                                        <p>Đơn hàng sẽ sớm được giao, vui lòng chú ý điện thoại</p>
-                                    </div>
-                                </li>
-
-                                <!-- Add more list items as needed -->
+                                @php
+                                    // Kiểm tra xem $log có phải là mảng không
+                                    $logEntries = is_array($order['log']) ? array_reverse($order['log']) : [$order['log']]; // Nếu không phải là mảng, chuyển đổi thành mảng
+                                @endphp
+                            
+                                @foreach($logEntries as $index => $entry)
+                                    @php
+                                        // Tách thời gian và trạng thái từ log
+                                        list($time, $status) = explode(' - ', $entry);
+                                    @endphp
+                                    <li class="tracking-item @if($index === 0) completed @endif">
+                                        <div class="tracking-time">{{ $time }}</div>
+                                        <div class="tracking-status">
+                                            <strong>{{ $status }}</strong>
+                                            <p>Đơn hàng sẽ sớm được giao, vui lòng chú ý điện thoại</p>
+                                        </div>
+                                    </li>
+                                @endforeach
                             </ul>
+                            
+                            
                         </div>
                     </div>
                 </div>

@@ -23,6 +23,10 @@ class Order extends Model
         'payment_status',
         'status',
         'log',
+        'payment_method',
+        'shipping_code',
+        'shipping_cost',
+        'delivery_company_code',
     ];
 
     public function customer()

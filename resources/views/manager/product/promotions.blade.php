@@ -183,7 +183,7 @@
         $('.select2').select2();
         function isValidDate(dateString) {
             // Kiểm tra định dạng ngày
-            if (!/^\d{1,2}-\d{1,2}-\d{4}$/.test(dateString))
+            if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(dateString)) // Sửa từ - thành /
                 return false;
 
             // Phân tách ngày, tháng, năm
@@ -224,14 +224,14 @@
 
             // Kiểm tra ngày bắt đầu
             if (!isValidDate(startDate)) {
-                alert('Ngày bắt đầu không hợp lệ. Vui lòng nhập theo định dạng ngày-tháng-năm.');
+                alert('Ngày bắt đầu không hợp lệ. Vui lòng nhập theo định dạng ngày/tháng/năm.');
                 event.preventDefault(); // Ngăn chặn gửi biểu mẫu
                 return;
             }
 
             // Kiểm tra ngày kết thúc
             if (!isValidDate(endDate)) {
-                alert('Ngày kết thúc không hợp lệ. Vui lòng nhập theo định dạng ngày-tháng-năm.');
+                alert('Ngày kết thúc không hợp lệ. Vui lòng nhập theo định dạng ngày/tháng/năm.');
                 event.preventDefault(); // Ngăn chặn gửi biểu mẫu
                 return;
             }

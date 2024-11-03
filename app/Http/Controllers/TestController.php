@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Product;
 use App\Repositories\ProductRepository;
+use App\Models\Order;
 
 class TestController extends Controller
 {
@@ -52,7 +53,7 @@ class TestController extends Controller
          
     }
 
-    public function test(Request $request)
+    public function test2(Request $request)
     {
         // Get all parameters from the request
         $filters = $request->all();
@@ -178,6 +179,85 @@ class TestController extends Controller
             ],
         ]);
     }
+
+    public function test3($order_id){
+
+        // Tìm đơn hàng với các orderItems
+        $order = Order::with('orderItems')->find($order_id);
+
+        // Kiểm tra nếu không tìm thấy đơn hàng
+        if (!$order) {
+            return response()->json(['error' => 'Order not found'], 404);
+        }
+
+        // Giải mã địa chỉ và log
+        $order->address = json_decode($order->address);
+        $order->log = json_decode($order->log);
+
+        // Lấy thông tin order_items
+        $order->order_items = $order->orderItems->map(function ($item) {
+            // Giải mã product_size_info
+            $item->product_size_info = json_decode($item->product_size_info, true); // Thêm tham số true để lấy dưới dạng mảng
+
+            // Trả về thông tin sản phẩm
+            return [
+                'name' => $item->product_size_info['product_name'] ?? 'Tên sản phẩm không xác định',
+                'code' => 'Code' . ($item->product_size_info['product_id'] ?? 'unknown'),
+                'quantity' => (int)($item->quantity ?? 1),
+                'price' => (int)($item->item_value ?? 200000),
+                'length' => (int)($item->product_size_info['length'] ?? 12),
+                'width' => (int)($item->product_size_info['width'] ?? 12),
+                'weight' => (int)($item->product_size_info['weight'] ?? 500),
+                'height' => (int)($item->product_size_info['height'] ?? 12),
+  /*               'category' => [
+                    'level1' => 'Nước hoa' // Thay thế bằng danh mục thực tế nếu có
+                ] */
+            ];
+        });
+
+        return response()->json($order->order_items);
+    }
+
+    public function test() {
+        $order_id = 23;
+        // Tìm đơn hàng với các orderItems
+        $order = Order::with('orderItems')->find($order_id);
+    
+        // Kiểm tra nếu không tìm thấy đơn hàng
+        if (!$order) {
+            return response()->json(['error' => 'Order not found'], 404);
+        }
+    
+        // Giải mã địa chỉ và log
+        $order->address = json_decode($order->address);
+        $order->log = json_decode($order->log);
+    
+        // Lấy thông tin order_items
+        $order_items = $order->orderItems->map(function ($item) {
+            // Giải mã product_size_info
+            $item->product_size_info = json_decode($item->product_size_info, true);
+    
+            // Trả về thông tin sản phẩm theo định dạng yêu cầu
+            return [
+                'name' => $item->product_size_info['product_name'] ?? 'Tên sản phẩm không xác định',
+                'code' => 'Code' . ($item->product_size_info['product_id'] ?? 'unknown'),
+                'quantity' => (int)($item->quantity ?? 1),
+                'price' => (int)($item->item_value ?? 200000),
+                'length' => (int)($item->product_size_info['length'] ?? 12),
+                'width' => (int)($item->product_size_info['width'] ?? 12),
+                'weight' => (int)($item->product_size_info['weight'] ?? 1200), // Kiểm tra giá trị này có hợp lý không
+                'height' => (int)($item->product_size_info['height'] ?? 12),
+                'category' => [
+                    'level1' => 'Nước hoa' // Thay thế bằng danh mục thực tế nếu có
+                ]
+            ];
+        })->toArray(); // Chuyển đổi thành mảng
+    
+        // Đảm bảo trả về đúng định dạng
+        //return response()->json(['items' => $order_items]);
+        return $order_items;
+    }
+    
     
     
 

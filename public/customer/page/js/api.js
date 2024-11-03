@@ -121,7 +121,8 @@ Api.Address.getWard = (districtId) => $.ajax({
 
 /* User */
 Api.User.checkAuth = () => $.ajax({
-    url: `http://127.0.0.1:3000/user_infor2`,
+    //url: `http://127.0.0.1:3000/user_infor2`,
+    url: `/api-v1/user/infor`,
     method: 'GET',
 });
 
@@ -132,4 +133,8 @@ Api.Order.createOrder = (data) => $.ajax({
     url: `/api-v1/order`,
     method: 'POST',
     data: data,
+});
+
+Api.Order.getOrderHistory = (status) => $.ajax({
+    url: `/profile/order/all?status=${status}`,
 });

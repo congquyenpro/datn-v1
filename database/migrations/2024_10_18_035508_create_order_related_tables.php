@@ -23,6 +23,13 @@ class CreateOrderRelatedTables extends Migration
             $table->integer('payment_status');
             $table->integer('status');
             $table->text('log')->nullable();
+
+            /* 1/11/2024 */
+            $table->string('payment_method',50)->nullable();
+            $table->string('shipping_code')->nullable();
+            $table->integer('shipping_cost')->nullable();
+            $table->string('delivery_company_code',50)->nullable();
+
             $table->timestamps();
         });
 

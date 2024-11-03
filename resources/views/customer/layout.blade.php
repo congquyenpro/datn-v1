@@ -278,10 +278,15 @@
                                         </div>
                                     @else
                                     <ul class="tab-link">
-                                        {{-- Đăng xuất --}}
                                         <li>
-                                            {{Auth()->user()->name}}
-                                            <a href="{{route('customer.auth.logout')}}">Logout</a>
+                                            <a href="{{route('customer.profile')}}"> {{Auth()->user()->name}}</a>
+                                        </li>
+                                        <br>
+                                        <li>                                   
+                                            <a href="{{route('customer.profile.order')}}">Lịch sử mua hàng</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{route('customer.auth.logout')}}">Đăng xuất</a>
                                         </li>
                                     </ul>
                                     @endif

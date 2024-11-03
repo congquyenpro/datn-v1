@@ -79,28 +79,19 @@ const Order = {
                             Order.update.updatePendingStatus();
                             break;
                         case 2:
-                            Order.template.showPackagPage(id);
+                            Order.template.showPackagPage();
                             Order.update.updateDefaultStatus();
                             break;
                         case 3:
-                            Order.template.showShippingPage(id);
-                            $('#order_status_update').html(`
-                                <option value="1">Đã xác nhận</option>
-                                <option value="2">Đã hoàn thiện</option>
-                                <option value="3">Chờ lấy hàng</option>
-                                <option value="4"selected>Đang giao hàng</option>
-                                <option value="5">Đã giao hàng</option>
-                                <option value="6">Đã hủy</option>
-                            `);
-                            //Order.template.showPendingShippingPage();
+                            Order.template.showPendingShippingPage();
                             Order.update.updateDefaultStatus();
                             break;
                         case 4:
-                            Order.template.showShippingPage(id);
+                            Order.template.showShippingPage();
                             Order.update.updateDefaultStatus();
                             break;
                         case 5:
-                            Order.template.showShippingPage(id);
+                            Order.template.showShippingPage();
                             Order.update.updateDefaultStatus();
                             break;
                         case 6:
@@ -464,7 +455,7 @@ const Order = {
                 </div>
             </div>
             `);
-            
+
             //Xử lý sự kiện khi chọn đơn vị vận chuyển
             $('.shipping-partner').change(function() {
                 var partner = $(this).val();
@@ -494,21 +485,9 @@ const Order = {
                 }
             });
 
-            //Order.address.fill();
-
-            Api.Order.GetOrderDetail(id).done((response) => {
-                var items_list_2 = response.order_items;
-                console.log(items_list_2);
-                $('#cod_amount').val(response.value);
-                $('#insurance_value').val(response.value);
-                $('#to_name').val(response.name);
-                $('#to_phone').val(response.phone);
-                Order.address.fill(response);
-
-            });
-
+            Order.address.fill();
         },
-        showPackagPage: (id) => {
+        showPackagPage: () => {
             $('#order_status_update').html(`
                 <option value="1">Đã xác nhận</option>
                 <option value="2">Đã hoàn thiện</option>
@@ -542,11 +521,11 @@ const Order = {
                                             <tbody class="data-list"> 
                                                 <tr>
                                                     <td>37</td>
-                                                    <td id="pk-shipping-code">LF7GNK</td>
-                                                    <td>${id}</td>
-                                                    <td id="pk-order-value">18000</td>
-                                                    <td>Kip 2</td>
-                                                    <td id="pk-order-note">Không giao hàng vào giờ hành chính từ t2-t6</td>
+                                                    <td>LF7GNK</td>
+                                                    <td>204</td>
+                                                    <td>18000</td>
+                                                    <td>12-10-2024</td>
+                                                    <td>Không giao hàng vào giờ hành chính từ t2-t6</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -557,7 +536,7 @@ const Order = {
                         <div class="col-sm-12 col-md-3 col-lg-3">
                             <div class="card">
                                 <div class="card-body">
-                                    <button style="white-space: nowrap;" class="btn btn-primary btn-tone m-l-5" id="print-order-btn" data-order-id="${id}">                                        
+                                    <button style="white-space: nowrap;" class="btn btn-primary btn-tone m-l-5">                                        
                                         <i class="anticon anticon-plus-circle m-r-5"></i>
                                         <span>In phiếu đóng gói</span>
                                     </button>  
@@ -568,31 +547,6 @@ const Order = {
 
                 </div>
             `);
-            Api.Order.GetOrderDetail(id).done((response) => {
-                $('#pk-shipping-code').text(response.shipping_code);
-                $('#pk-order-value').text(response.value);
-                $('#pk-order-note').text(response.description);
-            });
-            $('#print-order-btn').click(function() {
-                //get data-order-id
-                var order_id = $(this).data('order-id');
-                console.log(order_id);
-                Api.Order.printTicket(order_id).done((response) => {
-                    // Giả sử response chứa đường dẫn đến tệp in
-                    var printUrl = response; // Thay đổi thành trường chính xác chứa URL
-                
-                    if (printUrl) {
-                        var printWindow = window.open(printUrl, '_blank');
-                        printWindow.onload = function() {
-                            printWindow.print();
-                        };
-                    } else {
-                        console.error('Không có liên kết để in.');
-                    }
-                });
-                
-            });
-
         },
         showPendingShippingPage: () => {
             $('#order_status_update').html(`
@@ -604,12 +558,7 @@ const Order = {
                 <option value="6">Đã hủy</option>
             `);
         },
-        showShippingPage: (id) => {
-/*             var order_logs = [];
-            Api.Order.GetOrderDetail(id).done((response) => {
-                order_logs = response.log;
-                console.log(order_logs);
-            }); */
+        showShippingPage: () => {
             $('#order_status_update').html(`
                 <option value="1">Đã xác nhận</option>
                 <option value="2">Đã hoàn thiện</option>
@@ -618,7 +567,7 @@ const Order = {
                 <option value="5" selected>Đã giao hàng</option>
                 <option value="6">Đã hủy</option>
             `);
-/*             $('#order-detail-body').append(`
+            $('#order-detail-body').append(`
                 <!-- Theo dõi đơn hàng -->
                 <div class="card">
                     <div class="card-body">
@@ -638,7 +587,7 @@ const Order = {
                                             <tbody class="data-list"> 
                                                 <tr>
                                                     <td>Tên cửa hàng</td>
-                                                    <td>BkPerfume</td>
+                                                    <td>BkeShop</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Số điện thoại</td>
@@ -725,7 +674,7 @@ const Order = {
                                                 <td>JHGN7</td>
                                             </tr>
                                             <tr>
-                                                <td>Mã đơn hàng</td>
+                                                <td>mã đơn hàng</td>
                                                 <td>104</td>
                                             </tr>
                                             <tr>
@@ -780,181 +729,7 @@ const Order = {
                     </div>
 
                 </div>
-            `); */
-            Api.Order.GetOrderDetail(id).done((response) => {
-                var status_index = ['Chờ xử lý ', 'Đã xác nhận ', 'Đã hoàn thiện, ', 'Chờ lấy hàng ', 'Đang giao hàng ', 'Đã giao hàng ', 'Đã hủy '];
-                const order_logs = response.log;
-                console.log(order_logs);
-            
-                // Tạo bảng trạng thái
-                let trackingRows = '';
-                order_logs.forEach(log => {
-                    const [timestamp, status] = log.split(' - '); // Chia thời gian và trạng thái
-                    trackingRows += `
-                        <tr>
-                            <td>${status}</td>
-                            <td>${timestamp}</td>
-                            <td>-</td>
-                        </tr>
-                    `;
-                });
-            
-                $('#order-detail-body').append(`
-                    <!-- Theo dõi đơn hàng -->
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="text-center">THEO DÕI ĐƠN HÀNG</h4>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12 col-md-4 col-lg-4">
-                                <div class="card">
-                                    <div class="card-body ">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <tr class="table-info">
-                                                        <th colspan="2">Người gửi</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="data-list"> 
-                                                    <tr>
-                                                        <td>Tên cửa hàng</td>
-                                                        <td>BkPerfume</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Số điện thoại</td>
-                                                        <td>0866222888</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Địa chỉ</td>
-                                                        <td>66, Trương Định, Hai Bà Trưng, Hà Nội</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-4 col-lg-4">
-                                <div class="card">
-                                    <div class="card-body ">
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr class="table-info">
-                                                    <th colspan="2">Người nhận</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="data-list"> 
-                                                <tr>
-                                                    <td>Tên khách hàng</td>
-                                                    <td>${response.name}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Số điện thoại</td>
-                                                    <td>${response.phone}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Địa chỉ</td>
-                                                    <td>${response.address.address}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-4 col-lg-4">
-                                <div class="card">
-                                    <div class="card-body ">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <tr class="table-info">
-                                                        <th colspan="2">Thông tin đơn hàng</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="data-list"> 
-                                                    <tr>
-                                                        <td>Khách phải trả</td>
-                                                        <td>${response.value}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Phân loại</td>
-                                                        <td>Cho thử hàng</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Phí vận chuyển</td>
-                                                        <td>Người gửi thanh toán</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-4 col-lg-4">
-                                <div class="card">
-                                    <div class="card-body ">
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr class="table-info">
-                                                    <th colspan="2">Thông tin chi tiết</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="data-list"> 
-                                                <tr>
-                                                    <td>Mã vận chuyển</td>
-                                                    <td>${response.shipping_code}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Mã đơn hàng</td>
-                                                    <td>${response.id}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Dự kiến lấy</td>
-                                                    <td>-</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Dự kiến giao</td>
-                                                    <td>-</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Trạng thái hiện tại</td>
-                                                    <td>${status_index[response.status]}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-8 col-lg-8">
-                                <div class="card">
-                                    <div class="card-body ">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <tr class="table-info">
-                                                        <th colspan="3">Theo dõi đơn hàng</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="data-list">
-                                                    <tr>
-                                                        <th>Trạng thái</th>
-                                                        <th>Thời gian</th>
-                                                        <th>Chi tiết</th>
-                                                    </tr> 
-                                                    ${trackingRows} <!-- Chèn các dòng trạng thái ở đây -->
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `);
-            });
-            
-            
+            `);
         }
     },
     update: {
@@ -1106,7 +881,8 @@ const Order = {
         },
     },
     address: {
-        fill_main: () => {
+        fill: () => {
+            // Fill data to form
             Api.User.checkAuth().done(function(data) {
                 console.log(data);
                 if (data.status === 'success') {
@@ -1160,60 +936,6 @@ const Order = {
                     });
                 }
             });
-        },
-        fill: (data) => {
-                console.log(data);
-                if (1) {
-                    data = data;
-                    $('#name').val(data.name);
-                    $('#phone').val(data.phone);
-                    $('#addressDetail').val(data.address.address);
-    
-                    // Clear existing options in province before filling
-                    $('#provinceSelect').empty();
-    
-                    // Assuming getProvince() returns a promise
-                    Api.Address.getProvince().done(function(provinces) {
-                        if (provinces && Array.isArray(provinces.data)) {
-                            provinces.data.forEach(element => {
-                                $('#provinceSelect').append(`<option value="${element.ProvinceID}">${element.ProvinceName}</option>`);
-                            });
-    
-                            // Trigger Chosen update
-                            $('#provinceSelect').trigger("chosen:updated");
-    
-                            // Set the province after populating options
-                            $('#provinceSelect').val(data.address.province).trigger("chosen:updated");
-    
-                            // Load districts based on the selected province
-                           Order.address.loadDistricts(data.address.province, data.address.district);
-    
-                            // Set the ward based on the user's data
-                           Order.address.loadWards(data.address.district, data.address.ward);
-                        }
-                    });
-    
-                    // Event listener for province change
-                    $('#provinceSelect').on('change', function() {
-                        var province = $(this).val();
-                       Order.address.loadDistricts(province); // Load districts for the selected province
-                    });
-                } else {
-                    Api.Address.getProvince().done(function(provinces) {
-                        if (provinces && Array.isArray(provinces.data)) {
-                            provinces.data.forEach(element => {
-                                $('#provinceSelect').append(`<option value="${element.ProvinceID}">${element.ProvinceName}</option>`);
-                            });
-                            // Trigger Chosen update
-                            $('#provinceSelect').trigger("chosen:updated");
-                        }
-                    });
-                    $('#provinceSelect').on('change', function() {
-                        var provinceId = $(this).val();
-                       Order.address.loadDistricts(provinceId); // Load districts for the selected province
-                    });
-                }
-
         },
     
         loadDistricts: (provinceId, selectedDistrictId = null) => {

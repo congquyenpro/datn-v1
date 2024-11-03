@@ -169,13 +169,19 @@ const Checkout = {
                 //console.log(order_items);
 
                 //send user_id to be
+                var provinceName = $('#province option:selected').text(); 
+                var districtName = $('#district option:selected').text();
+                var wardName = $('#ward option:selected').text();
+                var fullAddress = $('#detail_address').val() + '/ ' + wardName + '/ ' + districtName + '/ ' + provinceName;
+
                 var data = {
                     name: $('#name').val(),
                     phone: $('#phone').val(),
                     province: $('#province').val(),
                     district: $('#district').val(),
                     ward: $('#ward').val(),
-                    detail_address: $('#detail_address').val(),
+                    //detail_address: $('#detail_address').val(),
+                    detail_address: fullAddress,
                     note: $('#note').val(),
                     payment_method: $('#payment_method').val(),
                     order_items: order_items
