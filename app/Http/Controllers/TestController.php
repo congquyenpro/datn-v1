@@ -11,6 +11,8 @@ class TestController extends Controller
 
     protected $productRepository;
     //Test pagination
+
+    //Không được xóa các hàm này => có sử dụng
     public function test1()
     {
         // Lấy sản phẩm với phân trang
@@ -53,7 +55,8 @@ class TestController extends Controller
          
     }
 
-    public function test2(Request $request)
+    //Không được xóa các hàm này => có sử dụng
+    public function test(Request $request)
     {
         // Get all parameters from the request
         $filters = $request->all();
@@ -218,7 +221,7 @@ class TestController extends Controller
         return response()->json($order->order_items);
     }
 
-    public function test() {
+    public function test5() {
         $order_id = 23;
         // Tìm đơn hàng với các orderItems
         $order = Order::with('orderItems')->find($order_id);

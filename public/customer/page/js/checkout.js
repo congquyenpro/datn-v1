@@ -190,12 +190,20 @@ const Checkout = {
 
 
                 Api.Order.createOrder(data).done(function(data) {
+                    console.log(data);
                     console.log(data.status);
                     if (data.status == '200') {
-                        var order_id = data.data;
-                        //alert('Đặt hàng thành công');
-                        localStorage.removeItem('cart');
-                        window.location.href = '/order-success?id=OD' + order_id;
+                        var payment_method = $('#payment_method').val();
+                        if (payment_method == 'Online') {
+                            //localStorage.removeItem('cart');
+                            window.location.href = '/payment?order_code=OD' + data.data;
+                        }
+                        else {
+                            var order_id = data.data;
+                            localStorage.removeItem('cart');
+                            window.location.href = '/order-success?id=OD' + order_id;
+                        }
+
                     } else {
                         alert('Đặt hàng thất bại');
                     }

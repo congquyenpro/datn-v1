@@ -4,6 +4,8 @@ const Api = {
     Order: {},
     Address: {},
     User: {},
+    Warehouse: {},
+    Blog: {},
 };
 (() => {
     $.ajaxSetup({
@@ -126,4 +128,25 @@ Api.User.checkAuth = () => $.ajax({
     //url: `http://127.0.0.1:3000/user_infor2`,
     url: `/api-v1/user/infor`,
     method: 'GET',
+});
+
+
+/* Warehouse */
+Api.Warehouse.getAllProducts = () => $.ajax({
+    url: `/admin/warehouse/all-products`,
+    method: 'GET',
+});
+
+Api.Warehouse.getProductSizes = (product_id) => $.ajax({
+    url: `/admin/warehouse/get-sizes?product_id=${product_id}`,
+    method: 'GET',
+});
+
+
+
+/* Blog */
+Api.Blog.store = (data) => $.ajax({
+    url: `/admin/blog/create`,
+    method: 'POST',
+    data: data,
 });

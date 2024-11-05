@@ -152,6 +152,24 @@ Route::prefix('admin')->group(function() {
         });
     });
 
+    /* warehouse */
+    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.order']], function() {
+        Route::prefix('warehouse')->group(function() {
+            Route::get('/', 'Manager\Warehouse\WarehouseController@index')->name('manager.warehouse');
+            Route::get('/all-products', 'Manager\Warehouse\WarehouseController@getAllProducts')->name('manager.warehouse.getAll');
+            Route::get('/get-sizes', 'Manager\Warehouse\WarehouseController@getProductSizes')->name('manager.warehouse.detail');
+        });
+    });
+
+    /* Post and Comment */
+    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.order']], function() {
+        Route::prefix('blog')->group(function() {
+            Route::get('/', 'BlogController@showManagerBlog')->name('manager.blog');
+            Route::post('/create', 'BlogController@createBlog')->name('manager.blog.create');
+            
+        });
+    });
+
 
 });
 
@@ -225,12 +243,17 @@ Route::prefix('/')->group(function() {
 
 //Payment
 Route::prefix('payment')->group(function() {
+    Route::get('/', 'PaymentController@displayPayment');
     Route::get('/create', 'PaymentController@createPayment');
     Route::get('/status', 'PaymentController@getPaymentStatus');
     Route::get('/refund', 'PaymentController@refundPayment');
     Route::get('/webhook', 'PaymentController@handleWebhook');
     Route::get('/get-all', 'PaymentController@getAllTransactions');
     Route::get('/cron', 'PaymentController@cron');
+    Route::get('/check', 'PaymentController@checkPayment');
+
+
+    Route::get('/ghn-webhook', 'PaymentController@ghnWebhook');
 });
 
 

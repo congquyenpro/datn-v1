@@ -123,7 +123,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="#" class="button button-payment">Thanh toán</a>
+                <a href="#" class="button button-payment">Đặt hàng</a>
             </div>
         </div>
     </div>

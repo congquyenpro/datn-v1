@@ -130,10 +130,13 @@ class OrderController extends Controller
         return response()->json($respone);
     }
     public function submitTicket(Request $request){
-        $shipping = new ShippingService();
+        
 
         $order = $request->data;
 
+        //Kiểm tra $order['shipping-partner'] 1:GHN, 2:GHTK, 3:OTHER
+
+        $shipping = new ShippingService();
         $order_items = $shipping->test($order['client_order_code']);
 
         

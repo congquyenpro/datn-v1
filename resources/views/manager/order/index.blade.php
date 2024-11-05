@@ -10,6 +10,8 @@
             width: 100%; /* Đảm bảo bảng sử dụng toàn bộ chiều rộng */
         }
     </style>
+    
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
 
 @endsection
 
@@ -149,6 +151,13 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-lg-4 text-right">
+                            <button class="btn btn-primary" id="export-excel">
+                                <i class="fas fa-file-excel m-r-5"></i>
+                                <span>Export</span>
+                            </button>
+                        </div>
+                        
                     </div>
 
                     <div class="table-responsive">

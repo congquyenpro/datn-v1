@@ -57,4 +57,9 @@ class User extends Authenticatable
             return $role->permissions; // Assuming each role has a permissions() relationship
         })->flatten()->unique('id');
     }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);  // User có nhiều bài viết
+    }
 }

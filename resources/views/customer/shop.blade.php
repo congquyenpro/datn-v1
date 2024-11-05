@@ -33,10 +33,10 @@
             <div class="content-area shop-grid-content no-banner col-lg-9 col-md-9 col-sm-12 col-xs-12">
                 <div class="site-main">
                     <h3 class="custom_blog_title">
-                        Grid Products
+                        SẢN PHẨM
                     </h3>
                     <!-- Trigger the modal with a button -->
-                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Tìm kiếm nâng cao</button>
+                    {{-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Tìm kiếm nâng cao</button> --}}
 
                     <div class="shop-top-control">
                         <form class="select-item select-form">

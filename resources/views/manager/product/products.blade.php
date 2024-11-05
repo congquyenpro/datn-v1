@@ -3,6 +3,7 @@
 @section('page_css')
 <link href="{{asset('admin_assets/assets/vendors/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet">
 <link href="{{asset('admin_assets/page/css/product.css')}}" rel="stylesheet">
+<link href="{{asset('admin_assets/assets/vendors/select2/select2.css')}}" rel="stylesheet">
 
 <!-- summernote -->
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
@@ -254,65 +255,74 @@
                                     <div class="metadata-item" style=" padding: 1rem; border: dotted 2px #1391c3; ">
                                         <div class="form-group">
                                             <label>Thương hiệu</label>
-                                            <select class="form-control" id="brandSelect">
+                                            <select class="form-control select2" id="brandSelect">
                                                 <option value="" disabled selected>Chọn thương hiệu...</option>
                                             </select>
+                                            <label style="float: right;"><a href="#" data-toggle="modal" data-target="#exampleModalCenter">Thêm mới</a></label>
                                             <input type="text" class="form-control mt-2" id="newBrandInput" placeholder="Nhập thương hiệu mới..." style="display: none;">
                                         </div>
                                         <div class="form-group">
                                             <label>Nồng độ</label>
-                                            <select class="form-control" id="concentrationSelect">
+                                            <select class="form-control select2" id="concentrationSelect">
                                                 <option value="" disabled selected>Chọn nồng độ...</option>
                                             </select>
+                                            <label style="float: right;"><a href="#" data-toggle="modal" data-target="#exampleModalCenter">Thêm mới</a></label>
                                             <input type="text" class="form-control mt-2" id="newConcentrationInput" placeholder="Nhập nồng độ mới..." style="display: none;">
                                         </div>
                                         <div class="form-group">
                                             <label>Phong cách</label>
-                                            <select class="form-control" id="styleSelect">
+                                            <select class="form-control select2" id="styleSelect">
                                                 <option value="" disabled selected>Chọn phong cách...</option>
                                             </select>
+                                            <label style="float: right;"><a href="#" data-toggle="modal" data-target="#exampleModalCenter">Thêm mới</a></label>
                                             <input type="text" class="form-control mt-2" id="newStyleInput" placeholder="Nhập phong cách mới..." style="display: none;">
                                         </div>                                        
                                         <div class="form-group">
                                             <label>Nhóm hương</label>
-                                            <select class="form-control" id="fragranceGroupSelect">
+                                            <select class="form-control select2" id="fragranceGroupSelect">
                                                 <option value="" disabled selected>Chọn nhóm hương...</option>
                                             </select>
+                                            <label style="float: right;"><a href="#" data-toggle="modal" data-target="#exampleModalCenter">Thêm mới</a></label>
                                             <input type="text" class="form-control mt-2" id="newFragranceGroupInput" placeholder="Nhập nhóm hương mới..." style="display: none;">
                                         </div>
                                         <div class="form-group">
                                             <label>Độ lưu hương</label>
-                                            <select class="form-control" id="fragranceTimeSelect">
+                                            <select class="form-control select2" id="fragranceTimeSelect">
                                                 <option value="" disabled selected>Chọn độ lưu hương...</option>
                                             </select>
+                                            <label style="float: right;"><a href="#" data-toggle="modal" data-target="#exampleModalCenter">Thêm mới</a></label>
                                             <input type="text" class="form-control mt-2" id="newFragranceTimeInput" placeholder="Nhập nhóm hương mới..." style="display: none;">
                                         </div>      
                                         <div class="form-group">
                                             <label>Độ tỏa hương</label>
-                                            <select class="form-control" id="fragranceDistanceSelect">
+                                            <select class="form-control select2" id="fragranceDistanceSelect">
                                                 <option value="" disabled selected>Chọn độ tỏa hương...</option>
                                             </select>
+                                            <label style="float: right;"><a href="#" data-toggle="modal" data-target="#exampleModalCenter">Thêm mới</a></label>
                                             <input type="text" class="form-control mt-2" id="newFragranceDistanceInput" placeholder="Nhập nhóm hương mới..." style="display: none;">
                                         </div> 
                                         <div class="form-group">
                                             <label>Xuất xứ</label>
-                                            <select class="form-control" id="countrySelect">
+                                            <select class="form-control select2" id="countrySelect">
                                                 <option value="" disabled selected>Chọn xuất xứ...</option>
                                             </select>
+                                            <label style="float: right;"><a href="#" data-toggle="modal" data-target="#exampleModalCenter">Thêm mới</a></label>
                                             <input type="text" class="form-control mt-2" id="newCountryInput" placeholder="Nhập nhóm hương mới..." style="display: none;">
                                         </div>               
                                         <div class="form-group">
                                             <label>Độ tuổi</label>
-                                            <select class="form-control" id="ageGroupSelect">
+                                            <select class="form-control select2" id="ageGroupSelect">
                                                 <option value="" disabled selected>Chọn độ tuổi...</option>
                                             </select>
+                                            <label style="float: right;"><a href="#" data-toggle="modal" data-target="#exampleModalCenter">Thêm mới</a></label>
                                             <input type="text" class="form-control mt-2" id="newAgeGroupInput" placeholder="Nhập độ tuổi mới..." style="display: none;">
                                         </div>                                        
                                         <div class="form-group">
                                             <label>Thành phần</label>
-                                            <select class="form-control" id="ingredientSelect">
+                                            <select class="form-control select2" id="ingredientSelect">
                                                 <option value="" disabled selected>Chọn thành phần...</option>
                                             </select>
+                                            <label style="float: right;"><a href="#" data-toggle="modal" data-target="#exampleModalCenter">Thêm mới</a></label>
                                             <input type="text" class="form-control mt-2" id="newIngredientInput" placeholder="Nhập thành phần mới..." style="display: none;">
                                         </div>                                        
                                     </div>
@@ -380,10 +390,40 @@
         </div>
     </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title2" id="exampleModalCenterTitle2">Thêm thương hiệu</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <i class="anticon anticon-close"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="formGroupExampleInput">Giá trị</label>
+                                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Giá trị">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
 
 @endsection
 
 @section('page_js')
+<script src="{{asset('admin_assets/assets/vendors/select2/select2.min.js')}}"></script>
+<script>
+    $('.select2').select2();
+</script>
 <script src="{{asset('admin_assets/assets/vendors/datatables/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('admin_assets/assets/vendors/datatables/dataTables.bootstrap.min.js')}}"></script>
 <script src="{{asset('admin_assets/assets/js/pages/e-commerce-order-list.js')}}"></script>

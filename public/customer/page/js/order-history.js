@@ -55,11 +55,11 @@ OrderHistory = {
                                                 <div class="col-sm-12 product-quantity">${product.product_size_name} ml</div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-3 product-price">${(product.product_size_price * (1 - product.product_size_discount / 100)).toLocaleString()}₫</div>
+                                        <div class="col-sm-3 product-price">${(product.product_size_price).toLocaleString()}₫</div>
                                     </div>
                                 `).join('')}
                                 <hr>
-                                <div class="total">Total Price: ${element.product_size_info.reduce((total, product) => total + (product.product_size_price * (1 - product.product_size_discount / 100)), 0).toLocaleString()}₫</div>
+                                <div class="total">Total Price: ${element.product_size_info.reduce((total, product) => total + (product.product_size_price*product.quantity), 0).toLocaleString()}₫</div>
                             </div>
                         </div>
                     `;

@@ -36,8 +36,8 @@
                 </div>
                 <div class="logo logo-white">
                     <a href="index.html">
-                        <img src="assets/images/logo/logo-white.png" alt="Logo">
-                        <img class="logo-fold" src="assets/images/logo/logo-fold-white.png" alt="Logo">
+                        <img src="#" alt="Logo">
+                        <img class="logo-fold" src="#" alt="Logo">
                     </a>
                 </div>
                 <div class="nav-wrap">
@@ -234,7 +234,7 @@
                             </ul>
                         </li> --}}
                         <li class="nav-item dropdown">
-                            <a class="dropdown-toggle" href="javascript:void(0);">
+                            <a class="dropdown-toggle" href="{{route('manager.warehouse')}}">
                                 <span class="icon-holder">
                                     <i class="fas fa-warehouse"></i>
                                 </span>
@@ -257,6 +257,14 @@
                                 <span class="title">Nhân viên</span>
                             </a>
                         </li> --}}
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle" href="{{route('manager.blog')}}">
+                                <span class="icon-holder">
+                                    <i class="fas fa-newspaper"></i>
+                                </span>
+                                <span class="title">Bài đăng</span>
+                            </a>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="dropdown-toggle" href="javascript:void(0);">
                                 <span class="icon-holder">
@@ -308,7 +316,6 @@
                                 </span>
                                 <span class="title">Đăng xuất</span>
                             </a>
-
                         </li>
                     </ul>
                 </div>

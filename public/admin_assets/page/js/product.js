@@ -351,22 +351,31 @@ const Product = {
 
                     //brand product_attributes[0]
                     document.getElementById('brandSelect').value = response.product_attributes[0].attribute_value.id;
+                    $('#brandSelect').select2().trigger('change');
                     //concentration product_attributes[1]
                     document.getElementById('concentrationSelect').value = response.product_attributes[1].attribute_value.id;
+                    $('#concentrationSelect').select2().trigger('change');
                     //style product_attributes[2]
                     document.getElementById('styleSelect').value = response.product_attributes[2].attribute_value.id;
+                    $('#styleSelect').select2().trigger('change');
                     //fragrance_group product_attributes[3]
                     document.getElementById('fragranceGroupSelect').value = response.product_attributes[3].attribute_value.id;
+                    $('#fragranceGroupSelect').select2().trigger('change');
                     //fragrance_time product_attributes[4]
                     document.getElementById('fragranceTimeSelect').value = response.product_attributes[4].attribute_value.id;
+                    $('#fragranceTimeSelect').select2().trigger('change');
                     //fragrance_distance product_attributes[5]
                     document.getElementById('fragranceDistanceSelect').value = response.product_attributes[5].attribute_value.id;
+                    $('#fragranceDistanceSelect').select2().trigger('change');
                     //age_group product_attributes[6]
                     document.getElementById('ageGroupSelect').value = response.product_attributes[6].attribute_value.id;
+                    $('#ageGroupSelect').select2().trigger('change');
                     //ingredient product_attributes[7]
                     document.getElementById('ingredientSelect').value = response.product_attributes[7].attribute_value.id;
+                    $('#ingredientSelect').select2().trigger('change');
                     //country product_attributes[8]
                     document.getElementById('countrySelect').value = response.product_attributes[8].attribute_value.id;
+                    $('#countrySelect').select2().trigger('change');
 
                     //description
                     $('#summernote').summernote('code', response.description);

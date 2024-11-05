@@ -35,7 +35,19 @@ class OrderRepository extends BaseRepository implements IBaseRepository
     }
     public function update($order_id, $data)
     {
+
         $order = $this->order->find($order_id);
+
+        //Kiểm tra $data['shipping_partner'] có tồn tại không
+        if (isset($data['shipping_partner'])) {
+            if ($data['shipping_partner'] == 3){
+                $order->delivery_company_code = $data['other_partner_name'];
+                $order->shipping_code = $data['other_partner_code'];
+                $order->shipping_cost = $data['other_partner_fee'];
+            }
+        }
+
+
         $order->status = $data['status'];
         $data_log_index = [
             0 => 'Chờ xử lý',
@@ -86,6 +98,7 @@ class OrderRepository extends BaseRepository implements IBaseRepository
 
             'order_date' => date('Y-m-d H:i:s'),
             'payment_status' => 0,
+            'payment_method' => $data['payment_method'],
             'status' => $data['status'],
             'log' => json_encode([$data['status'] => date('Y-m-d H:i:s') . ' - Đặt thành công']),
             //'log' => json_encode(date('Y-m-d H:i:s') . ' - Đặt thành công'),
@@ -100,6 +113,10 @@ class OrderRepository extends BaseRepository implements IBaseRepository
             $orderItem = new OrderItem();
             $orderItem->order_id = $order_id;
             $orderItem->product_size_id = $item['product_size_id'];
+            //lấy ra ảnh đầu tiên của product
+            $product_images = explode(',', $product->images);
+            
+
             $orderItem->product_size_info = json_encode([
                 'product_id' => $product->id,
                 'product_name' => $product->name,
@@ -107,6 +124,8 @@ class OrderRepository extends BaseRepository implements IBaseRepository
                 'product_size_name' => $product_size->volume,
                 'product_size_discount' => $product_size->discount,
                 'product_size_price' => $product_size->price,
+                'product_entry_price' => $product_size->entry_price,
+                'product_image' => $product_images[0],
             ]);
             $orderItem->quantity = $item['quantity'];
             $orderItem->item_value = $product_size->price * $item['quantity'];
@@ -158,9 +177,9 @@ class OrderRepository extends BaseRepository implements IBaseRepository
     
         return $orders;
     }
-    public function getOrderByUser($user_id, $status)
+    public function getOrderByUser_Main($user_id, $status)
     {
-        if ($status == 2) $status = 3;
+        if ($status == 3) $status = 2;
         
         $sql = "
         SELECT 
@@ -209,6 +228,77 @@ class OrderRepository extends BaseRepository implements IBaseRepository
     
         return $orders;
     }
+
+    public function getOrderByUser($user_id, $status)
+    {
+        //if ($status == 3) $status = 2;
+    
+        $sql = "
+            SELECT 
+                o.id AS order_id,
+                o.value,
+                o.status,
+                GROUP_CONCAT(p.images) AS images,
+                JSON_ARRAYAGG(
+                    JSON_OBJECT(
+                        'product_id', ps.product_id,
+                        'product_name', p.name,
+                        'product_size_id', ps.id,
+                        'product_size_name', ps.volume,
+                        'product_size_price', ps.price,
+                        'product_size_discount', ps.discount,
+                        'image', p.images
+                    )
+                ) AS product_size_info
+            FROM 
+                Orders o
+            JOIN 
+                Order_Items oi ON oi.order_id = o.id
+            JOIN 
+                Product_Sizes ps ON ps.id = oi.product_size_id
+            JOIN 
+                Products p ON p.id = ps.product_id
+            WHERE 
+                o.customer_id = ? AND o.status = ?
+            GROUP BY 
+                o.id, o.value, o.status
+            ORDER BY 
+                o.order_date DESC;
+            
+        ";
+    
+        $orders = DB::select($sql, [$user_id, $status]);
+        foreach ($orders as $order) {
+            // Chia tách các chuỗi JSON thành một mảng
+            $productSizeInfos = json_decode($order->product_size_info, true);
+            $order->product_size_info = $productSizeInfos;
+    
+            // Tách chuỗi hình ảnh và gán vào thuộc tính images
+            $order->images = explode(',', $order->images);
+    
+            // Lấy ảnh đại diện cho từng sản phẩm
+            foreach ($order->product_size_info as &$product) {
+                $productId = $product['product_id'];
+    
+                // Truy vấn ảnh từ bảng products (lấy ảnh đầu tiên)
+                $imageSql = "SELECT images FROM products WHERE id = ?";
+                $image = DB::select($imageSql, [$productId]);
+
+                //Truy vấn lấy ra quantity của item
+                $quantitySql = "SELECT quantity FROM order_items WHERE order_id = ? AND product_size_id = ?";
+                $quantity = DB::select($quantitySql, [$order->order_id, $product['product_size_id']]);
+    
+                // Gán ảnh đại diện (nếu có)
+                $product['image'] = $image ? explode(',', $image[0]->images)[0] : null; // Lấy ảnh đầu tiên
+
+                // Gán số lượng sản phẩm
+                $product['quantity'] = $quantity[0]->quantity;
+            }
+        }
+    
+        return $orders;
+    }
+    
     
     
     

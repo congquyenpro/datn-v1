@@ -6,15 +6,18 @@ use App\Repositories\OrderRepository;
 use Illuminate\Support\Str;
 
 use App\Services\ShippingService;
+use App\Services\PaymentService;
 
 
 class OrderService
 {
     protected $orderRepository;
+    protected $paymentService;
 
-    public function __construct(OrderRepository $orderRepository)
+    public function __construct(OrderRepository $orderRepository, PaymentService $paymentService)
     {
         $this->orderRepository = $orderRepository;
+        $this->paymentService = $paymentService;
     }
 
     //Admin
@@ -55,7 +58,15 @@ class OrderService
   
         switch ($data['payment_method']) {
             case 'Online':
-                /* optional */
+                $data['status'] = 0;
+                //Tạo order
+                $order_create = $this->orderRepository->createOrder($data);
+                //lấy ra mã order vừa tạo
+                $order_id = $order_create;
+
+                //Tạo đơn thanh toán
+                $order = $this->paymentService->createPayment($order_id);
+
                 break;
             default:
                 $data['status'] = 0;

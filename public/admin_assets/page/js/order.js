@@ -420,7 +420,7 @@ const Order = {
                                         <input name="" type="text" class="form-control" id="cod_amount" placeholder="" value="">
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="inputEmail4">Tổng giá trị đơn:</label>
+                                        <label for="inputEmail4">Tổng giá trị đơn (đền bù):</label>
                                         <input name="" type="text" class="form-control" id="insurance_value" placeholder="" value="">
                                     </div>
                                     <div class="form-group col-md-6">
@@ -475,19 +475,19 @@ const Order = {
                                 <form>
                                     <div class="form-group">
                                         <label for="formGroupExampleInput">Đơn vị vận chuyển</label>
-                                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Tên đơn vị">
+                                        <input type="text" class="form-control" id="other-partner-name" placeholder="Tên đơn vị">
                                     </div>
                                     <div class="form-group">
                                         <label for="formGroupExampleInput2">Mã vận chuyển</label>
-                                        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Mã vận chuyển">
+                                        <input type="text" class="form-control" id="other-partner-code" placeholder="Mã vận chuyển">
                                     </div>
                                     <div class="form-group">
                                         <label for="formGroupExampleInput2">Phí dịch vụ</label>
-                                        <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Phí vận chuyển">
+                                        <input type="text" class="form-control" id="other-partner-fee" placeholder="Phí vận chuyển">
                                     </div>
                                 </form>
                                 <hr>
-                                <button id="save-order-btn" type="button" class="btn btn-primary push-modal2" atr="Push2" data-toggle="modal" data-target="#exampleModalCenter">Xác nhận</button>
+                                
                             </div>
                         </div>
                 `);      
@@ -499,8 +499,10 @@ const Order = {
             Api.Order.GetOrderDetail(id).done((response) => {
                 var items_list_2 = response.order_items;
                 console.log(items_list_2);
-                $('#cod_amount').val(response.value);
-                $('#insurance_value').val(response.value);
+
+                response.payment_status == 1 ?  $('#cod_amount').val(0): $('#cod_amount').val(response.value);
+               
+                $('#insurance_value').val(5000000);
                 $('#to_name').val(response.name);
                 $('#to_phone').val(response.phone);
                 Order.address.fill(response);
@@ -963,12 +965,38 @@ const Order = {
             $(document).on('click', '#save-order-btn', function() {
                 console.log('Button clicked 1!');
 
+                //Lấy ra shipping-partner
+                var shipping_partner = $('.shipping-partner').val();
+                if (shipping_partner == 3) {
+                    var other_partner_name = $('#other-partner-name').val();
+                    var other_partner_code = $('#other-partner-code').val();
+                    var other_partner_fee = $('#other-partner-fee').val();
+                    
+                    //check nếu trống thì alert
+                    if (other_partner_name == '' || other_partner_code == '' || other_partner_fee == '') {
+                        alert('Vui lòng nhập đầy đủ thông tin đơn vị vận chuyển khác');
+                        return;
+                    }
+                }else{
+                    other_partner_name = '';
+                    other_partner_code = '';
+                    other_partner_fee = '';
+                }
+                console.log('shipping_partner:', shipping_partner);
+                console.log('other_partner_name:', other_partner_name);
+                console.log('other_partner_code:', other_partner_code);
+                console.log('other_partner_fee:', other_partner_fee);
+
                 //lấy id order từ data-id của button save
                 var id = $('#save-order-btn').attr('data-id');
                 console.log('id order: ' + id);
                 var data = {
                     status: $('#order_status_update').val(),
-                    note: $('#order_note').val() || ''
+                    note: $('#order_note').val() || '',
+                    shipping_partner: shipping_partner,
+                    other_partner_name: other_partner_name,
+                    other_partner_code: other_partner_code,
+                    other_partner_fee: other_partner_fee
                 };
                 console.log(data);
                 Api.Order.UpdateOrder(id, data).done((response) => {
@@ -1258,11 +1286,138 @@ const Order = {
                 }
             });
         }
-    }, 
+    },
+    report: {
+        export: () => {
+            function downloadExcel(filename, data) {
+              // Hàm giúp chuyển đổi địa chỉ từ chuỗi JSON sang dạng dễ đọc
+              function formatAddress(addressJson) {
+                try {
+                  const address = JSON.parse(addressJson);
+                  const detailAddress = address.address ? `${address.address}` : '';
+                  // Chuyển dấu / thành dấu , để dễ đọc
+                  const addressStr = JSON.stringify(detailAddress).replace(/\//g, ',');
+                  
+                  // Trả về địa chỉ theo định dạng dễ đọc
+                  return addressStr;
+                } catch (error) {
+                  return "Địa chỉ không hợp lệ";
+                }
+              }
+          
+              // Chuyển đổi dữ liệu status và payment_status sang dạng chữ, bỏ cột Log
+              const transformedData = data.map(order => [
+                order.id,
+                order.name,
+                order.phone,
+                formatAddress(order.address), // Chuyển đổi địa chỉ thành dạng dễ đọc
+                order.order_date,
+                order.payment_method,
+                order.payment_status === 0 ? 'Chưa thanh toán' : 'Đã thanh toán', // Chuyển payment_status sang chữ
+                order.delivery_company_code,
+                order.shipping_code,
+                order.value,
+                order.shipping_cost,
+                (function() {
+                    switch (order.status) {
+                      case 0: return 'Chờ xử lý';
+                      case 1: return 'Đã xác nhận';
+                      case 2: return 'Đã hoàn thiện';
+                      case 3: return 'Chờ lấy hàng';
+                      case 4: return 'Đang giao hàng';
+                      case 5: return 'Đã giao hàng';
+                      case 6: return 'Hủy đơn';
+                      default: return 'Không xác định';
+                    }
+                  })()
+              ]);
+          
+              // Thêm tiêu đề cho bảng
+              const headers = [
+                "ID", "Tên", "Điện thoại", "Địa chỉ", "Ngày đặt hàng", "Phương thức thanh toán", "Trạng thái thanh toán",
+                "Mã công ty vận chuyển", "Mã giao hàng","Giá trị đơn", "Phí vận chuyển", "Trạng thái đơn hàng"
+              ];
+          
+              // Tạo sheet từ dữ liệu
+              const ws = XLSX.utils.aoa_to_sheet([headers, ...transformedData]);
+          
+              // Tính toán chiều rộng tối ưu cho mỗi cột, nhưng cố định cột Địa chỉ
+              const colWidths = headers.map((header, index) => {
+                let maxWidth = header.length; // Chiều rộng cột ban đầu là chiều dài tiêu đề
+          
+                // Để Địa chỉ không kéo dài quá mức, chúng ta sẽ xử lý riêng
+                if (header === "Địa chỉ") {
+                  maxWidth = Math.min(maxWidth, 50); // Cố định chiều rộng cột Địa chỉ (max 50 ký tự)
+                } else {
+                  // Với các cột khác, tính chiều rộng tối đa dựa trên giá trị trong cột
+                  transformedData.forEach(row => {
+                    const cellValue = row[index] ? row[index].toString() : '';
+                    if (cellValue.length > maxWidth) {
+                      maxWidth = cellValue.length;
+                    }
+                  });
+                }
+          
+                return { wch: maxWidth + 2 }; // Thêm 2 ký tự để cột không bị cắt
+              });
+          
+              // Áp dụng chiều rộng cột cho sheet
+              ws['!cols'] = colWidths;
+          
+              // Tạo workbook mới
+              const wb = XLSX.utils.book_new();
+              XLSX.utils.book_append_sheet(wb, ws, "Đơn hàng");
+          
+              // Tạo file Excel và tải về
+              XLSX.writeFile(wb, filename);
+            }
+      
+            // Hàm để gọi API và lấy dữ liệu
+            async function fetchDataAndDownload() {
+              try {
+                // Gọi API với phương thức GET
+                const response = await fetch('http://127.0.0.1:8000/admin/order/all?order_status=4');
+                
+                if (!response.ok) {
+                  throw new Error('Lỗi khi tải dữ liệu từ API');
+                }
+      
+                // Chuyển đổi dữ liệu nhận về từ JSON
+                const data = await response.json();
+      
+                // Gọi hàm downloadExcel để xuất file
+                downloadExcel("danh_sach_don_hang.xlsx", data);
+              } catch (error) {
+                console.error("Lỗi khi tải dữ liệu:", error);
+              }
+            }
+            // Gọi hàm fetchDataAndDownload khi trang được tải
+            
+
+            $('#export-excel').on('click', function() {
+                var selectedElement = document.querySelector('.status-event.is-select');
+                // Lấy giá trị của thuộc tính data-id
+                var dataId = selectedElement ? selectedElement.getAttribute('data-id') : 0;
+                Api.Order.GetOrdersList(dataId).done((response) => {
+                    console.log(response);
+
+                    const timestamp = Date.now();
+                    var file_name = 'ds-don-'+timestamp+'.xlsx';
+
+                    downloadExcel(file_name, response);
+                }).fail((response) => {
+                    alert('Có lỗi xảy ra');
+                    console.log(response);
+                });
+            });
+        }
+    } 
 }
 
 Order.orderList.show(); // Output: Order List
 Order.orderList.viewDetail(); // Output: View Order Detail
+
+Order.report.export(); // Output: Export Excel
 
 
 //Order.template.showDefault(); // Output: Order Detail
