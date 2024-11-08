@@ -287,133 +287,11 @@
                     <div class="owl-slick equal-container nav-center"
                          data-slick='{"autoplay":false, "autoplaySpeed":1000, "arrows":false, "dots":true, "infinite":true, "speed":800, "rows":1}'
                          data-responsive='[{"breakpoint":"2000","settings":{"slidesToShow":3}},{"breakpoint":"1200","settings":{"slidesToShow":3}},{"breakpoint":"992","settings":{"slidesToShow":2}},{"breakpoint":"768","settings":{"slidesToShow":2}},{"breakpoint":"481","settings":{"slidesToShow":1}}]'>
-                        <div class="stelina-blog-item equal-element layout1">
-                            <div class="post-thumb">
-                                <a href="#">
-                                    <img src="https://placehold.co/370x280" alt="img">
-                                </a>
-                                <div class="category-blog">
-                                    <ul class="list-category">
-                                        <li class="category-item">
-                                            <a href="#">Skincare</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="post-item-share">
-                                    <a href="#" class="icon">
-                                        <i class="fa fa-share-alt" aria-hidden="true"></i>
-                                    </a>
-                                    <div class="box-content">
-                                        <a href="#">
-                                            <i class="fa fa-facebook"></i>
-                                        </a>
-                                        <a href="#">
-                                            <i class="fa fa-twitter"></i>
-                                        </a>
-                                        <a href="#">
-                                            <i class="fa fa-google-plus"></i>
-                                        </a>
-                                        <a href="#">
-                                            <i class="fa fa-pinterest"></i>
-                                        </a>
-                                        <a href="#">
-                                            <i class="fa fa-linkedin"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="blog-info">
-                                <div class="blog-meta">
-                                    <div class="post-date">
-                                        Agust 17, 09:14 am
-                                    </div>
-                                    <span class="view">
-											<i class="icon fa fa-eye" aria-hidden="true"></i>
-											631
-										</span>
-                                    <span class="comment">
-											<i class="icon fa fa-commenting" aria-hidden="true"></i>
-											84
-										</span>
-                                </div>
-                                <h2 class="blog-title">
-                                    <a href="#">We bring you the best </a>
-                                </h2>
-                                <div class="main-info-post">
-                                    <p class="des">
-                                        Phasellus condimentum nulla a arcu lacinia, a venenatis ex congue.
-                                        Mauris nec ante magna.
-                                    </p>
-                                    <a class="readmore" href="#">Read more</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="stelina-blog-item equal-element layout1">
-                            <div class="post-thumb">
-                                <a href="#">
-                                    <img src="https://placehold.co/370x280" alt="img">
-                                </a>
-                                <div class="category-blog">
-                                    <ul class="list-category">
-                                        <li class="category-item">
-                                            <a href="#">HOW TO</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="post-item-share">
-                                    <a href="#" class="icon">
-                                        <i class="fa fa-share-alt" aria-hidden="true"></i>
-                                    </a>
-                                    <div class="box-content">
-                                        <a href="#">
-                                            <i class="fa fa-facebook"></i>
-                                        </a>
-                                        <a href="#">
-                                            <i class="fa fa-twitter"></i>
-                                        </a>
-                                        <a href="#">
-                                            <i class="fa fa-google-plus"></i>
-                                        </a>
-                                        <a href="#">
-                                            <i class="fa fa-pinterest"></i>
-                                        </a>
-                                        <a href="#">
-                                            <i class="fa fa-linkedin"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="blog-info">
-                                <div class="blog-meta">
-                                    <div class="post-date">
-                                        Agust 17, 09:14 am
-                                    </div>
-                                    <span class="view">
-											<i class="icon fa fa-eye" aria-hidden="true"></i>
-											631
-										</span>
-                                    <span class="comment">
-											<i class="icon fa fa-commenting" aria-hidden="true"></i>
-											84
-										</span>
-                                </div>
-                                <h2 class="blog-title">
-                                    <a href="#">We know that buying Items</a>
-                                </h2>
-                                <div class="main-info-post">
-                                    <p class="des">
-                                        Using Lorem Ipsum allows designers to put together layouts
-                                        and the form content
-                                    </p>
-                                    <a class="readmore" href="#">Read more</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="stelina-blog-item equal-element layout1">
+{{--                         <div class="stelina-blog-item equal-element layout1">
                             <div class="post-thumb">
                                 <div class="video-stelina-blog">
                                     <figure>
-                                        <img src="https://placehold.co/370x280" alt="img" width="370"
+                                        <img style=" width: 100%; height: 280px; " src="https://images.pexels.com/photos/3633850/pexels-photo-3633850.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="img" width="370"
                                              height="280">
                                     </figure>
                                     <a class="quick-install" href="#" data-videosite="vimeo"
@@ -535,7 +413,69 @@
                                     <a class="readmore" href="#">Read more</a>
                                 </div>
                             </div>
+                        </div> --}}
+                        @foreach ($blogs as $blog)
+                        <div class="stelina-blog-item equal-element layout1">
+                            <div class="post-thumb">
+                                <a href="/post/{{$blog->slug}}">
+                                    <img src="{{$blog->image}}" alt="img" style=" width: 100%; height: 280px; " >
+                                </a>
+                                <div class="category-blog">
+                                    <ul class="list-category">
+                                        <li class="category-item">
+                                            <a href="/post/{{$blog->slug}}">Nước hoa</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="post-item-share">
+                                    <a href="#" class="icon">
+                                        <i class="fa fa-share-alt" aria-hidden="true"></i>
+                                    </a>
+                                    <div class="box-content">
+                                        <a href="#">
+                                            <i class="fa fa-facebook"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-twitter"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-google-plus"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-pinterest"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-linkedin"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="blog-info">
+                                <div class="blog-meta">
+                                    <div class="post-date">
+                                        {{$blog->created_at}}
+                                    </div>
+                                    <span class="view">
+											<i class="icon fa fa-eye" aria-hidden="true"></i>
+											631
+										</span>
+                                    <span class="comment">
+											<i class="icon fa fa-commenting" aria-hidden="true"></i>
+											84
+										</span>
+                                </div>
+                                <h2 class="blog-title">
+                                    <a href="/post/{{$blog->slug}}">{{$blog->title}}</a>
+                                </h2>
+                                <div class="main-info-post">
+                                    <p class="des">
+                                        {{$blog->summary}}
+                                    </p>
+                                    <a class="readmore" href="/post/{{$blog->slug}}">Read more</a>
+                                </div>
+                            </div>
                         </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -554,7 +494,7 @@
                  data-responsive='[{"breakpoint":"2000","settings":{"slidesToShow":5}},{"breakpoint":"1200","settings":{"slidesToShow":4}},{"breakpoint":"992","settings":{"slidesToShow":3}},{"breakpoint":"768","settings":{"slidesToShow":2}},{"breakpoint":"481","settings":{"slidesToShow":2}}]'>
                 <div class="item-instagram">
                     <a href="#">
-                        <img src="https://placehold.co/302x302" alt="img">
+                        <img src="https://images.pexels.com/photos/264950/pexels-photo-264950.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="img">
                     </a>
                     <span class="text">
                         <i class="icon flaticon-instagram" aria-hidden="true"></i>
@@ -562,7 +502,7 @@
                 </div>
                 <div class="item-instagram">
                     <a href="#">
-                        <img src="https://placehold.co/302x302" alt="img">
+                        <img src="https://images.pexels.com/photos/1961791/pexels-photo-1961791.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="img">
                     </a>
                     <span class="text">
                         <i class="icon flaticon-instagram" aria-hidden="true"></i>
@@ -570,7 +510,7 @@
                 </div>
                 <div class="item-instagram">
                     <a href="#">
-                        <img src="https://placehold.co/302x302" alt="img">
+                        <img src="https://images.pexels.com/photos/3865676/pexels-photo-3865676.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="img">
                     </a>
                     <span class="text">
                         <i class="icon flaticon-instagram" aria-hidden="true"></i>
@@ -578,7 +518,7 @@
                 </div>
                 <div class="item-instagram">
                     <a href="#">
-                        <img src="https://placehold.co/302x302" alt="img">
+                        <img src="https://images.pexels.com/photos/4659793/pexels-photo-4659793.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="img">
                     </a>
                     <span class="text">
                         <i class="icon flaticon-instagram" aria-hidden="true"></i>
@@ -586,7 +526,7 @@
                 </div>
                 <div class="item-instagram">
                     <a href="#">
-                        <img src="https://placehold.co/302x302" alt="img">
+                        <img src="https://images.pexels.com/photos/3910071/pexels-photo-3910071.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="img">
                     </a>
                     <span class="text">
                         <i class="icon flaticon-instagram" aria-hidden="true"></i>

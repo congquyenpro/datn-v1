@@ -44,6 +44,12 @@ class OrderService
         return $order;
     }
 
+    //Trừ đi số lượng sản phẩm của order đã xác nhận
+    public function minusProductQuantity($order_id)
+    {
+        $update = $this->orderRepository->minusProductQuantity($order_id);
+    }
+
     //Kết  nối đơn vị vận chuyển
     public function connectShipping($data)
     {

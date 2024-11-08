@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- Mirrored from dreamingtheme.kiendaotac.com/html/stelina/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 17 Sep 2024 15:31:48 GMT -->
+
 <head>
     <title>@yield('page_title')</title>
     <meta charset="UTF-8">
@@ -28,6 +28,7 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    @yield('meta_tags')
     @yield('page_css')
 
     {{-- <link rel="stylesheet" href="test.css"> --}}
@@ -351,7 +352,7 @@
                     <div class="container-wapper">
                         <ul class="stelina-clone-mobile-menu stelina-nav main-menu " id="menu-main-menu">
                             <li class="menu-item">
-                                <a href="index.html" class="stelina-menu-item-title" title="Home">Home</a>
+                                <a href="/" class="stelina-menu-item-title" title="Home">Home</a>
                                 <span class="toggle-submenu"></span>
                             </li>
                             <li class="menu-item  menu-item-has-children item-megamenu">
@@ -437,27 +438,27 @@
                                 </div>
                             </li>
                             <li class="menu-item  menu-item-has-children">
-                                <a href="inblog_right-siderbar.html" class="stelina-menu-item-title"
+                                <a href="javascript:void(0)" class="stelina-menu-item-title"
                                    title="Blogs">Blogs</a>
                                 <span class="toggle-submenu"></span>
                                 <ul class="submenu">
                                     <li class="menu-item menu-item-has-children">
-                                        <a href="#" class="stelina-menu-item-title" title="Blog Style">Blog Style</a>
+                                        <a href="#" class="stelina-menu-item-title" title="Blog Style">Kiến thức</a>
                                         <span class="toggle-submenu"></span>
                                         <ul class="submenu">
                                             <li class="menu-item">
-                                                <a href="bloggrid.html">Grid</a>
+                                                <a href="bloggrid.html">Chọn nước hoa cho người mới</a>
                                             </li>
                                             <li class="menu-item">
-                                                <a href="bloglist.html">List</a>
-                                            </li>
-                                            <li class="menu-item">
-                                                <a href="bloglist-leftsidebar.html">List Sidebar</a>
+                                                <a href="bloglist.html">Phân biệt nước hoa</a>
                                             </li>
                                         </ul>
                                     </li>
+                                    <li class="menu-item">
+                                        <a href="#" class="stelina-menu-item-title" title="Post Layout">Kinh nghiệm</a>
+                                    </li>
                                     <li class="menu-item menu-item-has-children">
-                                        <a href="#" class="stelina-menu-item-title" title="Post Layout">Post Layout</a>
+                                        <a href="#" class="stelina-menu-item-title" title="Post Layout">Góc review</a>
                                         <span class="toggle-submenu"></span>
                                         <ul class="submenu">
                                             <li class="menu-item">
@@ -676,7 +677,7 @@
 <div class="footer-device-mobile">
     <div class="wapper">
         <div class="footer-device-mobile-item device-home">
-            <a href="index.html">
+            <a href="/">
 					<span class="icon">
 						<i class="fa fa-home" aria-hidden="true"></i>
 					</span>
@@ -742,5 +743,5 @@
 
 </body>
 
-<!-- Mirrored from dreamingtheme.kiendaotac.com/html/stelina/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 17 Sep 2024 15:31:48 GMT -->
+
 </html>

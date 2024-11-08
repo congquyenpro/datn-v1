@@ -38,6 +38,14 @@ Api.Product.GetAllCategories = () => $.ajax({
     method: 'GET',
 });
 
+/* Add new value of product */
+Api.Product.AddNewValue = (data) => $.ajax({
+    url: `/admin/product/addNewValue`,
+    method: 'POST',
+    data: JSON.stringify(data),
+    processData: false,
+    contentType: 'application/json',
+});
 
 
 Api.Product.AddNewProduct = (formData) => $.ajax({
@@ -142,6 +150,28 @@ Api.Warehouse.getProductSizes = (product_id) => $.ajax({
     method: 'GET',
 });
 
+Api.Warehouse.store = (data) => $.ajax({
+    url: `/admin/warehouse/store`,
+    //url: `/api/warehouse/store`,
+    method: 'POST',
+    data: data,
+});
+
+Api.Warehouse.getHistory = () => $.ajax({
+    url: `/admin/warehouse/get-inventory-changes`,
+    method: 'GET',
+});
+
+Api.Warehouse.getOneHistory = (ticketId) => $.ajax({
+    url: `/admin/warehouse/get-inventory-change-details/${ticketId}`,
+    method: 'GET',
+});
+
+Api.Warehouse.getHistoryDetail = (ticketId) => $.ajax({
+    url: `/admin/warehouse/get-change-details/${ticketId}`,
+    method: 'GET',
+});
+
 
 
 /* Blog */
@@ -149,4 +179,7 @@ Api.Blog.store = (data) => $.ajax({
     url: `/admin/blog/create`,
     method: 'POST',
     data: data,
+    processData: false, // Không xử lý dữ liệu, để trình duyệt tự xử lý FormData
+    contentType: false, // Không đặt Content-Type, để trình duyệt tự động
+    
 });

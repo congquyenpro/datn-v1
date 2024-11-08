@@ -828,6 +828,50 @@ const Product = {
             const inputElement = document.getElementById(inputId);
             return (selectElement.value === 'other') ? inputElement.value : selectElement.value;
         },
+    },
+    attribute : {
+        addAttribute: () => {
+            $('.add-new-att').on('click', function() {
+                var attribute_id = $(this).data('att-id'); // Chuyển `this` thành đối tượng jQuery
+                var title_index = [
+                    'Thêm nồng độ',
+                    'Thêm phong cách',
+                    'Thêm nhóm hương',
+                    'Thêm độ lưu hương',
+                    'Thêm độ tỏa hương',
+                    'Thêm xuất xứ',
+                    'Thêm thương hiệu',
+                    'Thêm độ tuổi',
+                    'Thêm thành phần'
+                ]
+                $('#exampleModalCenterTitle2').text(title_index[attribute_id-1]);
+
+                console.log(attribute_id); // In ra giá trị thực của biến `attribute`
+                $('#save-att-value').off('click').on('click', function() {
+                    var data = {
+                        'attribute_id': attribute_id,
+                        'value': $('#value-of-att').val()
+                    };
+                    //Kiểm tra trống
+                    if(data.value == ''){
+                        alert('Vui lòng nhập giá trị');
+                        //return;
+                    }
+                    Api.Product.AddNewValue(data).then((response) => {
+                        $('#exampleModalCenter').modal('hide');
+                        console.log(data);
+                        Product.productDetail.addProduct();
+                        
+                    }).fail((error) => {
+                        alert('Thêm thất bại!');
+                        console.log(error);
+                    });
+                    
+                    
+                });
+
+            });
+        }
     }
     
     
@@ -844,3 +888,7 @@ Product.formSubmit.addProduct();
 
 // Edit product
 Product.productDetail.editProduct();
+
+// Add attribute
+//Xóa dữ liệu trước khi thêm??
+Product.attribute.addAttribute();

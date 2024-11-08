@@ -277,14 +277,17 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="accordion.html">Tổng quan</a>
+                                    <a href="#">Tổng quan</a>
                                 </li>
                                 <li>
-                                    <a href="carousel.html">Tài chính</a>
+                                    <a href="{{route('manager.report.fin')}}">Tài chính</a>
                                 </li>
                                 <li>
+                                    <a href="{{route('manager.report.transaction')}}">Giao dịch</a>
+                                </li>
+{{--                                 <li>
                                     <a href="carousel.html">Hệ thống</a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </li>
 {{--                         <li class="nav-item dropdown">

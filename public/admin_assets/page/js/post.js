@@ -37,34 +37,44 @@ Post = {
     },
     submit: function() {
         $('#btn-save').on('click', function() {
-            // Lấy dữ liệu từ các trường trong form
-            var title = $('#post-title').val();  // Tiêu đề
-            var summary = $('#post-summary').val();  // Tóm tắt
-            var content = $('textarea[name="content"]').val();  // Nội dung (editor)
-            var status = $('#post-status').val();  // Trạng thái
-            var tags = $('#post-tags').val();  // Từ khóa
-            var commentStatus = $('input[name="comment_status"]:checked').val();  // Trạng thái bình luận
-            var image = $('#post-image').attr('src');  // Hình ảnh (src của thẻ <img>)
+        // Lấy dữ liệu từ các trường trong form
+        var title = $('#post-title').val();  // Tiêu đề
+        var summary = $('#post-summary').val();  // Tóm tắt
+        var content = $('textarea[name="content"]').val();  // Nội dung (editor)
+        var status = $('#post-status').val();  // Trạng thái
+        var tags = $('#post-tags').val();  // Từ khóa
+        // Nếu tags là chuỗi, bạn sẽ tách nó thành mảng (nếu người dùng nhập thủ công vào một input)
+        console.log(typeof tags);  // Kiểm tra kiểu dữ liệu của tags
+        //chuyển tags thành mảng từ khóa
+        //tags = tags.split(',');  // Chuyển chuỗi thành mảng từ khóa
+        var commentStatus = $('input[name="comment_status"]:checked').val();  // Trạng thái bình luận
+        var imageFile = $('#customFile')[0].files[0];  // Lấy file ảnh từ input file
+        if (imageFile && imageFile.size > 5 * 1024 * 1024) {
+            alert("Ảnh quá lớn, vui lòng chọn ảnh có kích thước nhỏ hơn 5MB.");
+            return;
+        }
+        // Kiểm tra các trường có rỗng không
+        if (title == '' || summary == '' || content == '' || tags == '' || !imageFile) {
+            alert('Vui lòng điền đầy đủ thông tin');
+            return;
+        }
 
-            //check fields are empty
-            if (title == '' || summary == '' || content == '' || tags == '' || image == '') {
-                alert('Vui lòng điền đầy đủ thông tin');
-                return;
-            }
-        
-            // Tạo một object chứa các dữ liệu cần gửi lên
-            var formData = {
-                title: title,
-                summary: summary,
-                content: content,
-                status: status,
-                tags: tags,
-                comment_status: commentStatus,
-                /* image: image */
-            };
-        
-            // In ra dữ liệu đã lấy từ form
-            console.log("Dữ liệu gửi lên server: ", formData);
+        // Tạo một FormData object để gửi cả file và các trường dữ liệu khác
+        var formData = new FormData();
+        formData.append('title', title);
+        formData.append('summary', summary);
+        formData.append('content', content);
+        formData.append('status', status);
+        formData.append('tags', JSON.stringify(tags));
+        formData.append('comment_status', commentStatus);
+        formData.append('image', imageFile);  // Thêm file ảnh vào FormData
+    
+        // In ra dữ liệu đã lấy từ form
+        console.log("Dữ liệu gửi lên server: ", formData);
+        //in chi tiết dữ liệu gửi lên
+        for (var pair of formData.entries()) {
+            console.log(pair[0]+ ', ' + pair[1]); 
+        }
             
             //Nếu cần, bạn có thể gửi dữ liệu lên server bằng AJAX
             Api.Blog.store(formData).done(function(res) {
@@ -112,7 +122,34 @@ Post = {
             window.open('https://trends.google.com/trends/explore?geo=VN&q=' + keyword, '_blank');
         });
         
-    }
+    },
+    uploadImage: function() {
+        $('#customFile').on('change', function(event) {
+            // Lấy file được chọn từ input
+            var file = event.target.files[0];
+            
+            // Kiểm tra xem file có hợp lệ không (kiểu ảnh)
+            if (file && file.type.startsWith('image/')) {
+                // Tạo URL đối tượng cho file hình ảnh
+                var reader = new FileReader();
+                
+                // Khi file đã được đọc xong, hiển thị hình ảnh
+                reader.onload = function(e) {
+                    // Cập nhật nguồn hình ảnh cho thẻ img
+                    $('#post-image').attr('src', e.target.result);
+                };
+                
+                // Đọc file dưới dạng URL
+                reader.readAsDataURL(file);
+                
+                // Cập nhật label của input file
+                var fileName = file.name;
+                $('.custom-file-label').text(fileName);
+            } else {
+                alert('Vui lòng chọn một tệp hình ảnh');
+            }
+        });
+    },
 
 }
 
@@ -125,3 +162,5 @@ Post.addPost(); // Add new post
 Post.submit();
 
 Post.keywordSearch(); // Search trending keyword
+
+Post.uploadImage(); // Upload image

@@ -112,6 +112,8 @@ Route::prefix('admin')->group(function() {
 
         //Get attribute-value
         Route::get('/product/getAllAttributes', 'Manager\Product\ProductController@getAllAttributes');
+        //add new value
+        Route::post('/product/addNewValue', 'Manager\Product\ProductController@addNewValue');
         
         Route::get('/product/category', 'Manager\Product\CategoryController@showCategories')->name('manager.category');
         Route::post('/product/category', 'Manager\Product\CategoryController@addCategory')->name('manager.category.add');
@@ -141,6 +143,9 @@ Route::prefix('admin')->group(function() {
 
             Route::post('/update-order', 'Manager\Order\OrderController@updateOrder')->name('manager.order.update');
 
+            //test trừ đi số sản phẩm
+            Route::get('/minus/{id}', 'Manager\Order\OrderController@minusProductQuantity')->name('manager.order.minusProductQuantity');
+
             //Shipping connect
             Route::post('/create-ticket', 'Manager\Order\OrderController@createTicket')->name('manager.order.createTicket');
             Route::post('/submit-ticket', 'Manager\Order\OrderController@submitTicket')->name('manager.order.submitTicket');
@@ -158,6 +163,14 @@ Route::prefix('admin')->group(function() {
             Route::get('/', 'Manager\Warehouse\WarehouseController@index')->name('manager.warehouse');
             Route::get('/all-products', 'Manager\Warehouse\WarehouseController@getAllProducts')->name('manager.warehouse.getAll');
             Route::get('/get-sizes', 'Manager\Warehouse\WarehouseController@getProductSizes')->name('manager.warehouse.detail');
+
+            Route::get('inventory', 'Manager\Warehouse\WarehouseController@showInventory')->name('manager.warehouse.inventory');
+            
+            Route::post('/store', 'Manager\Warehouse\WarehouseController@store')->name('manager.warehouse.store');
+
+            Route::get('/get-inventory-changes', 'Manager\Warehouse\WarehouseController@getInventoryChanges')->name('manager.warehouse.getInventoryChanges');
+            Route::get('/get-inventory-change-details/{ticketId}', 'Manager\Warehouse\WarehouseController@getInventoryChangeDetails')->name('manager.warehouse.getInventoryChangeDetails');
+            Route::get('/get-change-details/{ticketId}', 'Manager\Warehouse\WarehouseController@getChangeDetails')->name('manager.warehouse.getChangeDetails');
         });
     });
 
@@ -167,6 +180,14 @@ Route::prefix('admin')->group(function() {
             Route::get('/', 'BlogController@showManagerBlog')->name('manager.blog');
             Route::post('/create', 'BlogController@createBlog')->name('manager.blog.create');
             
+        });
+    });
+
+    /* Report */
+    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.order']], function() {
+        Route::prefix('report')->group(function() {
+            Route::get('/transaction', 'Manager\Report\ReportController@showTransaction')->name('manager.report.transaction');
+            Route::get('/fin', 'Manager\Report\ReportController@showFin')->name('manager.report.fin');
         });
     });
 
@@ -237,6 +258,11 @@ Route::prefix('/')->group(function() {
     Route::get('/profile/order/all','Customer\OrderController@getOrderByUser')->name('customer.profile.order.detail')->middleware(['customer']);
 
     Route::get('/profile/order-detail','Customer\DisplayController@userOrderDetail')->name('customer.profile.order-detail')->middleware(['customer']);
+
+
+    /* Post & Comment*/
+    Route::get('/post/{slug}','BlogController@getPostBySlug')->name('customer.post.detail');
+    
 });
 
 

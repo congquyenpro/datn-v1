@@ -6,6 +6,9 @@
     <link href="{{asset('admin_assets/assets/vendors/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('admin_assets/assets/vendors/select2/select2.css')}}" rel="stylesheet">
     <link href="{{asset('admin_assets/page/css/order.css')}}" rel="stylesheet">
+    <link href="{{asset('admin_assets/page/css/product.css')}}" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
 @endsection
 
 @section('page_content')
@@ -26,7 +29,7 @@
                 <div class="card-body">
                     <button data-toggle="modal" data-toggle="modal" data-target=".bd-example-modal-xl-2" class="btn btn-primary btn-tone">
                         <i class="anticon anticon-plus-circle m-r-5"></i>
-                        <span>Nhập</span>
+                        <span>Tạo</span>
                     </button>
                     <hr>
                     <div class="status-event template-item is-select" atr="Pending" data-id-template="0" style="cursor: pointer;">
@@ -55,78 +58,21 @@
                             <div class="d-md-flex">
                                 <div class="m-b-10 m-r-15">
                                     <select class="custom-select" style="min-width: 180px;">
-                                        <option selected>Catergory</option>
-                                        <option value="all">All</option>
-                                        <option value="Burberry">Burberry</option>
-                                        <option value="Calvin Klein">Calvin Klein</option>
-                                        <option value="Christian Dior">Christian Dior</option>
+                                        <option selected>Loại</option>
+                                        <option value="all">Tất cả</option>
+                                        <option value="Burberry">Nhập</option>
+                                        <option value="Calvin Klein">Hỏng</option>
+                                    
                                     </select>
                                 </div>
-                                <div class="m-b-10">
-                                    <select class="custom-select" style="min-width: 180px;">
-                                        <option selected>Status</option>
-                                        <option value="all">All</option>
-                                        <option value="inStock">In Stock</option>
-                                        <option value="outOfStock">Out of Stock</option>
-                                        <option value="outOfStock">Trending</option>
-                                    </select>
-                                </div>
+       
                             </div>
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-hover e-commerce-table">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <div class="checkbox">
-                                            <input id="checkAll" type="checkbox">
-                                            <label for="checkAll" class="m-b-0"></label>
-                                        </div>
-                                    </th>
-                                    <th>ID</th>
-                                    <th>Người duyệt</th>
-                                    <th>Tổng giá trị</th>
-                                    <th>Ngày nhập</th>
-                                    <th>Trạng thái</th>
-                                    <th>Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <input id="check-item-1" type="checkbox">
-                                            <label for="check-item-1" class="m-b-0"></label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        #31
-                                    </td>
-                                    <td>
-                                        Nguyễn Công Quyền
-                                    </td>
-                                    <td>
-                                        2.200.000₫
-                                    </td>
-                                    <td>
-                                        06-10-2024 16:22
-                                    </td>
-                                    <td>
-                                        <span class="badge m-b-5 badge-pill badge-green">Nhập hàng</span>
-                                    </td>
-                                    <td class="text-right">
-                                        <button class="btn btn-icon btn-hover btn-sm btn-rounded" data-toggle="modal" data-target=".bd-example-modal-xl">
-                                            <i class="anticon anticon-eye"></i>
-                                        </button>
-                                        <button class="btn btn-icon btn-hover btn-sm btn-rounded">
-                                            <i class="anticon anticon-delete"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                            </tbody>
+                        <table class="table table-hover"  id="warehouse-history-table">
                         </table>
+
                     </div>
                 </div>
             </div>
@@ -141,108 +87,34 @@
                             <div class="d-md-flex">
                                 <div class="m-b-10 m-r-15">
                                     <select class="custom-select" style="min-width: 180px;">
-                                        <option selected>Catergory</option>
-                                        <option value="all">All</option>
-                                        <option value="Burberry">Burberry</option>
-                                        <option value="Calvin Klein">Calvin Klein</option>
-                                        <option value="Christian Dior">Christian Dior</option>
-                                    </select>
-                                </div>
-                                <div class="m-b-10">
-                                    <select class="custom-select" style="min-width: 180px;">
-                                        <option selected>Status</option>
-                                        <option value="all">All</option>
-                                        <option value="inStock">In Stock</option>
-                                        <option value="outOfStock">Out of Stock</option>
-                                        <option value="outOfStock">Trending</option>
+                                        <option selected>Tồn kho</option>
+                                        <option value="all">Tất cả</option>
+                                        <option value="Burberry">Hết hàng</option>
+                                        <option value="Calvin Klein">Dưới 50</option>
+                                        <option value="Christian Dior">Dưới 10</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
+{{--                         <div class="col-lg-4 text-right">
+                            <button class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl" id="btn-add-product">
+                                <i class="anticon anticon-plus-circle m-r-5"></i>
+                                <span>Sản phẩm hỏng</span>
+                            </button>
+                        </div> --}}
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-hover e-commerce-table">
+                        <table id="productsTable" class="table table-hover e-commerce-table">
                             <thead>
                                 <tr>
-                                    <th>
-                                        <div class="checkbox">
-                                            <input id="checkAll" type="checkbox">
-                                            <label for="checkAll" class="m-b-0"></label>
-                                        </div>
-                                    </th>
                                     <th>ID</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Dung tích</th>
-                                    <th>Giới tính</th>
-                                    <th>Số lượng/Tổng</th>
-                                    <th>Giá nhập</th>
-                                    <th>Hạn sử dụng</th>
+                                    <th>Tên</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Phân loại</th>
+                                    <th>Kho</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <input id="check-item-1" type="checkbox">
-                                            <label for="check-item-1" class="m-b-0"></label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        #31
-                                    </td>
-                                    <td>
-                                        HERMÈS L’OMBRE DES MERVEILLES
-                                    </td>
-                                    <td>
-                                        200ml
-                                    </td>
-                                    <td>
-                                        Nam
-                                    </td>
-                                    <td>
-                                        50/55
-                                    </td>
-                                    <td>
-                                        2.000.000₫
-                                    </td>
-                                    <td>
-                                        22-2-2025
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <input id="check-item-1" type="checkbox">
-                                            <label for="check-item-1" class="m-b-0"></label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        #32
-                                    </td>
-                                    <td>
-                                        HERMÈS L’OMBRE DES MERVEILLES
-                                    </td>
-                                    <td>
-                                        200ml
-                                    </td>
-                                    <td>
-                                        Nam
-                                    </td>
-                                    <td>
-                                        5/55
-                                    </td>
-                                    <td>
-                                        2.000.000₫
-                                    </td>
-                                    <td>
-                                        22-2-2026
-                                    </td>
-
-
-                                </tr>
-
                             </tbody>
                         </table>
                     </div>
@@ -254,77 +126,25 @@
 </div>
 
     <!-- Modal Chi tiết nhập -->
-    <div class="modal fade bd-example-modal-xl" style="padding-left: 20px !important;">
+    <div class="modal fade bd-example-modal-xl" style="padding-left: 20px !important;" >
         <div class="modal-dialog modal-dialog-scrollable" style="max-width: 95%;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title h4">Chi tiết nhập</h5>
+                    <h5 class="modal-title h4">Chi tiết phiếu</h5>
                     <button type="button" class="close" data-dismiss="modal">
                         <i class="anticon anticon-close"></i>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-sm-12 col-md-12 col-lg-12">
-                            <div class="card">
-                                <div class="card-body ">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                  <tr class="table-info">
-                                                    <th>ID</th>
-                                                    <th>Ngày nhập</th>
-                                                    <th>Tổng giá trị</th>
-                                                    <th>Người xác nhận</th>
-                                                  </tr>
-                                            </thead>
-                                            <tbody class="data-list"> 
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>4-11-2024 17:06:22</td>
-                                                    <td>8.000.000₫</td>
-                                                    <td>Nguyễn Công Quyền</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                  <tr class="table-info">
-                                                    <th>Mã SP</th>
-                                                    <th>Tên sản phẩm</th>
-                                                    <th>Dung tích</th>
-                                                    <th>Hạn sử dụng</th>
-                                                    <th>Số lượng</th>
-                                                    <th>Giá nhập</th>
-                                                    <th>Thành tiền</th>
-                                                  </tr>
-                                            </thead>
-                                            <tbody class="data-list"> 
-                                                <tr>
-                                                    <td>37</td>
-                                                    <td>HERMÈS L’OMBRE DES MERVEILLES (100ml)</td>
-                                                    <td>200</td>
-                                                    <td>12-06-2025</td>
-                                                    <td>10</td>
-                                                    <td>400.000₫</td>
-                                                    <td>4.000.000₫</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>37</td>
-                                                    <td>HERMÈS L’OMBRE DES MERVEILLES (100ml)</td>
-                                                    <td>200</td>
-                                                    <td>12-06-2025</td>
-                                                    <td>10</td>
-                                                    <td>400.000₫</td>
-                                                    <td>4.000.000₫</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-12 text-right m-b-20">
+                            <button class="btn btn-primary" id="export-ticket">
+                                <i class="fas fa-file-excel m-r-5"></i>
+                                <span>Export</span>
+                            </button>
                         </div>
                     </div>
+                    <div id="ticket-detail"></div>
                     
                 </div>
                 <div class="modal-footer">
@@ -350,6 +170,16 @@
                         <div class="col-sm-12 col-md-12 col-lg-12">
                             <div class="card">
                                 <div class="card-body ">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="inputType"></label>
+                                            <select id="inputType" class="form-control">
+                                                <option value="IN" selected>Nhập hàng</option>
+                                                <option value="OUT">Hàng hỏng</option>
+                                                <option value="OUT2" disabled>Xuất hàng (coming soon)</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <button class="btn btn-primary m-b-15" id="add-entry-item">
                                         <i class="anticon anticon-plus-circle m-r-5"></i>
                                         <span>Tạo mới</span>
@@ -362,42 +192,6 @@
                                     <div id="items-container">
 
                                     </div>
-<!-- 
-                                    <div class="item-entry m-t-20 border p-5 m-b-15" style=" border: dotted 1px #1391c3 !important;">
-                                        <form>
-                                            <div class="form-row">
-                                                <div class="m-b-5 col-sm-6 col-md-2 col-lg-2">
-                                                    <select class="select2 form-control" name="states[]" multiple="multiple">
-                                                        <option value="AP">Nước hoa 1 Nước hoa 1 Nước hoa 1</option>
-                                                        <option value="NL">Nước hoa 2</option>
-                                                        <option value="BN">Nước hoa 3</option>
-                                                        <option value="HL">Nước hoa 4</option>
-                                                    </select>
-                                                </div>
-                                                <div class="m-b-5 col-sm-6 col-md-2 col-lg-2">
-                                                    <select class="select2 form-control" name="states[]" multiple="multiple">
-                                                        <option value="AP">100ml</option>
-                                                        <option value="NL">200ml</option>
-                                                        <option value="BN">300ml</option>
-                                                    </select>
-                                                </div>
-                                                <div class="m-b-5 col-sm-3 col-md-2 col-lg-2">
-                                                    <input type="text" class="form-control" placeholder="Số lượng">
-                                                </div>
-                                                <div class="m-b-5 col-sm-3 col-md-2 col-lg-2">
-                                                    <input type="text" class="form-control" placeholder="Giá bán">
-                                                </div>
-                                                <div class="m-b-5 col-sm-3 col-md-2 col-lg-2">
-                                                    <input type="text" class="form-control" placeholder="HSD: ngày-tháng-năm">
-                                                </div>
-                                                <div class="m-b-5 col-sm-3 col-md-2 col-lg-2">
-                                                    <button class="btn btn-danger m-r-5"><i class="anticon anticon-delete"></i></button>
-                                                </div>
-
-                                            </div>
-                                        </form>
-                                    </div> -->
-
 
                                 </div>
                             </div>
@@ -428,5 +222,6 @@
     
     <script src="{{asset('admin_assets/page/js/api.js')}}"></script>
     <script src="{{asset('admin_assets/page/js/warehouse.js')}}"></script>
+    <script src="{{asset('admin_assets/page/js/inventory.js')}}"></script>
 
 @endsection

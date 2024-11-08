@@ -47,6 +47,11 @@ class OrderRepository extends BaseRepository implements IBaseRepository
             }
         }
 
+        //Kiểm tra nếu $data['status'] == 1 thì thực hiện trừ số lượng sản phẩm theo order_items
+        if ($data['status'] == 1) {
+            $this->minusProductQuantity($order_id);
+        }
+
 
         $order->status = $data['status'];
         $data_log_index = [
@@ -76,6 +81,21 @@ class OrderRepository extends BaseRepository implements IBaseRepository
         return $order;
     }
 
+    //Hàm trừ sản phẩm sau khi đã xác nhận
+    public function minusProductQuantity($order_id)
+    {
+        $order = $this->order->find($order_id);
+        $order_items = $order->orderItems;
+        foreach ($order_items as $item) {
+            $product_size = ProductSize::find($item->product_size_id);
+            $product_size->quantity -= $item->quantity;
+            $product_size->save();
+        }
+        //return $order_items;
+    }
+
+
+    /* Customer */
     public function createOrder($data)
     {
         $data['pre_value'] = $this->caculateTotal($data);

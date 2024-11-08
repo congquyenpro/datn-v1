@@ -140,6 +140,26 @@ class ProductController extends Controller
         return response()->json($attributes, 200);
     }
 
+    //Thêm value của attribute
+    public function addNewValue(Request $request){
+        $data = $request->json()->all();
+
+        $attribute_id = $data['attribute_id'] ?? null;
+        $value = $data['value'] ?? null;
+
+        if (!$attribute_id || !$value) {
+            return response()->json(['message' => 'Dữ liệu không hợp lệ!'], 400);
+        }
+
+
+       try {
+        $rp =  $this->attributeValueService->addNewValue($data);
+            return response()->json(['message' => 'Value created successfully'], 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error: ' . $e->getMessage()], 500);
+        }
+    }
+
     //get product by type
     public function getProductByType(Request $request)
     {

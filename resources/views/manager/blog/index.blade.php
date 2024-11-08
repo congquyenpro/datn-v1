@@ -278,9 +278,14 @@
                                 <div class="card-body">
                                     <div class="m-b-10">Hình ảnh</div>
                                     <div>
-                                        <img src="https://placehold.co/150x150" alt="post-image" id="post-image" width="100%">
+                                        <!-- Thẻ img sẽ hiển thị hình ảnh preview -->
+                                        <img src="https://images.pexels.com/photos/965989/pexels-photo-965989.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="post-image" id="post-image" width="100%">
                                     </div>
-                                    <a href="javascript:void(0)" id="change-image" class="m-t-5 float-right">Thay ảnh</a>
+                                    <div class="custom-file m-t-20">
+                                        <!-- Thẻ input cho phép người dùng chọn file -->
+                                        <input type="file" class="custom-file-input" id="customFile">
+                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>

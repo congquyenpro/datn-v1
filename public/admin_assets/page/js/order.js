@@ -1310,7 +1310,7 @@ const Order = {
                 order.id,
                 order.name,
                 order.phone,
-                formatAddress(order.address), // Chuyển đổi địa chỉ thành dạng dễ đọc
+                //formatAddress(order.address), // Chuyển đổi địa chỉ thành dạng dễ đọc
                 order.order_date,
                 order.payment_method,
                 order.payment_status === 0 ? 'Chưa thanh toán' : 'Đã thanh toán', // Chuyển payment_status sang chữ
@@ -1334,7 +1334,7 @@ const Order = {
           
               // Thêm tiêu đề cho bảng
               const headers = [
-                "ID", "Tên", "Điện thoại", "Địa chỉ", "Ngày đặt hàng", "Phương thức thanh toán", "Trạng thái thanh toán",
+                "ID", "Tên", "Điện thoại", "Ngày đặt hàng", "Phương thức thanh toán", "Trạng thái thanh toán",
                 "Mã công ty vận chuyển", "Mã giao hàng","Giá trị đơn", "Phí vận chuyển", "Trạng thái đơn hàng"
               ];
           

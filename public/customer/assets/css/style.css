@@ -7803,6 +7803,7 @@ body.vertical-menu-open .vertical-menu-overlay {
 }
 .instagram .item-instagram img {
 	width: 100%;
+	height: 302px;
 }
 .instagram .item-instagram .text {
 	position: absolute;

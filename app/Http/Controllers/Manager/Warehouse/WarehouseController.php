@@ -18,6 +18,9 @@ class WarehouseController extends Controller
         //$products = $this->warehouseService->getProducts();
         return view('manager.warehouse.home');
     }
+    public function showInventory(){
+        return view('manager.warehouse.inventory');
+    }
 
     public function getAllProducts(){
         $products = $this->warehouseService->getProducts();
@@ -28,6 +31,26 @@ class WarehouseController extends Controller
         $product_id = $request->product_id;
         $productSizes = $this->warehouseService->getProductSizes($product_id);
         return response()->json($productSizes);
+    }
+
+    public function store (Request $request){
+        return $this->warehouseService->store($request);
+        //return response()->json(['success' => 'Product added successfully']);
+    }
+
+    public function getInventoryChanges(){
+        $inventoryChanges = $this->warehouseService->getInventoryChanges();
+        return response()->json($inventoryChanges);
+    }
+    public function getInventoryChangeDetails(Request $request){
+        $ticketId = $request->ticketId;
+        $inventoryChangeDetails = $this->warehouseService->getInventoryChangeDetails($ticketId);
+        return response()->json($inventoryChangeDetails);
+    }
+    public function getChangeDetails(Request $request){
+        $ticketId = $request->ticketId;
+        $changeDetails = $this->warehouseService->getChangeDetails($ticketId);
+        return response()->json($changeDetails);
     }
 
 

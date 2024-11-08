@@ -22,5 +22,16 @@ class AttributeValueService
     {
         return AttributeValue::where('attribute_id', $attribute_id)->get(); // Gọi trực tiếp từ model
     }
+
+    public function addNewValue($data)
+    {
+        $attribute_id = $data['attribute_id'];
+        $value = $data['value'];
+        $attributeValue = new AttributeValue();
+        $attributeValue->attribute_id = $attribute_id;
+        $attributeValue->value = $value;
+        $attributeValue->save();
+        return $attributeValue;
+    }
     
 }

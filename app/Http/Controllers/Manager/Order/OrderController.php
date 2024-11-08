@@ -62,6 +62,18 @@ class OrderController extends Controller
         }
     }
 
+    //Trừ sản phẩm
+    public function minusProductQuantity(Request $request){
+        $order_id = $request->id;
+        try {
+            $this->orderService->minusProductQuantity($order_id);
+            return response()->json(['status' => 200, 'message' => 'Trừ sản phẩm thành công']);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), 500);
+        }
+
+    }
+
     public function createTicket(Request $request){
         $shipping = new ShippingService();
 

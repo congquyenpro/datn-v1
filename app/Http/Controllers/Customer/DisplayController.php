@@ -6,19 +6,25 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\ProductService;
 use App\Services\OrderService;
+use App\Services\BlogService;
 
 
 class DisplayController extends Controller
 {
     protected $productService;
     protected $orderService;
-    public function __construct(ProductService $productService, OrderService $orderService) {
+    protected $blogService;
+
+    public function __construct(ProductService $productService, OrderService $orderService, BlogService $blogService) {
         $this->productService = $productService;
         $this->orderService = $orderService;
+        $this->blogService = $blogService;
     }
 
     public function displayHome(){
-        return view('customer.home');
+        $blogs = $this->blogService->getLatestPosts();
+        //return dd($blog);
+        return view('customer.home',compact('blogs'));
     }
     
     public function displayProduct(Request $request){

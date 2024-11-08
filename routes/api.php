@@ -19,3 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
+Route::post('/warehouse/store', 'Manager\Warehouse\WarehouseController@store')->name('manager.warehouse.store');

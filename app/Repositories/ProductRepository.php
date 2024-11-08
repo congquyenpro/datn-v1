@@ -67,7 +67,11 @@ class ProductRepository extends BaseRepository
     public function getAllProducts()
     {
         // Lấy tất cả sản phẩm cùng với kích thước
-        $products = Product::with('productSizes','category')->get(); // Chỉnh sửa ở đây
+        //$products = Product::with('productSizes','category')->get(); bản ngày 6/11: ko có order
+        $products = Product::with('productSizes', 'category')
+                   ->orderBy('created_at', 'desc') // Sắp xếp theo created_at giảm dần
+                   ->get();
+
 
         // Định dạng lại dữ liệu
         return $products->map(function ($product) {
@@ -87,9 +91,10 @@ class ProductRepository extends BaseRepository
                         'price' => $size->price,
                         'discount' => $size->discount,
                         'quantity' => $size->quantity,
+                        'entry_price' => $size->entry_price,
                     ];
                 }),
-                'trending' => $product->trending, // Hoặc 1/0 tùy vào logic của bạn
+                'trending' => $product->trending, // Hoặc 1/0 tùy vào logic
             ];
         });
     }
@@ -267,6 +272,9 @@ class ProductRepository extends BaseRepository
     {
         $query = $limit = null ? $this->product->with('productSizes')->limit($limit) : $this->product;
         //$query = $this->product->with('productSizes')->limit($limit);
+
+        //Thêm sắp xếp
+        //$query->orderBy('id', 'desc');
     
         if ($productIds) {
             $query->whereIn('id', $productIds); // Thêm điều kiện nếu có productIds

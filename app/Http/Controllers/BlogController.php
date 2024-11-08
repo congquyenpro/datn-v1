@@ -42,4 +42,16 @@ class BlogController extends Controller
         $posts = $this->blogService->getAll();
         return $posts;
     }
+
+
+    //Customer
+    public function getLatestPost(){
+        $posts = $this->blogService->getLatestPosts();
+        return $posts;
+    }
+    public function getPostBySlug(Request $request){
+        $post = $this->blogService->getPostBySlug($request->slug);
+        $tags = json_decode($post->tags);
+        return view('customer.blog.detail',compact('post','tags'));
+    }
 }
