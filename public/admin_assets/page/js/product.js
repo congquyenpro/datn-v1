@@ -343,6 +343,9 @@ const Product = {
                         }
                     }
 
+                    //lấy ra thẻ có name="short_description" và gán giá trị cho nó là response.short_description
+                    //document.getElementsByName('short_description')[0].value = response.short_description;
+
                     //category
                     document.getElementsByName('catergory')[0].value = response.category_id;
 
@@ -532,8 +535,8 @@ const Product = {
                                 <input type="text" class="form-control data-discount number-type" placeholder="%">
                             </div>
                             <div class="form-group">
-                                <label>Số lượng * (Mặc định 0)</label>
-                                <input type="text" class="form-control data-quantity number-type" placeholder="">
+                                <label>Số lượng * (Mặc định: 0 khi tạo mới)</label>
+                                <input type="text" class="form-control data-quantity number-type" placeholder="" value="0">
                             </div>
                             <div class="form-group">
                                 <button class="btn btn-danger metadata-remove" atr="Delete">Xóa thuộc tính</button>
@@ -663,6 +666,8 @@ const Product = {
                         alert(`Sản phẩm đã được ${isEdit ? 'cập nhật' : 'thêm'} thành công!`);
                         $('.bd-example-modal-xl').modal('hide');
                         Product.productsList.show(); // Refresh danh sách sản phẩm
+                        //reload lại trang
+                        //location.reload();
                     })
                     .catch(error => {
                         console.error("Error processing product:", error);

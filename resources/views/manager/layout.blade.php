@@ -277,7 +277,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="#">Tổng quan</a>
+                                    <a href="{{route('manager.report.sale')}}">Bán hàng</a>
                                 </li>
                                 <li>
                                     <a href="{{route('manager.report.fin')}}">Tài chính</a>

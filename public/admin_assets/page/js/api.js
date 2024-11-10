@@ -6,6 +6,7 @@ const Api = {
     User: {},
     Warehouse: {},
     Blog: {},
+    Report: {},
 };
 (() => {
     $.ajaxSetup({
@@ -183,3 +184,38 @@ Api.Blog.store = (data) => $.ajax({
     contentType: false, // Không đặt Content-Type, để trình duyệt tự động
     
 });
+
+
+/* Report */
+Api.Report.getReport = (start_date,end_date) => $.ajax({
+    //url: `http://127.0.0.1:3000/report?start_date=${start_date}&end_date=${end_date}`,
+    url : `/admin/report/revenue?start_date=${start_date}&end_date=${end_date}`,
+    method: 'GET',
+});
+Api.Report.getReportByMonth = (year) => $.ajax({
+    //url: `http://127.0.0.1:3000/report-by-month?year=${year}`,
+    url : `/admin/report/revenue-by-month?year=${year}`,
+    method: 'GET',
+});
+
+Api.Report.getReportByDay = (year, month) => $.ajax({
+    //url: `http://127.0.0.1:3000/report-by-day?year=${year}&month=${month}`,
+    url : `/admin/report/revenue-by-day?year=${year}&month=${month}`,
+    method: 'GET',
+});
+Api.Report.getInventory = () => $.ajax({
+      url: `/admin/report/inventory`,
+      method: 'GET',
+  });
+
+//Get best seller and top viewed product từ bên customer làm report
+Api.Product.GetBestSeller = () => $.ajax({
+    /* url: `http://127.0.0.1:3000/best-seller`, */
+    url: `/api-v1/product/type/best`,
+    method: 'GET',
+});
+Api.Product.GetTopViewed = () => $.ajax({
+    /*   url: `http://127.0.0.1:3000/new-arrival`, */
+      url: `/api-v1/product/type/top_view`,
+      method: 'GET',
+  });

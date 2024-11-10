@@ -303,8 +303,8 @@ const Index = {
                         </div>
                         <div class="product-thumb">
                             <div class="thumb-inner">
-                                <a href="#">
-                                    <img src="https://placehold.co/300x300" alt="img">
+                                <a href="/nuoc-hoa/${element.slug}">
+                                    <img src="/${element.image}" alt="img">
                                 </a>
                                 <div class="thumb-group">
                                     <div class="yith-wcwl-add-to-wishlist">
@@ -322,7 +322,7 @@ const Index = {
                         </div>
                         <div class="product-info">
                             <h5 class="product-name product_title">
-                                <a href="#">${element.product_name}</a>
+                                <a href="/nuoc-hoa/${element.slug}">${element.product_name}</a>
                             </h5>
                             <div class="group-info">
                                 <div class="stars-rating">

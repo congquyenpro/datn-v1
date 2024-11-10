@@ -6719,7 +6719,7 @@ ul.list-products {
 	margin-bottom: 20px;
 }
 .slider-item.style7 .slider-inner {
-	background-image: url(https://placehold.co/770x620);
+	background-image: url(/customer/assets/css/images/pexels-photo-3910071.webp);
 }
 .slider-item.style7 .slider-inner .slider-infor {
 	padding-top: 176px;
@@ -6728,7 +6728,7 @@ ul.list-products {
 	padding-right: 400px;
 }
 .slider-item.style8 .slider-inner {
-	background-image: url(https://placehold.co/770x620);
+	background-image: url(/customer/assets/css/images/pexels-photo-1653085.webp);
 }
 .slider-item.style8 .slider-inner .slider-infor {
 	padding-top: 176px;
@@ -6736,8 +6736,9 @@ ul.list-products {
 	padding-left: 50px;
 	padding-right: 400px;
 }
+
 .slider-item.style9 .slider-inner {
-	background-image: url(https://placehold.co/770x620);
+	background-image: url(/customer/assets/css/images/pexels-photo-755992.webp);
 }
 .slider-item.style9 .slider-inner .slider-infor {
 	padding-top: 176px;
@@ -8557,7 +8558,7 @@ body.vertical-menu-open .vertical-menu-overlay {
 }
 /*banner home 02*/
 .item-banner.style4 .inner {
-	background-image: url(https://placehold.co/570x300);
+	background-image: url(/customer/assets/css/images/pexels-photo-21547042.webp);
 	background-size: cover;
 	background-position: 65% center;
 }
@@ -8578,7 +8579,7 @@ body.vertical-menu-open .vertical-menu-overlay {
 	max-width: 195px;
 }
 .item-banner.style5 .inner {
-	background-image: url(https://placehold.co/570x300);
+	background-image: url(/customer/assets/css/images/pexels-photo-4041392.webp);
 	background-size: cover;
 	background-position: 65% center;
 }
@@ -8624,7 +8625,7 @@ body.vertical-menu-open .vertical-menu-overlay {
 /*banner home 03*/
 .item-banner.style7 .inner {
 	/* background-image: url(../images/banner-home-5.jpg); */
-	background-image: url(https://placehold.co/380x300);
+	background-image: url(/customer/assets/css/images/pexels-photo-4239011.webp);
 }
 .item-banner.style7 .banner-content {
 	padding-top: 59px;

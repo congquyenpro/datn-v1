@@ -122,6 +122,16 @@
                         </div>
                     </div>
 
+                    <div class="status-event" atr="Pending" data-id="7">
+                        <div class="d-flex align-items-center">
+                            <div class="badge badge-danger badge-dot m-r-10"></div>
+                            <div>Hoàn trả</div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <div>(30)</div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

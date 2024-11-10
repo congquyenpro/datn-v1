@@ -69,6 +69,13 @@ class ProductService
         
         return $product;
     }
+
+    //update view
+    public function updateView($product_id)
+    {
+        $this->productRepository->updateView($id);
+    }
+
     
 
     //for customer
@@ -85,6 +92,7 @@ class ProductService
 
         return $this->productRepository->getRelatedProduct($product_id);
     }
+
 
     
 

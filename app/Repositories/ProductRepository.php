@@ -92,6 +92,7 @@ class ProductRepository extends BaseRepository
                         'discount' => $size->discount,
                         'quantity' => $size->quantity,
                         'entry_price' => $size->entry_price,
+                        'inventory_quantity' => $size->inventory_quantity,
                     ];
                 }),
                 'trending' => $product->trending, // Hoặc 1/0 tùy vào logic
@@ -165,8 +166,8 @@ class ProductRepository extends BaseRepository
     }
 
 
-    //update product
-    public function updateProduct($id, $data)
+    //update product v cũ: khi update xóa phân loại cũ => bị xóa trong order
+    public function updateProduct2($id, $data)
     {
         return DB::transaction(function () use ($id, $data) {
             // Tìm sản phẩm cần cập nhật
@@ -219,6 +220,98 @@ class ProductRepository extends BaseRepository
             return $product; // Đảm bảo trả về sản phẩm đã được cập nhật
         });
     }
+
+    //update product mới: khi update giữ nguyên phân loại cũ
+    public function updateProduct($id, $data)
+    {
+        return DB::transaction(function () use ($id, $data) {
+            // Tìm sản phẩm cần cập nhật
+            $product = Product::findOrFail($id);
+
+            // Xử lý ảnh tải lên, nếu có hình ảnh mới
+            if (isset($data['images'])) {
+                $imagesString = $this->handleImageUpload($data['images']);
+                $product->images = $imagesString; // Cập nhật hình ảnh
+            }
+
+            // Cập nhật thông tin sản phẩm
+            $product->name = $data['product_name'];
+            $product->category_id = $data['category_id'];
+            $product->gender = $data['gender'];
+            $product->short_description = $data['short_description'];
+            $product->detail_description = $data['description'];
+            $product->trending = $data['trending'] ?? 0;
+            $product->affiliate = $data['affiliate'] ?? 1;
+            $product->status = $data['status'] ?? 1;
+
+            // Lưu thay đổi của sản phẩm
+            $product->save();
+
+            // Cập nhật kích thước sản phẩm
+            foreach ($data['product_variants'] as $variant) {
+                // Kiểm tra xem kích thước đã tồn tại chưa
+                $productSize = ProductSize::where('product_id', $product->id)
+                                        ->where('volume', $variant['size'])
+                                        ->first();
+                
+                if ($productSize) {
+                    // Nếu kích thước đã tồn tại, cập nhật thông tin
+                    $productSize->quantity = $variant['quantity'];
+                    $productSize->price = $variant['price'];
+                    $productSize->discount = $variant['discount'] ?? 0;
+                    $productSize->save();
+                } else {
+                    // Nếu kích thước chưa tồn tại, tạo mới
+                    ProductSize::create([
+                        'product_id' => $product->id,
+                        'volume' => $variant['size'],
+                        'quantity' => $variant['quantity'],
+                        'price' => $variant['price'],
+                        'discount' => $variant['discount'] ?? 0,
+                    ]);
+                }
+            }
+
+            // Cập nhật thuộc tính
+            foreach ($data['attributes'] as $attribute) {
+                // Kiểm tra xem thuộc tính đã tồn tại chưa
+                $productAttribute = ProductAttribute::where('product_id', $product->id)
+                                                    ->where('attribute_value_id', $attribute['value_id'])
+                                                    ->first();
+                
+                if (!$productAttribute) {
+                    // Nếu thuộc tính chưa tồn tại, tạo mới
+                    ProductAttribute::create([
+                        'product_id' => $product->id,
+                        'attribute_value_id' => $attribute['value_id'],
+                    ]);
+                }
+
+                //Nếu thuộc tính đã tồn tại trong db thì xóa thuộc tính cũ đó, sau đó tạo mới
+/*                 else {
+                    ProductAttribute::where('product_id', $product->id)
+                                    ->where('attribute_value_id', $attribute['value_id'])
+                                    ->delete();
+                    ProductAttribute::create([
+                        'product_id' => $product->id,
+                        'attribute_value_id' => $attribute['value_id'],
+                    ]);
+                } */
+
+            }
+
+            return $product; // Đảm bảo trả về sản phẩm đã được cập nhật
+        });
+    }
+
+
+    //update view
+    public function updateView($product_id)
+    {
+        $product = Product::find($product_id);
+        $product->view = $product->view + 1;
+        $product->save();
+    }
     
 
     public function deleteProduct($id)
@@ -260,17 +353,22 @@ class ProductRepository extends BaseRepository
                 return $this->getProducts($limit);
     
             case 'best':
-                // Lấy sản phẩm từ bảng order_item (giả sử có phương thức để lấy best-seller)
-                $productIds = $this->getBestSellerProductIds($limit); // Hàm giả định để lấy ID sản phẩm bán chạy
-                return $this->getProducts($limit, $productIds);
+                return $this->getBestSellerProducts($limit);
+                //$productIds = $this->getBestSellerProductIds($limit); // Hàm giả định để lấy ID sản phẩm bán chạy
+                //return $this->getProducts($limit, $productIds);
     
-            // Thêm các case khác nếu cần
+            case 'top_view':
+                //$productIds = $this->getTopViewedProductIds($limit); // Hàm giả định để lấy ID sản phẩm xem nhiều
+                //return $this->getProducts($limit, $productIds);
+                return $this->getTopViewedProducts($limit);
         }
     }
     
     public function getProducts($limit, $productIds = null)
-    {
-        $query = $limit = null ? $this->product->with('productSizes')->limit($limit) : $this->product;
+    {   
+        $query = $limit ? $this->product->with('productSizes')->limit($limit) : $this->product;
+
+        //9-11-2024:$query = $limit = null ? $this->product->with('productSizes')->limit($limit) : $this->product;
         //$query = $this->product->with('productSizes')->limit($limit);
 
         //Thêm sắp xếp
@@ -311,7 +409,221 @@ class ProductRepository extends BaseRepository
             ->pluck('product_id')
             ->unique(); // Trả về danh sách product_id duy nhất
     }
+    protected function getTopViewedProductIds($limit)
+    {
+        // Lấy danh sách các sản phẩm có số lượt xem giảm dần
+        return \DB::table('products')
+            ->orderBy('view', 'desc')  // Sắp xếp theo số lượt xem giảm dần
+            ->limit($limit)  // Giới hạn số lượng sản phẩm
+            ->pluck('id');  // Lấy chỉ id của các sản phẩm
+    }
 
+    //version 9/11/2024
+    public function getTopViewedProducts($limit)
+    {
+        // Truy vấn SQL raw để lấy các sản phẩm có lượt xem cao nhất và chỉ lấy kích thước đầu tiên
+        $products = \DB::select(
+            \DB::raw("
+                SELECT p.id AS product_id, 
+                       p.name AS product_name, 
+                       ps.id AS product_size_id, 
+                       ps.volume AS size, 
+                       ps.price, 
+                       p.view,
+                       ps.discount, 
+                       p.slug, 
+                       TRIM(SUBSTRING_INDEX(p.images, ',', 1)) AS image
+                FROM products p
+                JOIN product_sizes ps ON ps.product_id = p.id
+                JOIN (
+                    SELECT id 
+                    FROM products
+                    ORDER BY view DESC
+                    LIMIT :limit
+                ) AS top_products ON top_products.id = p.id
+                WHERE ps.id IN (
+                    SELECT MIN(id) 
+                    FROM product_sizes 
+                    WHERE product_id = p.id
+                    GROUP BY product_id
+                )
+                ORDER BY p.view DESC
+            "), 
+            ['limit' => $limit] // Gán tham số limit vào truy vấn
+        );
+    
+        // Xử lý và trả về kết quả dưới dạng mảng sản phẩm với thông tin cần thiết
+        return collect($products)->map(function ($product) {
+            return (object)[
+                'product_id' => $product->product_id,
+                'slug' => $product->slug,
+                'product_name' => $product->product_name,
+                'product_size_id' => $product->product_size_id,
+                'size' => $product->size,
+                'image' => $product->image,
+                'price' => $product->price,
+                'discount' => $product->discount,
+                'view' => $product->view,
+            ];
+        });
+    }
+
+    //hàm gốc
+    public function getBestSellerProducts2($limit)
+    {
+        // Lấy danh sách các sản phẩm bán chạy nhất
+        $products = \DB::select(
+            \DB::raw("
+                SELECT p.id AS product_id, 
+                       p.name AS product_name, 
+                       ps.id AS product_size_id, 
+                       ps.volume AS size, 
+                       ps.price, 
+                       ps.discount, 
+                       p.slug, 
+                       TRIM(SUBSTRING_INDEX(p.images, ',', 1)) AS image
+                FROM products p
+                JOIN product_sizes ps ON ps.product_id = p.id
+                JOIN (
+                    SELECT product_size_id 
+                    FROM order_items
+                    GROUP BY product_size_id
+                    ORDER BY SUM(quantity) DESC
+                    LIMIT :limit
+                ) AS best_sellers ON best_sellers.product_size_id = ps.id
+                WHERE ps.id IN (
+                    SELECT MIN(id) 
+                    FROM product_sizes 
+                    WHERE product_id = p.id
+                    GROUP BY product_id
+                )
+            "), 
+            ['limit' => $limit] // Gán tham số limit vào truy vấn
+        );
+    
+        // Xử lý và trả về kết quả dưới dạng mảng sản phẩm với thông tin cần thiết
+        return collect($products)->map(function ($product) {
+            return (object)[
+                'product_id' => $product->product_id,
+                'slug' => $product->slug,
+                'product_name' => $product->product_name,
+                'product_size_id' => $product->product_size_id,
+                'size' => $product->size,
+                'image' => $product->image,
+                'price' => $product->price,
+                'discount' => $product->discount,
+            ];
+        });
+    }
+
+    //Lấy ra sản phẩm bán chạy nhất (tách theo từng phân loại)
+    public function getBestSellerProducts3($limit)
+    {
+        // Thực thi câu lệnh SQL raw query
+        $products = \DB::table('products as p')
+            ->select(
+                'p.id as product_id',
+                'p.name as product_name',
+                'ps.id as product_size_id',
+                'ps.volume as size',
+                'ps.price',
+                'ps.discount',
+                'p.slug',
+                \DB::raw('TRIM(SUBSTRING_INDEX(p.images, \',\', 1)) AS image'),
+                \DB::raw('SUM(oi.quantity) AS total_sales') // Tính tổng số lượng bán
+            )
+            ->join('product_sizes as ps', 'ps.product_id', '=', 'p.id') // Kết nối bảng product_sizes
+            ->join('order_items as oi', 'oi.product_size_id', '=', 'ps.id') // Kết nối bảng order_items để tính tổng số lượng
+            ->join(
+                \DB::raw(
+                    '(SELECT oi.product_size_id
+                      FROM order_items oi
+                      GROUP BY oi.product_size_id
+                      ORDER BY SUM(oi.quantity) DESC 
+                      LIMIT ' . (int) $limit . ') AS best_sellers'
+                ),
+                'best_sellers.product_size_id',
+                '=',
+                'ps.id'
+            )
+            ->groupBy('p.id', 'ps.id') // Nhóm theo sản phẩm và phân loại sản phẩm
+            ->limit($limit)  // Giới hạn số lượng sản phẩm bán chạy
+            ->get()
+            ->map(function ($product) {
+                // Trả về các thuộc tính cần thiết và hiển thị ảnh đầu tiên
+                return (object) [
+                    'product_id' => $product->product_id,
+                    'product_name' => $product->product_name,
+                    'price' => $product->price,
+                    'product_size_id' => $product->product_size_id,
+                    'size' => $product->size,
+                    'discount' => $product->discount,
+                    'slug' => $product->slug,
+                    'image' => trim($product->image), // Lấy ảnh đầu tiên của sản phẩm
+                    'total_sales' => $product->total_sales // Số lượng bán
+                ];
+            });
+    
+        return $products;
+    }
+    
+    //Lấy ra sản phẩm bán chạy nhất (gộp các phân loại)
+    public function getBestSellerProducts($limit)
+    {
+        // Thực thi câu lệnh SQL raw query
+        $products = \DB::table('products as p')
+            ->select(
+                'p.id as product_id',
+                'p.name as product_name',
+                \DB::raw('SUM(oi.quantity) AS total_sales'), // Tính tổng số lượng bán của tất cả các phân loại
+                \DB::raw('MIN(ps.volume) as size'), // Sử dụng MAX() để lấy giá trị size đại diện
+                \DB::raw('MIN(ps.price) as price'), // Sử dụng MAX() hoặc MIN() để lấy giá trị giá đại diện
+                \DB::raw('MAX(ps.discount) as discount'), // Lấy giá trị discount đại diện
+                'p.slug',
+                \DB::raw('TRIM(SUBSTRING_INDEX(p.images, \',\', 1)) AS image'), // Lấy ảnh đầu tiên
+                \DB::raw('MIN(ps.id) as product_size_id') // Lấy product_size_id đầu tiên (hoặc có thể là MIN hoặc MAX)
+            )
+            ->join('product_sizes as ps', 'ps.product_id', '=', 'p.id') // Kết nối bảng product_sizes
+            ->join('order_items as oi', 'oi.product_size_id', '=', 'ps.id') // Kết nối bảng order_items để tính tổng số lượng
+            ->join(
+                \DB::raw(
+                    '(SELECT oi.product_size_id
+                      FROM order_items oi
+                      GROUP BY oi.product_size_id
+                      ORDER BY SUM(oi.quantity) DESC 
+                      LIMIT ' . (int) $limit . ') AS best_sellers'
+                ),
+                'best_sellers.product_size_id',
+                '=',
+                'ps.id'
+            )
+            ->orderBy('total_sales', 'desc') // Sắp xếp theo số lượng bán giảm dần
+            ->groupBy('p.id') // Nhóm theo sản phẩm (chỉ nhóm theo product_id)
+            ->limit($limit)  // Giới hạn số lượng sản phẩm bán chạy
+            ->get()
+            ->map(function ($product) {
+                // Trả về các thuộc tính cần thiết và hiển thị ảnh đầu tiên
+                return (object) [
+                    'product_id' => $product->product_id,
+                    'product_name' => $product->product_name,
+                    'price' => $product->price,
+                    'discount' => $product->discount,
+                    'slug' => $product->slug,
+                    'image' => trim($product->image), // Lấy ảnh đầu tiên của sản phẩm
+                    'total_sales' => $product->total_sales, // Tổng số lượng bán của sản phẩm
+                    'product_size_id' => $product->product_size_id, // Kích thước đại diện
+                    'size' => $product->size, // Kích thước đại diện
+                ];
+            });
+    
+        return $products;
+    }
+    
+
+    
+    
+    
+    
 
     
     public function getProductBySlug($slug)
@@ -326,6 +638,10 @@ class ProductRepository extends BaseRepository
         } else {
             $product->price = null; // Handle case when no sizes are available
         }
+
+        //update view
+        $product_id = $product->id;
+        $this->updateView($product_id);
     
         return $product;
     }

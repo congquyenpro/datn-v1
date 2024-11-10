@@ -1,13 +1,12 @@
 const Api = {
     Product: {},
     Atrributes: {},
-    Comment: {},
     Cart: {},
     Address: {},
     User: {},
     Order: {},
-
-
+    Comment: {},
+    Other: {},
 };
 (() => {
     $.ajaxSetup({
@@ -41,7 +40,8 @@ Api.Product.GetNewArrival = () => $.ajax({
 });
 
 Api.Product.GetTopViewed = () => $.ajax({
-    url: `http://127.0.0.1:3000/new-arrival`,
+  /*   url: `http://127.0.0.1:3000/new-arrival`, */
+    url: `/api-v1/product/type/top_view`,
     method: 'GET',
 });
 
@@ -71,12 +71,6 @@ Api.Atrributes.getAll = () => $.ajax({
 Api.Product.GetProducts = (filter) => $.ajax({
     //url: `http://127.0.0.1:3000/products?${filter}`, //?field=price&order=asc&brand=6&gender=3a&volume=6b
     url: `/test?${filter}`,
-    method: 'GET',
-});
-
-/* Comment */
-Api.Comment.getAll = (product_id) => $.ajax({
-    url: `http://127.0.0.1:3000/comments?product_id=${product_id}`,
     method: 'GET',
 });
 
@@ -138,3 +132,32 @@ Api.Order.createOrder = (data) => $.ajax({
 Api.Order.getOrderHistory = (status) => $.ajax({
     url: `/profile/order/all?status=${status}`,
 });
+
+
+
+/* Comment */
+Api.Comment.getComments = (product_id) => $.ajax({
+/*     url: `http://127.0.0.1:3000/comments?product_id=${product_id}`,
+    method: 'GET', */
+    url: `/api-v1/comment/test`,
+    method: 'GET',
+});
+
+Api.Other.test = (slug) => $.ajax({
+    url: `/api-v1/comment/test`,
+    method: 'GET',
+});
+
+
+Api.Comment.createComment = (data) => $.ajax({
+    url: `/api-v1/comment/add`,
+    method: 'POST',
+    data: data,
+});
+
+Api.Comment.deleteComment = (id) => $.ajax({
+    url: `/api-v1/comment`,
+    method: 'DELETE',
+    data: {id},
+});
+

@@ -89,6 +89,8 @@ class OrderRepository extends BaseRepository implements IBaseRepository
         foreach ($order_items as $item) {
             $product_size = ProductSize::find($item->product_size_id);
             $product_size->quantity -= $item->quantity;
+            //Trừ cả số lượng kho
+            $product_size->inventory_quantity -= $item->quantity;
             $product_size->save();
         }
         //return $order_items;
@@ -149,6 +151,7 @@ class OrderRepository extends BaseRepository implements IBaseRepository
             ]);
             $orderItem->quantity = $item['quantity'];
             $orderItem->item_value = $product_size->price * $item['quantity'];
+            $orderItem->entry_price = $product_size->entry_price * $item['quantity'];
             $orderItem->save();
         }
 

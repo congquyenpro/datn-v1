@@ -262,10 +262,43 @@
                                                 <div class="col-sm-4 col-md-4 col-xl-4"></div>
                                             </div>
                                         </div>
-
-                                                                       
-                                        
-                                        <ol class="commentlist">
+										@if (!Auth::check())
+											<div style="margin-bottom: 10px; cursor:pointer;" id="view-more-comments">
+												<div style="border: 1px dotted;padding: 4px;text-align: center;font-weight: bold;font-size: 14px;color: #ab8e66;">Đăng nhập để đánh giá</div>
+											</div>
+										@else
+											<div class="review_form_wrapper">
+												<div class="review_form">
+													<div class="comment-respond">
+														<form class="comment-form-review">
+															<div class="comment-form-rating">
+																<label>Your rating</label>
+																<p class="stars">
+																		<span>
+																			<a class="rating-star star-1" data-star-id="1" href="javascript:void(0)"></a>
+																			<a class="rating-star star-2" data-star-id="2" href="javascript:void(0)"></a>
+																			<a class="rating-star star-3" data-star-id="3" href="javascript:void(0)"></a>
+																			<a class="rating-star star-4" data-star-id="4" href="javascript:void(0)"></a>
+																			<a class="rating-star star-5" data-star-id="5" href="javascript:void(0)"></a>
+																		</span>
+																</p>
+															</div>
+															<p class="comment-form-comment">
+																<label>
+																	Your review
+																	<span class="required">*</span>
+																</label>
+																<textarea title="review" id="comment-content" name="comment-content" cols="30" rows="2"></textarea>
+															</p>
+															<p class="form-submit">
+																<input style="float: right;margin-top:-25px;margin-bottom:20px;" name="submit" type="submit" id="submit-comment" class="submit" value="Submit">
+															</p>
+														</form>
+													</div>
+												</div>
+											</div>	
+										@endif
+                                        <ol class="commentlist" id="list-comments">
                                             <li class="conment">
                                                 <div id="list-comments"></div>
                                                 <div class="conment-container">
@@ -293,62 +326,12 @@
                                                 </div>
                                                 
                                             </li>
+{{-- 											<div style="margin-bottom: 10px; cursor:pointer;" id="view-more-comments">
+												<div style="border: 1px dotted;padding: 4px;text-align: center;font-weight: bold;font-size: 14px;color: #ab8e66;">Xem thêm</div>
+											</div> --}}
                                         </ol>
                                     </div>
-                                    <div class="review_form_wrapper">
-                                        <div class="review_form">
-                                            <div class="comment-respond">
-                                                <span class="comment-reply-title">Add a review </span>
-                                                <form class="comment-form-review">
-                                                    <p class="comment-notes">
-                                                        <span class="email-notes">Your email address will not be published.</span>
-                                                        Required fields are marked
-                                                        <span class="required">*</span>
-                                                    </p>
-                                                    <div class="comment-form-rating">
-                                                        <label>Your rating</label>
-                                                        <p class="stars">
-                                        						<span>
-                                        							<a class="star-1" href="#"></a>
-                                        							<a class="star-2" href="#"></a>
-                                        							<a class="star-3" href="#"></a>
-                                        							<a class="star-4" href="#"></a>
-                                        							<a class="star-5" href="#"></a>
-                                        						</span>
-                                                        </p>
-                                                    </div>
-                                                    <p class="comment-form-comment">
-                                                        <label>
-                                                            Your review
-                                                            <span class="required">*</span>
-                                                        </label>
-                                                        <textarea title="review" id="comment" name="comment" cols="45"
-                                                                  rows="8"></textarea>
-                                                    </p>
-                                                    <p class="comment-form-author">
-                                                        <label>
-                                                            Name
-                                                            <span class="">*</span>
-                                                        </label>
-                                                        <input title="author" id="author" name="author" type="text"
-                                                               value="">
-                                                    </p>
-                                                    <p class="comment-form-email">
-                                                        <label>
-                                                            Email
-                                                            <span class="">*</span>
-                                                        </label>
-                                                        <input title="email" id="email" name="email" type="email"
-                                                               value="">
-                                                    </p>
-                                                    <p class="form-submit">
-                                                        <input name="submit" type="submit" id="submit" class="submit"
-                                                               value="Submit">
-                                                    </p>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                 </div>
                             </div>
 						</div>

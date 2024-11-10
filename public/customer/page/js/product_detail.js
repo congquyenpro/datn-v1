@@ -1,37 +1,60 @@
+
+
 const ProductDetail = {
     comments : {
-        getCommnents : function(productId) {
-            const listComments = $('#list-comments');
-            Api.Comment.getAll(productId).done(function(data){
-                data.forEach(element => {
-                    listComments.append(`
-                    <div class="conment-container">
-                    <a href="#" class="avatar">
-                        <img src="https://placehold.co/60x59" alt="img">
-                    </a>
-                    <div class="comment-text">
-                        <div class="stars-rating">
-                            <div class="star-rating">
-                                <span class="star-${element.rating}"></span>
-                            </div>
-                            <div class="count-star">
-                                (1)
-                            </div>
-                        </div>
-                        <p class="meta">
-                            <strong class="author">${element.user_name}</strong>
-                            <span>-</span>
-                            <span class="time">12/10/2024</span>
-                        </p>
-                        <div class="description">
-                            <p>${element.content}</p>
-                        </div>
-                    </div>
-                </div>
-                    `);
+        showDefault: function() {
+
+        },
+        comment: function() {
+            $('.rating-star').off('click');
+            $('.rating-star').on('click', function(e) {
+                var rating = $(this).data('star-id');
+
+                //Xóa css của tất cả star
+                $('.rating-star').css('color', '#ccc');
+                //Thêm css cho star được chọn
+                $(this).css('color', '#ffb933'); // Thay đổi màu của star được click
+                //Thêm class active cho star được chọn
+                $('.rating-star').removeClass('active');
+                $(this).addClass('active');
+            });
+
+            $('#submit-comment').off('click');
+            $('#submit-comment').on('click', function(e) {
+                e.preventDefault();
+                var rating = $('.rating-star.active').data('star-id');
+                var content = $('#comment-content').val();
+
+                //Check nếu null
+                if (rating == null || content == '') {
+                    alert('Vui lòng nhập đủ thông tin');
+                    return;
+                }
+
+
+                // Lấy URL hiện tại của trang
+                const url = window.location.pathname;  // Lấy toàn bộ URL (chỉ lấy phần đường dẫn)
+
+                // Tách chuỗi theo dấu "/"
+                const parts = url.split('/');
+
+                // Lấy phần cuối cùng trong mảng parts (phần bạn cần)
+                const slug = parts[parts.length - 1];  // "versace-eros-edt"
+
+                var data = {
+                    commentable_type: 'product',
+                    slug: slug,
+                    rating: rating,
+                    content: content,
+                };
+                Api.Comment.createComment(data).done(function(res){
+                    if (res.status == 201){
+                        alert('Cảm ơn bạn đã đánh giá sản phẩm !');
+                    }
                 });
             });
-        },
+
+        }
     },
     Cart: {
         init: function () {
@@ -211,8 +234,8 @@ const ProductDetail = {
     },
 }
 
-/* ProductDetail.comments.getCommnents(1); */ //get all comments of product id = 1
 
+ProductDetail.comments.showDefault();
 
 $(document).ready(function() {
 
@@ -221,3 +244,5 @@ $(document).ready(function() {
     // Show cart content
     ProductDetail.Cart.showCart();
 });
+
+ProductDetail.comments.comment();

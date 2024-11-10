@@ -33,7 +33,12 @@ const Product = {
                             `).join('');
                             const productRows2 = product.product_size_list.map(size => `
                                 <div class="metadata-table-wrapper">
-                                    <span class="badge badge-pill badge-red m-r-10">N-${size.quantity}</span>
+                                    <span class="badge badge-pill badge-red m-r-10">S-${size.quantity}</span>
+                                </div>
+                            `).join('');
+                            const productRows3 = product.product_size_list.map(size => `
+                                <div class="metadata-table-wrapper">
+                                    <span class="badge badge-pill badge-red m-r-10">I-${size.inventory_quantity}</span>
                                 </div>
                             `).join('');
     
@@ -56,6 +61,7 @@ const Product = {
                                 </div>`,
                                 productRows,
                                 productRows2,
+                                productRows3,
                             ];
     
                             // Thêm hàng mới vào DataTable

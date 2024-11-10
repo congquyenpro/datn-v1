@@ -204,14 +204,14 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="row" style=" display: block;">
-                                        <label class="col-form-label col-sm-2 pt-0">Trạng thái</label>
+                                        <label class="col-form-label col-sm-6 pt-0">Trạng thái (Ẩn: Khi chưa nhập hàng)</label>
                                         <div class="col-sm-10" style=" display: flex;">
                                             <div class="radio m-r-50">
-                                                <input type="radio" name="status" id="status4" value="1" checked>
+                                                <input type="radio" name="status" id="status4" value="1">
                                                 <label for="status4">Công khai</label>
                                             </div>
                                             <div class="radio m-r-50">
-                                                <input type="radio" name="status" id="status5" value="0">
+                                                <input type="radio" name="status" id="status5" value="0" checked>
                                                 <label for="status5">Ẩn</label>
                                             </div>
                                             <div class="radio m-r-50">

@@ -65,7 +65,9 @@ class PromotionService
         // Lấy chương trình khuyến mãi mới nhất mà có end_date > current_date
         $promotion = Promotion::whereRaw("STR_TO_DATE(end_date, '%d/%m/%Y') > STR_TO_DATE(?, '%d/%m/%Y')", [$currentDate])
             ->orderBy('end_date', 'asc') // Sắp xếp theo end_date
-            ->first(); // Lấy chương trình khuyến mãi mới nhất
+            /* ->first(); */
+            ->get();
+        $promotion = $promotion->last(); // Lấy phần tử cuối cùng
     
         // Khởi tạo một mảng để lưu các sản phẩm
         $products = collect();

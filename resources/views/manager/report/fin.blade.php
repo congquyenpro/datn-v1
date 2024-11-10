@@ -7,6 +7,7 @@
     <link href="{{asset('admin_assets/page/css/order.css')}}" rel="stylesheet">
 
     <link href="{{asset('admin_assets/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css')}}" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
 @endsection
 
 @section('page_content')
@@ -36,14 +37,14 @@
             <div class="row m-b-10">
                 <div class="col-md-12 col-sm-12">
                     <div class="form-group">
-                        <div><h3 class="font-weight-bold m-b-20" style="display:flex;justify-content:center;">1/11/2024 - 30/11/2024</h3></div>
+                        <div><h3 class="font-weight-bold m-b-20" style="display:flex;justify-content:center;">BÁO CÁO TÀI CHÍNH</h3></div>
                         <div class="row">
                             <div class="col-sm-2">
                                 <!-- Default Datepicker-->
                                 <div class="form-group">
                                     <div class="input-affix m-b-10">
                                         <i class="prefix-icon anticon anticon-calendar"></i>
-                                        <input type="text" class="form-control datepicker-input" placeholder="Từ ngày">
+                                        <input id="start_date" type="text" class="form-control datepicker-input" placeholder="Từ ngày">
                                     </div>
                                 </div>
                             </div>
@@ -53,7 +54,7 @@
                                 <div class="form-group">
                                     <div class="input-affix m-b-10">
                                         <i class="prefix-icon anticon anticon-calendar"></i>
-                                        <input type="text" class="form-control datepicker-input" placeholder="Đến ngày">
+                                        <input id="end_date" type="text" class="form-control datepicker-input" placeholder="Đến ngày">
                                     </div>
                                 </div>
                             </div>
@@ -69,147 +70,9 @@
                 </div>
                 <div class="col-md-12 col-sm-12">
                     <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr class="font-size-15">
-                                    <th class="font-weight-bold">CHỈ TIÊU BÁO CÁO</th>
-                                    <th class="font-weight-bold">KỲ TRƯỚC</th>
-                                    <th class="font-weight-bold">KỲ HIỆN TẠI</th>
-                                    <th class="font-weight-bold">THAY ĐỔI </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Dòng 1 -->
-                                <tr class="table-info">
-                                    <td class="font-weight-bold">I. Doanh Thu Bán Hàng (1+2+3-4)</td>
-                                    <td id="pre_1" >9,250,000</td>
-                                    <td id="now_1">16,300,000</td>
-                                    <td id="rate1">+44%</td>
-                                </tr>
-        
-                                <!-- Dòng 1.1 -->
-                                <tr>
-                                    <td class="ml-4"> 1. Tiền Hàng Thực Bán (1a-1b)</td>
-                                    <td id="pre_2">9,250,000</td>
-                                    <td id="now_2">16,300,000</td>
-                                    <td id="rate2">+44%</td>
-                                </tr>
-        
-                                <!-- Dòng 1.1.1 -->
-                                <tr>
-                                    <td class="ml-5"> a. Tiền Hàng Bán Ra</td>
-                                    <td id="pre_3">12,500,000</td>
-                                    <td id="now_3">17,800,000</td>
-                                    <td id="rate3">+30%</td>
-                                </tr>
-        
-                                <!-- Dòng 1.1.2 -->
-                                <tr>
-                                    <td class="ml-5"> b. Tiền Hàng Trả Lại</td>
-                                    <td id="pre_4">3,250,000</td>
-                                    <td id="now_4">1,500,000</td>
-                                    <td id="rate4">-54%</td>
-                                </tr>
-        
-                                <tr>
-                                    <td> 2. Thuế VAT</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-                                <tr>
-                                    <td> 3. Phí giao hàng thu của khách</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-                                <tr>
-                                    <td> 4. Chiết khấu</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-        
-                                <!-- ...Thêm các dòng khác tương tự... -->
-        
-                                <!-- Dòng 2 -->
-                                <tr class="table-info">
-                                    <td class="font-weight-bold">II. Chi Phí Bán Hàng (1+2+3)</td>
-                                    <td id="pre_5">5,675,000</td>
-                                    <td id="now_5">8,035,000</td>
-                                    <td id="rate5">+30%</td>
-                                </tr>
-                                <tr>
-                                    <td> 1. Chi phí giá vốn hàng hóa</td>
-                                    <td id="pre_6">5,250,000</td>
-                                    <td id="now_6">7,300,000</td>
-                                    <td id="rate6">+28%</td>
-                                </tr>
-                                <tr>
-                                    <td> 2. Phí giao hàng trả đối tác</td>
-                                    <td id="pre_7">425,000</td>
-                                    <td id="now_7">735,000</td>
-                                    <td id="rate7">+42%</td>
-                                </tr>
-                                <tr>
-                                    <td> 3. Thanh toán bằng điểm</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-        
-                                <!-- ...Thêm các dòng khác tương tự... -->
-        
-                                <!-- Dòng 3 -->
-                                <tr class="table-info">
-                                    <td class="font-weight-bold">III. Thu Nhập Khác (1+2)</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-                                <tr>
-                                    <td> 1. Phiếu thu</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-                                <tr>
-                                    <td> 2. Phí khách trả hàng</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-        
-                                <!-- ...Thêm các dòng khác tương tự... -->
-        
-                                <!-- Dòng 4 -->
-                                <tr class="table-info">
-                                    <td class="font-weight-bold">IV. Chi Phí Khác</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-                                <tr>
-                                    <td> 1. Phiếu chi</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                </tr>
-        
-                                <!-- ...Thêm các dòng khác tương tự... -->
-        
-                                <!-- Dòng 5 -->
-                                <tr class="table-warning font-weight-bold">
-                                    <td>Lợi Nhuận (I + III - II - IV)</td>
-                                    <td id="pre_9">3,575,000</td>
-                                    <td id="now_9">8,265,000</td>
-                                    <td id="rate_9">+57%</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div id="report-table"></div>
+
                     </div>
-        
-        
         
                 </div>
             </div>
@@ -369,7 +232,6 @@
         </div>
     </div>
 </div>
-
 @endsection
 
 @section('page_js')
@@ -385,5 +247,6 @@
     </script>
     
     <script src="{{asset('admin_assets/page/js/api.js')}}"></script>
+    <script src="{{asset('admin_assets/page/js/report.fin.js')}}"></script>
 
 @endsection

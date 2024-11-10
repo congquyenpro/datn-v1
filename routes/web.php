@@ -188,6 +188,13 @@ Route::prefix('admin')->group(function() {
         Route::prefix('report')->group(function() {
             Route::get('/transaction', 'Manager\Report\ReportController@showTransaction')->name('manager.report.transaction');
             Route::get('/fin', 'Manager\Report\ReportController@showFin')->name('manager.report.fin');
+            Route::get('/sale', 'Manager\Report\ReportController@showSale')->name('manager.report.sale');
+
+            Route::get('/revenue', 'Manager\Report\ReportController@getRevenue')->name('manager.report.revenue');
+            Route::get('/revenue-by-month', 'Manager\Report\ReportController@getRevenueByMonth')->name('manager.report.revenue.month');
+            Route::get('/revenue-by-day', 'Manager\Report\ReportController@getRevenueByDay')->name('manager.report.revenue.day');
+
+            Route::get('/inventory', 'Manager\Report\ReportController@getInventory')->name('manager.report.inventory');
         });
     });
 
@@ -223,6 +230,12 @@ Route::prefix('/')->group(function() {
 
         /* Promotion */
         Route::get('/promotion/deal-of-day', 'Manager\Product\PromotionController@getDealOfDay');
+
+        /* Comment Product */
+        Route::get('/comment/all/{slug}', 'CommentController@getAllComments');
+        Route::get('/comment/test', 'CommentController@test');
+        Route::post('/comment/add', 'CommentController@addComment')->middleware(['customer']);
+        Route::delete('/comment', 'CommentController@deleteComment')->middleware(['customer']);
     });
 
 

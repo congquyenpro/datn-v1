@@ -131,6 +131,13 @@ class WarehouseService {
         return DB::table('inventory_changes')->where('id', $ticketId)->get();
     }
     public function getChangeDetails($ticketId){
-        return DB::table('stock_entries')->where('inventory_changes_id', $ticketId)->get();
+        //return DB::table('stock_entries')->where('inventory_changes_id', $ticketId)->get();
+        return DB::select('
+            SELECT se.id, se.inventory_changes_id, product_sizes.volume as product_size_id, products.name as product_name, se.entry_date, se.quantity, se.entry_price, se.expiry_date, se.damaged_reason, se.created_at 
+            FROM `stock_entries` as se
+            LEFT JOIN product_sizes ON product_sizes.id = product_size_id
+            LEFT JOIN products ON products.id = product_sizes.product_id
+            WHERE se.inventory_changes_id = ?
+        ', [$ticketId]);
     }
 }

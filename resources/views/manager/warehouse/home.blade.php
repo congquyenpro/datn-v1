@@ -111,6 +111,7 @@
                                     <th>Tên</th>
                                     <th>Hình ảnh</th>
                                     <th>Phân loại</th>
+                                    <th>Đang bán</th>
                                     <th>Kho</th>
                                 </tr>
                             </thead>
