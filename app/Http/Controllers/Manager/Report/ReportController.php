@@ -187,6 +187,49 @@ class ReportController extends Controller
         return response()->json($data);
     }
 
+    public function getRevenueBy7Day(Request $request) {
+        $data = [];
+        
+        // Lấy năm và tháng từ request (mặc định là năm và tháng hiện tại)
+        $year = $request->input('year', date('Y'));
+        $month = $request->input('month', date('m'));
+        
+        // Lấy ngày hiện tại
+        $currentDate = \Carbon\Carbon::now();
+    
+        // Duyệt qua 7 ngày gần đây (bao gồm ngày hôm nay)
+        for ($i = 6; $i >= 0; $i--) {
+            // Tính toán ngày
+            $date = $currentDate->copy()->subDays($i);
+            
+            // Xác định ngày bắt đầu và kết thúc của ngày hiện tại
+            $startDate = $date->startOfDay()->format('Y-m-d 00:00:00');
+            $endDate = $date->endOfDay()->format('Y-m-d 23:59:59');
+            
+            // Lấy báo cáo doanh thu cho ngày này
+            $salesData = $this->getSalesReport($startDate, $endDate);
+            
+            // Lưu trữ dữ liệu cho ngày đó
+            $data[] = [
+                'day' => $date->day, // Ngày của tháng
+                'revenue' => $salesData['revenue'],
+                'total_sale' => $salesData['total_sale'],
+                'total_return_sale' => $salesData['total_return_sale'],
+                'total_entry_value' => $salesData['total_entry_value'],
+                'total_shipping_cost' => $salesData['total_shipping_cost'],
+                'total_real_sale' => $salesData['total_real_sale'],
+                'total_cost_sale' => $salesData['total_cost_sale'],
+                'other_income' => $salesData['other_income'],
+                'other_cost' => $salesData['other_cost'],
+                'profit' => $salesData['profit'],
+            ];
+        }
+        
+        // Trả về dữ liệu dưới dạng JSON
+        return response()->json($data);
+    }
+    
+
     //Lấy tổng số sản phẩm tồn kho và giá trị tồn kho
     public function getInventory(Request $request)
     {

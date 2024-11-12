@@ -43,7 +43,7 @@
                 <div id="order-status-1" style="margin-top:5px">Không có đơn hàng nào</div>
             </div>
             <div class="tab-pane fade" id="shipping-justified" role="tabpanel" aria-labelledby="shipping-tab-justified">
-                <div id="order-status-2" style="margin-top:5px"><p>Không có đơn hàng nào</p></div>
+                <div id="order-status-3" style="margin-top:5px"><p>Không có đơn hàng nào</p></div>
             </div>
             <div class="tab-pane fade" id="in-progress-justified" role="tabpanel" aria-labelledby="in-progress-tab-justified">
                 <div id="order-status-4" style="margin-top:5px"><p>Không có đơn hàng nào</p></div>

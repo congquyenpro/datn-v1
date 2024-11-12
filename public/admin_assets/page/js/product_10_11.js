@@ -527,7 +527,7 @@ const Product = {
                                 <input type="text" class="form-control data-size number-type" placeholder="ml">
                             </div>
                             <div class="form-group">
-                                <label>Giá bán * (Tạo mới: Giá nhập = Giá bán)</label>
+                                <label>Đơn giá *</label>
                                 <input type="text" class="form-control data-prices number-type" placeholder="">
                             </div>
                             <div class="form-group">
@@ -535,8 +535,8 @@ const Product = {
                                 <input type="text" class="form-control data-discount number-type" placeholder="%">
                             </div>
                             <div class="form-group">
-                                <label>Số lượng * (Tạo mới: SL có thể bán = SL kho)</label>
-                                <input type="text" class="form-control data-quantity number-type" placeholder="">
+                                <label>Số lượng * (Mặc định: 0 khi tạo mới)</label>
+                                <input type="text" class="form-control data-quantity number-type" placeholder="" value="0">
                             </div>
                             <div class="form-group">
                                 <button class="btn btn-danger metadata-remove" atr="Delete">Xóa thuộc tính</button>
@@ -594,8 +594,7 @@ const Product = {
                 size: item.querySelector('.data-size')?.value || null,
                 price: item.querySelector('.data-prices')?.value || null,
                 discount: item.querySelector('.data-discount')?.value || 0,
-                quantity: item.querySelector('.data-quantity')?.value || 0,
-                entry_price: item.querySelector('.data-entry-prices')?.value || 0
+                quantity: item.querySelector('.data-quantity')?.value || 0
             })).filter(item => item.size && item.price); // filter out incomplete items
     
             // Kiểm tra itemSizes
@@ -655,7 +654,6 @@ const Product = {
                     formData.append(`product_variants[${index}][price]`, variant.price);
                     formData.append(`product_variants[${index}][discount]`, variant.discount || 0);
                     formData.append(`product_variants[${index}][quantity]`, variant.quantity || 0);
-
                 });
     
                 const apiMethod = isEdit ? Api.Product.EditProduct : Api.Product.AddNewProduct;

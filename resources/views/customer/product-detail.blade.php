@@ -299,7 +299,7 @@
 											</div>	
 										@endif
                                         <ol class="commentlist" id="list-comments">
-                                            <li class="conment">
+ {{--                                            <li class="conment">
                                                 <div id="list-comments"></div>
                                                 <div class="conment-container">
                                                     <a href="#" class="avatar">
@@ -325,7 +325,7 @@
                                                     </div>
                                                 </div>
                                                 
-                                            </li>
+                                            </li> --}}
 {{-- 											<div style="margin-bottom: 10px; cursor:pointer;" id="view-more-comments">
 												<div style="border: 1px dotted;padding: 4px;text-align: center;font-weight: bold;font-size: 14px;color: #ab8e66;">Xem thêm</div>
 											</div> --}}
@@ -709,6 +709,7 @@
 @endsection
 
 @section('page_js')
-	<script src="{{asset('customer/page/js/product_detail.js')}}"></script>
+	
 	<script src="{{asset('customer/page/js/api.js')}}"></script>
+	<script src="{{asset('customer/page/js/product_detail.js')}}"></script>
 @endsection

@@ -47,7 +47,6 @@ class ProductController extends Controller
                 'product_variants.*.quantity' => 'required|integer',
 
 
-
             ]);
                 // Lưu các hình ảnh
 /*                 $imagePaths = [];

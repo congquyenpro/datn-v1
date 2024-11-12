@@ -87,6 +87,13 @@ class OrderService
         return $orders;
     }
 
+    public function getOrderByUser2($user_id,$status)
+    {
+        $orders = $this->orderRepository->getOrderByUser2($user_id,$status);
+        return $orders;
+    }
+
+
 
 
 

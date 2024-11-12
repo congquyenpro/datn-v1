@@ -613,7 +613,8 @@ const init_page = init_urlParams.get('page') || 1;
 PageProduct.products.getDefaultProducts(init_page, 9, 'price', 'asc');
 
 PageProduct.Cart.init();
-//PageProduct.Cart.show();
+
+PageProduct.Cart.showCart();
 
 PageProduct.showAdvancedFilter();
 

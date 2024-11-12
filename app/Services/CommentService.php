@@ -7,10 +7,12 @@ class CommentService {
     public function getAllComments($request)
     {
         $slug = $request->slug;
-        //lấy ra
+        //lấy ra id của product từ slug
+        $product_id = Product::where('slug', $slug)->first()->id;
+        $commentable_type = 'product';
 
-        $comments = Comment::where('commentable_id', $request->commentable_id)
-            ->where('commentable_type', $request->commentable_type)
+        $comments = Comment::where('commentable_id', $product_id)
+            ->where('commentable_type', $commentable_type)
             ->with('user')
             ->get();
         return $comments;

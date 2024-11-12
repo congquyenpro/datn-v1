@@ -59,7 +59,7 @@ OrderHistory = {
                                     </div>
                                 `).join('')}
                                 <hr>
-                                <div class="total">Total Price: ${element.product_size_info.reduce((total, product) => total + (product.product_size_price*product.quantity), 0).toLocaleString()}₫</div>
+                                <div class="total">Total Price: ${element.value.toLocaleString()}₫</div>
                             </div>
                         </div>
                     `;

@@ -2,8 +2,47 @@
 
 const ProductDetail = {
     comments : {
-        showDefault: function() {
+        getCommnents : function() {
+            const listComments = $('#list-comments');
 
+            let pathname = window.location.pathname;
+
+            // Tách các phần trong đường dẫn theo dấu '/'
+            let pathParts = pathname.split('/');
+
+            // Giả sử phần cần lấy luôn nằm ở cuối URL sau phần '/nuoc-hoa/'
+            let productSlug = pathParts[pathParts.length - 1];
+
+            Api.Comment.getComments(productSlug).done(function(data){
+                listComments.html('');
+                data.forEach(element => {
+                    listComments.append(`
+                    <div class="conment-container">
+                    <a href="#" class="avatar">
+                        <img src="/customer/page/images/user_avatar.jpeg" alt="img" style=" width: 60px; height: 60px; ">
+                    </a>
+                    <div class="comment-text">
+                        <div class="stars-rating">
+                            <div class="star-rating">
+                                <span class="star-${element.rating}"></span>
+                            </div>
+                            <div class="count-star">
+                                (1)
+                            </div>
+                        </div>
+                        <p class="meta">
+                            <strong class="author">${element.user['name']}</strong>
+                            <span>-</span>
+                            <span class="time">12/10/2024</span>
+                        </p>
+                        <div class="description">
+                            <p>${element.content}</p>
+                        </div>
+                    </div>
+                </div>
+                    `);
+                });
+            });
         },
         comment: function() {
             $('.rating-star').off('click');
@@ -50,11 +89,14 @@ const ProductDetail = {
                 Api.Comment.createComment(data).done(function(res){
                     if (res.status == 201){
                         alert('Cảm ơn bạn đã đánh giá sản phẩm !');
+                        ProductDetail.comments.getCommnents();
+                        //Xóa nội dung comment cũ
+                        $('#comment-content').val('');
                     }
                 });
             });
 
-        }
+        },
     },
     Cart: {
         init: function () {
@@ -235,7 +277,8 @@ const ProductDetail = {
 }
 
 
-ProductDetail.comments.showDefault();
+ProductDetail.comments.getCommnents();
+
 
 $(document).ready(function() {
 
@@ -246,3 +289,4 @@ $(document).ready(function() {
 });
 
 ProductDetail.comments.comment();
+

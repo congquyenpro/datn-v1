@@ -48,6 +48,8 @@ class ProductRepository extends BaseRepository
                     'volume' => $variant['size'],  // Match 'size' instead of 'volume'
                     'quantity' => $variant['quantity'],
                     'price' => $variant['price'],
+                    'entry_price' => $variant['price'],
+                    'inventory_quantity' => $variant['quantity'],
                     'discount' => $variant['discount'] ?? 0, // Default to 0 if not provided
                 ]);
             }
@@ -286,6 +288,11 @@ class ProductRepository extends BaseRepository
                         'attribute_value_id' => $attribute['value_id'],
                     ]);
                 }
+                //Nếu đã tồn tại thì cập nhật lại
+/*                 else {
+                    $productAttribute->attribute_value_id = $attribute['value_id'];
+                    $productAttribute->save();
+                } */
 
                 //Nếu thuộc tính đã tồn tại trong db thì xóa thuộc tính cũ đó, sau đó tạo mới
 /*                 else {

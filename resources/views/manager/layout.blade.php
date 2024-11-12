@@ -29,13 +29,13 @@
             <!-- Header START -->
             <div class="header">
                 <div class="logo logo-dark">
-                    <a href="index.html">
+                    <a href="/admin">
                         <img src="https://placehold.co/130x65" alt="Logo">
                         <img class="logo-fold" src="https://placehold.co/80x65" alt="Logo">
                     </a>
                 </div>
                 <div class="logo logo-white">
-                    <a href="index.html">
+                    <a href="/admin">
                         <img src="#" alt="Logo">
                         <img class="logo-fold" src="#" alt="Logo">
                     </a>

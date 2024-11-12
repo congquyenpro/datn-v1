@@ -32,9 +32,9 @@
                         </div>
                         <div>
                             <div class="btn-group">
-                                <button class="btn btn-default active">
+                                <a href="{{route('manager.report.fin')}}" class="btn btn-default active">
                                     <span>Xem chi tiết</span>
-                                </button>
+                                </a>
                                 <!--                                                 <button class="btn btn-default">
                                     <span>Year</span>
                                 </button> -->
@@ -42,7 +42,7 @@
                         </div>
                     </div>
                     <div class="m-t-50" style="height: 330px">
-                        <canvas class="chart" id="revenue-chart"></canvas>
+                        <canvas class="chart" id="revenue-chart-2"></canvas>
                     </div>
                 </div>
             </div>

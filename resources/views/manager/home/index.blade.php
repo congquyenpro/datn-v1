@@ -8,6 +8,12 @@
         max-height: 4000px;
     }
 </style>
+<link href="{{asset('admin_assets/assets/vendors/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet">
+<link href="{{asset('admin_assets/assets/vendors/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet">
+<link href="{{asset('admin_assets/page/css/order.css')}}" rel="stylesheet">
+
+<link href="{{asset('admin_assets/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css')}}" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
 @endsection
 
 @section('page_content')
@@ -18,7 +24,7 @@
                 <div class="col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="card-title"><b>KẾT QUẢ KINH DOANH TRONG NGÀY</b></div>
+                            <div class="card-title"><b>DOANH THU NGÀY</b></div>
                             <hr>
                             <div class="row">
                                 <div class="col-sm-6 col-md-6 col-lg-4">
@@ -74,30 +80,23 @@
                 <div class="col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="card-title"><b>DOANH THU BÁN HÀNG</b></div>
-                            <hr>
+                            <div class="card-title"><b>DOANH THU THÁNG</b></div>
+                            
                             <!-- Range Datepicker-->
-                            <div class="row">
-                                <div class="col-sm-12 col-md-6 col-lg-6">
-                                    <div class="form-group">
-                                        <label>Tổng quan báo cáo</label>
-                                        <div class="d-flex align-items-center">
-                                            <input type="text" class="form-control datepicker-input" name="start" placeholder="From">
-                                            <span class="p-h-10">to</span>
-                                            <input type="text" class="form-control datepicker-input" name="end" placeholder="To">
-                                            <button class="btn btn-default m-l-5"><i class="anticon anticon-file-search"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div>
+                                <h4 class="m-b-0" id="total-month-revenue"></h4>
                             </div>
-                            <canvas id="myChart"></canvas>
+                            <hr>
+                            <div class="m-t-50" style="height: 330px">
+                                <canvas class="chart" id="revenue-chart-2"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="card-title"><b>THỐNG KÊ</b></div>
+                            <div class="card-title"><b>THỐNG KÊ HỆ THỐNG (Coming soon)</b></div>
                             <hr>
                             <div class="row">
                                 <div class="col-sm-6 col-md-6 col-lg-4">
@@ -150,7 +149,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="col-md-12 col-sm-12 col-lg-12">
                     <div class="card">
                         <div class="card-body">
                            <div class="d-flex justify-content-between align-items-center">
@@ -161,133 +160,13 @@
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
+                                                <th>ID</th>
                                                 <th>Sản phẩm</th>
                                                 <th>Đã bán</th>
                                                 <th>Doanh thu</th>
-                                                <th style="max-width: 70px">Tồn kho</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="media align-items-center">
-                                                        <div class="avatar avatar-image rounded">
-                                                            <img src="https://placehold.co/128x128" alt="">
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            <span>Gray Sofa</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>81</td>
-                                                <td>$1,912.00</td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="progress progress-sm w-100 m-b-0">
-                                                            <div class="progress-bar bg-success" style="width: 82%"></div>
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            82
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="media align-items-center">
-                                                        <div class="avatar avatar-image rounded">
-                                                            <img src="https://placehold.co/128x128" alt="">
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            <span>Gray Sofa</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>26</td>
-                                                <td>$1,377.00</td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="progress progress-sm w-100 m-b-0">
-                                                            <div class="progress-bar bg-success" style="width: 61%"></div>
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            61
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="media align-items-center">
-                                                        <div class="avatar avatar-image rounded">
-                                                            <img src="https://placehold.co/128x128" alt="">
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            <span>Wooden Rhino</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>71</td>
-                                                <td>$9,212.00</td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="progress progress-sm w-100 m-b-0">
-                                                            <div class="progress-bar bg-danger" style="width: 23%"></div>
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            23
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="media align-items-center">
-                                                        <div class="avatar avatar-image rounded">
-                                                            <img src="https://placehold.co/128x128" alt="">
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            <span>Red Chair</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>79</td>
-                                                <td>$1,298.00</td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="progress progress-sm w-100 m-b-0">
-                                                            <div class="progress-bar bg-warning" style="width: 54%"></div>
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            54
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="media align-items-center">
-                                                        <div class="avatar avatar-image rounded">
-                                                            <img src="https://placehold.co/128x128" alt="">
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            <span>Wristband</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>60</td>
-                                                <td>$7,376.00</td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="progress progress-sm w-100 m-b-0">
-                                                            <div class="progress-bar bg-success" style="width: 76%"></div>
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            76
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                        <tbody id="best-selling-body">
                                         </tbody>
                                     </table>
                                 </div>
@@ -295,144 +174,24 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="col-md-12 col-lg-12 col-sm-12">
                     <div class="card">
                         <div class="card-body">
                            <div class="d-flex justify-content-between align-items-center">
-                                <h5><b>SẢN PHẨM XU HƯỚNG</b></h5>
+                                <h5><b>SẢN PHẨM TIỀM NĂNG</b></h5>
                             </div>
                             <div class="m-t-30">
                                 <div class="table-responsive">
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
+                                                <th>ID</th>
                                                 <th>Sản phẩm</th>
-                                                <th>Đã bán</th>
+                                                <th>Lượt xem</th>
                                                 <th>Doanh thu</th>
-                                                <th style="max-width: 70px">Tồn kho</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="media align-items-center">
-                                                        <div class="avatar avatar-image rounded">
-                                                            <img src="https://placehold.co/128x128" alt="">
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            <span>Gray Sofa</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>81</td>
-                                                <td>$1,912.00</td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="progress progress-sm w-100 m-b-0">
-                                                            <div class="progress-bar bg-success" style="width: 82%"></div>
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            82
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="media align-items-center">
-                                                        <div class="avatar avatar-image rounded">
-                                                            <img src="https://placehold.co/128x128" alt="">
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            <span>Gray Sofa</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>26</td>
-                                                <td>$1,377.00</td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="progress progress-sm w-100 m-b-0">
-                                                            <div class="progress-bar bg-success" style="width: 61%"></div>
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            61
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="media align-items-center">
-                                                        <div class="avatar avatar-image rounded">
-                                                            <img src="https://placehold.co/128x128" alt="">
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            <span>Wooden Rhino</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>71</td>
-                                                <td>$9,212.00</td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="progress progress-sm w-100 m-b-0">
-                                                            <div class="progress-bar bg-danger" style="width: 23%"></div>
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            23
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="media align-items-center">
-                                                        <div class="avatar avatar-image rounded">
-                                                            <img src="https://placehold.co/128x128" alt="">
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            <span>Red Chair</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>79</td>
-                                                <td>$1,298.00</td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="progress progress-sm w-100 m-b-0">
-                                                            <div class="progress-bar bg-warning" style="width: 54%"></div>
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            54
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="media align-items-center">
-                                                        <div class="avatar avatar-image rounded">
-                                                            <img src="https://placehold.co/128x128" alt="">
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            <span>Wristband</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>60</td>
-                                                <td>$7,376.00</td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="progress progress-sm w-100 m-b-0">
-                                                            <div class="progress-bar bg-success" style="width: 76%"></div>
-                                                        </div>
-                                                        <div class="m-l-10">
-                                                            76
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                        <tbody id="top-view-body">
                                         </tbody>
                                     </table>
                                 </div>
@@ -489,12 +248,197 @@
                     </div>
                 </div>
             </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="m-b-0">Thống kê kho</h5>
+                        <div>
+                            <a href="/admin/warehouse" class="btn btn-sm btn-default">Xem</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-t-10">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#tab-today">Tồn kho</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tab-week1"></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tab-month1"></a>
+                        </li>
+                    </ul>
+                    <div class="tab-content m-t-15">
+                        <div class="tab-pane card-body fade active show" id="tab-today">
+                            <div class="alert alert-primary">
+                                <p class="font-weight-bold"> Số tồn kho:</p>
+                                <p id="inventory-quantity"></p>
+                            </div>
+                            <div class="alert alert-primary">
+                                <p class="font-weight-bold"> Giá trị tồn kho:</p>
+                                <p id="inventory-value"></p>
+                            </div>
+                        </div>
+                        <div class="tab-pane card-body fade" id="tab-week">
+                            <div class="m-b-15">
+                                <div class="d-flex align-items-center">
+                                    <div class="checkbox">
+                                        <input id="task-week-1" type="checkbox">
+                                        <label for="task-week-1" class="d-flex align-items-center">
+                                            <div class="inline-block m-l-10">
+                                                <h5 class="m-b-0">Verify connectivity</h5>
+                                                <p class="m-b-0 text-muted font-size-13">Bugger bag
+                                                    egg's old boy willy jolly</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-b-15">
+                                <div class="d-flex align-items-center">
+                                    <div class="checkbox">
+                                        <input id="task-week-2" type="checkbox">
+                                        <label for="task-week-2" class="d-flex align-items-center">
+                                            <div class="inline-block m-l-10">
+                                                <h5 class="m-b-0">Order console machines</h5>
+                                                <p class="m-b-0 text-muted font-size-13">Value
+                                                    proposition alpha crowdsource</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-b-15">
+                                <div class="d-flex align-items-center">
+                                    <div class="checkbox">
+                                        <input id="task-week-3" type="checkbox" checked="">
+                                        <label for="task-week-3" class="d-flex align-items-center">
+                                            <div class="inline-block m-l-10">
+                                                <h5 class="m-b-0">Customize Template</h5>
+                                                <p class="m-b-0 text-muted font-size-13">Do you see any
+                                                    Teletubbies in here</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-b-15">
+                                <div class="d-flex align-items-center">
+                                    <div class="checkbox">
+                                        <input id="task-week-4" type="checkbox" checked="">
+                                        <label for="task-week-4" class="d-flex align-items-center">
+                                            <div class="inline-block m-l-10">
+                                                <h5 class="m-b-0">Batch schedule</h5>
+                                                <p class="m-b-0 text-muted font-size-13">Trillion a very
+                                                    small stage in a vast</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-b-15">
+                                <div class="d-flex align-items-center">
+                                    <div class="checkbox">
+                                        <input id="task-week-5" type="checkbox" checked="">
+                                        <label for="task-week-5" class="d-flex align-items-center">
+                                            <div class="inline-block m-l-10">
+                                                <h5 class="m-b-0">Prepare implementation</h5>
+                                                <p class="m-b-0 text-muted font-size-13">Drop in axle
+                                                    roll-in rail slide</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane card-body fade" id="tab-month">
+                            <div class="m-b-15">
+                                <div class="d-flex align-items-center">
+                                    <div class="checkbox">
+                                        <input id="task-month-1" type="checkbox">
+                                        <label for="task-month-1" class="d-flex align-items-center">
+                                            <div class="inline-block m-l-10">
+                                                <h5 class="m-b-0">Create user groups</h5>
+                                                <p class="m-b-0 text-muted font-size-13">Nipperkin run a
+                                                    rig ballast chase</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-b-15">
+                                <div class="d-flex align-items-center">
+                                    <div class="checkbox">
+                                        <input id="task-month-2" type="checkbox" checked="">
+                                        <label for="task-month-2" class="d-flex align-items-center">
+                                            <div class="inline-block m-l-10">
+                                                <h5 class="m-b-0">Design Wireframe</h5>
+                                                <p class="m-b-0 text-muted font-size-13">Value
+                                                    proposition alpha crowdsource</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-b-15">
+                                <div class="d-flex align-items-center">
+                                    <div class="checkbox">
+                                        <input id="task-month-3" type="checkbox">
+                                        <label for="task-month-3" class="d-flex align-items-center">
+                                            <div class="inline-block m-l-10">
+                                                <h5 class="m-b-0">Customize Template</h5>
+                                                <p class="m-b-0 text-muted font-size-13">I'll be sure to
+                                                    note that</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-b-15">
+                                <div class="d-flex align-items-center">
+                                    <div class="checkbox">
+                                        <input id="task-month-4" type="checkbox">
+                                        <label for="task-month-4" class="d-flex align-items-center">
+                                            <div class="inline-block m-l-10">
+                                                <h5 class="m-b-0">Management meeting</h5>
+                                                <p class="m-b-0 text-muted font-size-13">Hand-crafted
+                                                    exclusive finest</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-b-15">
+                                <div class="d-flex align-items-center">
+                                    <div class="checkbox">
+                                        <input id="task-month-5" type="checkbox" checked="">
+                                        <label for="task-month-5" class="d-flex align-items-center">
+                                            <div class="inline-block m-l-10">
+                                                <h5 class="m-b-0">Extend data model</h5>
+                                                <p class="m-b-0 text-muted font-size-13">European minnow
+                                                    priapumfish mosshead</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
 @endsection
 
 @section('page_js')
+<script src="{{asset('admin_assets/assets/vendors/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('admin_assets/assets/vendors/datatables/dataTables.bootstrap.min.js')}}"></script>
+<script src="{{asset('admin_assets/assets/js/pages/e-commerce-order-list.js')}}"></script>
+
+<script src="{{asset('admin_assets/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
 <script>
     // Thiết lập dữ liệu cho biểu đồ
     const ctx = document.getElementById('myChart').getContext('2d');
@@ -539,4 +483,7 @@
 <script>
     $('.datepicker-input').datepicker();
 </script>
+
+<script src="{{asset('admin_assets/page/js/api.js')}}"></script>
+<script src="{{asset('admin_assets/page/js/home.js')}}"></script>
 @endsection

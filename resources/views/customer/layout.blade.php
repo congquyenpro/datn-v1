@@ -215,7 +215,7 @@
 												</span>
                                     </div>
                                     <div class="actions">
-                                        <a class="button button-viewcart" href="shoppingcart.html">
+                                        <a class="button button-viewcart" href="{{route('customer.cart')}}">
                                             <span>View</span>
                                         </a>
                                         <a href="{{route('customer.checkout')}}" class="button button-checkout">

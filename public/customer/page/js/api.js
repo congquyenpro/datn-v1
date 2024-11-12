@@ -136,10 +136,9 @@ Api.Order.getOrderHistory = (status) => $.ajax({
 
 
 /* Comment */
-Api.Comment.getComments = (product_id) => $.ajax({
-/*     url: `http://127.0.0.1:3000/comments?product_id=${product_id}`,
-    method: 'GET', */
-    url: `/api-v1/comment/test`,
+Api.Comment.getComments = (slug) => $.ajax({
+    //url: `http://127.0.0.1:3000/comments?slug=${slug}`,
+    url: `/api-v1/comment/all/${slug}`,
     method: 'GET',
 });
 

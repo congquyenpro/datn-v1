@@ -318,8 +318,8 @@ Report = {
 }
 
 Report.saleReport.init();
-Report.saleReport2.init();
-Report.customerChart.init();
+//Report.saleReport2.init();
+//Report.customerChart.init();
 
 Report.product.getBestSeller();
 Report.product.getTopViewed();

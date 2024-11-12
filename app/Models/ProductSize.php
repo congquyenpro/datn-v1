@@ -11,6 +11,8 @@ class ProductSize extends Model
         'quantity',
         'price',
         'discount',
+        'entry_price',
+        'inventory_quantity',
     ];
 
     public function product()

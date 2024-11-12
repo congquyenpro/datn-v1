@@ -32,6 +32,9 @@ class DisplayController extends Controller
         $related_products = $this->productService->getRelatedProduct($product->id);
         return view('customer.product-detail',compact('product','related_products'));
     }
+    public function cart(){
+        return view('customer.cart');
+    }
 
     public function checkout(){
         return view('customer.checkout');

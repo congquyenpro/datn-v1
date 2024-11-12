@@ -252,6 +252,7 @@ Route::prefix('/')->group(function() {
     Route::get('/nuoc-hoa/{slug}','Customer\DisplayController@displayProduct')->name('customer.product');
 
     /* Cart and Checkout */
+    Route::get('/cart','Customer\DisplayController@cart')->name('customer.cart');
     Route::get('/checkout','Customer\DisplayController@checkout')->name('customer.checkout');
     Route::get('/order-success','Customer\DisplayController@orderSuccess')->name('customer.order-success');
     Route::get('/order-detail','Customer\DisplayController@orderDetail')->name('customer.order-detail');

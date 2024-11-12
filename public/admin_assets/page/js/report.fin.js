@@ -137,7 +137,7 @@ FinReport = {
                         <td id="rate4"></td>
                     </tr>
 
-                    <tr>
+<!--                    <tr>
                         <td> 2. Thuế VAT</td>
                         <td>0</td>
                         <td>0</td>
@@ -154,7 +154,7 @@ FinReport = {
                         <td>0</td>
                         <td>0</td>
                         <td>0</td>
-                    </tr>
+                    </tr>                           -->
 
                     <!-- ...Thêm các dòng khác tương tự... -->
 
@@ -249,9 +249,9 @@ FinReport = {
                 [' 1. Tiền Hàng Thực Bán (1a-1b)', data.sale.total_real_sale, data.sale_last_month.total_real_sale, ''],
                 ['   a. Tiền Hàng Bán Ra', data.sale.total_sale, data.sale_last_month.total_sale, ''],
                 ['   b. Tiền Hàng Trả Lại', data.sale.total_return_sale, data.sale_last_month.total_return_sale, ''],
-                [' 2. Thuế VAT', 0, 0, 0],
+/*                 [' 2. Thuế VAT', 0, 0, 0],
                 [' 3. Phí giao hàng thu của khách', 0, 0, 0],
-                [' 4. Chiết khấu', 0, 0, 0],
+                [' 4. Chiết khấu', 0, 0, 0], */
                 ['II. Chi Phí Bán Hàng (1+2+3)', data.sale.total_cost_sale, data.sale_last_month.total_cost_sale, ''],
                 [' 1. Chi phí giá vốn hàng hóa', data.sale.total_entry_value, data.sale_last_month.total_entry_value, ''],
                 [' 2. Phí giao hàng trả đối tác', data.sale.total_shipping_cost, data.sale_last_month.total_shipping_cost, ''],
