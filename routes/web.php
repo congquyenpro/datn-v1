@@ -220,6 +220,10 @@ Route::prefix('/')->group(function() {
         Route::get('/product/type/{type}', 'Customer\ProductController@getProductByType');
         Route::get('/product/detail/{slug}', 'Customer\ProductController@getProductDetail');
         Route::get('/product/related/{product_id}', 'Customer\ProductController@getRelatedProduct');
+        //get similar products
+        Route::get('/product/similar/{product_id}', 'Customer\ProductController@getSimilarProduct');
+
+
 
         /* Attribute-Value */
         Route::get('/attribute-value/all', 'Customer\ProductController@getAllAttributes');

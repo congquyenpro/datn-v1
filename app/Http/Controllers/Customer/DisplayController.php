@@ -30,7 +30,8 @@ class DisplayController extends Controller
     public function displayProduct(Request $request){
         $product = $this->productService->getProductBySlug($request->slug);
         $related_products = $this->productService->getRelatedProduct($product->id);
-        return view('customer.product-detail',compact('product','related_products'));
+        $similar_products = $this->productService->getSimilarProduct($product->id);
+        return view('customer.product-detail',compact('product','related_products','similar_products'));
     }
     public function cart(){
         return view('customer.cart');

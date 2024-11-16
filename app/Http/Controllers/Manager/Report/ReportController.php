@@ -47,9 +47,11 @@ class ReportController extends Controller
 
     public function getSalesReport($startDate, $endDate)
     {
+        //old-version: total_sale và total_shipping_cost(query2) NOT IN (0, 6, 7)=> đơn trả lại không được tính là đã bán
+        //new-version: total_sale và total_shipping_cost(query2): NOT IN (0, 6) => đơn trả lại cũng được tính là đã bán
         $query = "
         SELECT 
-            COALESCE(SUM(CASE WHEN od.status NOT IN (0, 6, 7) THEN oi.item_value ELSE 0 END), 0) AS total_sale,
+            COALESCE(SUM(CASE WHEN od.status NOT IN (0, 6) THEN oi.item_value ELSE 0 END), 0) AS total_sale,
             COALESCE(SUM(CASE WHEN od.status = 7 THEN oi.item_value ELSE 0 END), 0) AS total_return_sale,
             COALESCE(SUM(CASE WHEN od.status NOT IN (0, 6, 7) THEN oi.entry_price ELSE 0 END), 0) AS total_entry_value,
             COALESCE(SUM(CASE WHEN od.status NOT IN (0, 6, 7) THEN od.shipping_cost ELSE 0 END), 0) AS total_shipping_cost
@@ -61,7 +63,7 @@ class ReportController extends Controller
         ";
         $query2 = "
         SELECT 
-            COALESCE(SUM(CASE WHEN od.status NOT IN (0, 6, 7) THEN od.shipping_cost ELSE 0 END), 0) AS total_shipping_cost
+            COALESCE(SUM(CASE WHEN od.status NOT IN (0, 6) THEN od.shipping_cost ELSE 0 END), 0) AS total_shipping_cost
         FROM orders AS od
         WHERE 
             od.order_date BETWEEN ? AND ?

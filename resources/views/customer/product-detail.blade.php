@@ -345,61 +345,66 @@
 					<div class="related products product-grid">
 						<h2 class="product-grid-title">You may also like</h2>
 						<div class="owl-products owl-slick equal-container nav-center"  data-slick ='{"autoplay":false, "autoplaySpeed":1000, "arrows":true, "dots":false, "infinite":true, "speed":800, "rows":1}' data-responsive='[{"breakpoint":"2000","settings":{"slidesToShow":3}},{"breakpoint":"1200","settings":{"slidesToShow":2}},{"breakpoint":"992","settings":{"slidesToShow":2}},{"breakpoint":"480","settings":{"slidesToShow":1}}]'>
-							<div class="product-item style-1">
-								<div class="product-inner equal-element">
-									<div class="product-top">
-										<div class="flash">
-													<span class="onnew">
-														<span class="text">
-															new
-														</span>
-													</span>
-										</div>
-									</div>
-									<div class="product-thumb">
-										<div class="thumb-inner">
-											<a href="#">
-												<img src="" alt="img">
-											</a>
-											<div class="thumb-group">
-												<div class="yith-wcwl-add-to-wishlist">
-													<div class="yith-wcwl-add-button">
-														<a href="#">Add to Wishlist</a>
+							@if ($similar_products->isNotEmpty())
+								@foreach ($similar_products as $sp)
+									<div class="product-item style-1" data-id="{{$sp['id']}}" data-id-size="{{$sp['product_size_id']}}" data-size="{{$sp['size']}}">
+										<div class="product-inner equal-element">
+											<div class="product-top">
+												<div class="flash">
+															<span class="onnew">
+																<span class="text">
+																	Trending
+																</span>
+															</span>
+												</div>
+											</div>
+											<div class="product-thumb">
+												<div class="thumb-inner">
+													<a href="/nuoc-hoa/{{$sp['slug']}}">
+														<img src="/{{$sp['image']}}" alt="img">
+													</a>
+													<div class="thumb-group">
+														<div class="yith-wcwl-add-to-wishlist">
+															<div class="yith-wcwl-add-button">
+																<a href="#">Add to Wishlist</a>
+															</div>
+														</div>
+														<a href="#" class="button quick-wiew-button">Quick View</a>
+														<div class="loop-form-add-to-cart">
+															<button class="single_add_to_cart_button button">Add to cart
+															</button>
+														</div>
 													</div>
 												</div>
-												<a href="#" class="button quick-wiew-button">Quick View</a>
-												<div class="loop-form-add-to-cart">
-													<button class="single_add_to_cart_button button">Add to cart
-													</button>
+											</div>
+											<div class="product-info">
+												<h5 class="product-name product_title">
+													<a href="/nuoc-hoa/{{$sp['slug']}}">{{$sp['name']}}</a>
+												</h5>
+												<div class="group-info">
+													<div class="stars-rating">
+														<div class="star-rating">
+															<span class="star-5"></span>
+														</div>
+														<div class="count-star">
+															(3)
+														</div>
+													</div>
+													<div class="price">
+														<del>
+															{{$sp['price']}}
+														</del>
+														<ins>
+															{{$sp['discounted_price']}}
+														</ins>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-									<div class="product-info">
-										<h5 class="product-name product_title">
-											<a href="#">Dainty Bangle</a>
-										</h5>
-										<div class="group-info">
-											<div class="stars-rating">
-												<div class="star-rating">
-													<span class="star-3"></span>
-												</div>
-												<div class="count-star">
-													(3)
-												</div>
-											</div>
-											<div class="price">
-												<del>
-													$65
-												</del>
-												<ins>
-													$45
-												</ins>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+								@endforeach
+							@endif
+
 							<div class="product-item style-1">
 								<div class="product-inner equal-element">
 									<div class="product-top">
@@ -605,7 +610,7 @@
 									</div>
 									<div class="author">
 										<div class="avt">
-											<img src="assets/images/member1.png" alt="img">
+											<img src="/customer/page/images/user_avatar.jpeg" alt="img">
 										</div>
 										<h3 class="name">
 											Mr. PFP
@@ -624,7 +629,7 @@
 									</div>
 									<div class="author">
 										<div class="avt">
-											<img src="assets/images/member2.png" alt="img">
+											<img src="/customer/page/images/user_avatar.jpeg" alt="img">
 										</div>
 										<h3 class="name">
 											Tom Milikin
@@ -644,7 +649,7 @@
 							{{-- DÙng only nên trả về mảng--}}
 							@if($related_products->isNotEmpty())
 								@foreach ($related_products as $rp)
-									<div class="product-item style-1">
+									<div class="product-item style-1" data-id="{{$rp['id']}}" data-id-size="{{$rp['product_size_id']}}" data-size="{{$rp['size']}}">
 										<div class="product-inner equal-element">
 											<div class="product-top">
 												<div class="flash">

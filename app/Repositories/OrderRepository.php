@@ -62,6 +62,7 @@ class OrderRepository extends BaseRepository implements IBaseRepository
             4 => 'Đang giao hàng',
             5 => 'Đã giao hàng',
             6 => 'Đã hủy',
+            7 => 'Hoàn trả',
         ];
         // Lấy log cũ
         $log = json_decode($order->log);

@@ -9,6 +9,7 @@ use App\Models\ProductAttribute;
 use App\Models\AttributeValue;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
 
 class ProductRepository extends BaseRepository 
 {
@@ -654,10 +655,11 @@ class ProductRepository extends BaseRepository
                 // Set price to the first size's price
                 if ($product->productSizes->isNotEmpty()) {
                     $firstSize = $product->productSizes->first();
-                    $product->price = $firstSize->price;
+                    $product->price = $firstSize->price + $firstSize->price*$firstSize->discount/100;
                     $product->product_size_id = $firstSize->id;
                     $product->discount = $firstSize->discount;
-                    $product->discounted_price = $firstSize->price - $firstSize->price*$firstSize->discount/100;
+                    $product->discounted_price = $firstSize->price;
+                    $product->size = $firstSize->volume;
                 }
     
                 // Get only the first image from the images string
@@ -665,13 +667,114 @@ class ProductRepository extends BaseRepository
                 $product->image = trim($imagesArray[0]);
     
                 // Trả về các trường mong muốn
-                return $product->only(['id', 'slug', 'name', 'product_size_id', 'image', 'price', 'discount','discounted_price']);
+                return $product->only(['id', 'slug', 'name', 'product_size_id', 'image', 'price', 'discount','discounted_price','size']);
             });
     }
     
+    public function getSimilarProducts1($product_id)
+    {
+        // Call the external API to get similar products based on the product_id
+        $response = Http::get('http://127.0.0.1:8080/recommend', [
+            'product_id' => $product_id
+        ]);
     
+        // Process the response data
+        $products = $response->json();
+        
+        // Check if the API returned data successfully
+        if ($products['code'] === 200 && isset($products['data'])) {
+            $similarProducts = $products['data'];
+            
+            // Map the similar products to the desired format
+            $similarProductIds = collect($similarProducts)->pluck('product_id')->toArray();
+    
+            // Fetch the products from the database based on the IDs
+            $relatedProducts = $this->product
+                ->whereIn('id', $similarProductIds) // Get products by IDs
+                ->with('productSizes') // Load productSizes relationship
+                ->get()
+                ->map(function ($product) {
+                    // Set price to the first size's price
+                    if ($product->productSizes->isNotEmpty()) {
+                        $firstSize = $product->productSizes->first();
+                        $product->price = $firstSize->price;
+                        $product->product_size_id = $firstSize->id;
+                        $product->discount = $firstSize->discount;
+                        $product->discounted_price = $firstSize->price - $firstSize->price * $firstSize->discount / 100;
+                    }
+    
+                    // Get only the first image from the images string
+                    $imagesArray = explode(',', $product->images);
+                    $product->image = trim($imagesArray[0]);
+    
+                    // Return the desired fields
+                    return $product->only(['id', 'slug', 'name', 'product_size_id', 'image', 'price', 'discount', 'discounted_price']);
+                });
+    
+            return $relatedProducts;
+        } else {
+            $products = $this->getRelatedProduct($product_id);
+        }
+    
+        // If no data is returned or the response is not successful, return null
+        return null;
+    }
+    
+    public function getSimilarProducts($product_id)
+    {
+        try {
+            // Sử dụng throw() để ném ngoại lệ nếu có lỗi HTTP
+            $response = Http::get('http://127.0.0.1:8080/recommend', [
+                'product_id' => $product_id
+            ])->throw();
+            
+            // Xử lý dữ liệu phản hồi
+            $products = $response->json();
+            
+            // Kiểm tra nếu API trả về dữ liệu thành công
+            if ($products['code'] === 200 && isset($products['data'])) {
+                $similarProducts = $products['data'];
+                
+                // Lấy danh sách product_id từ kết quả trả về
+                $similarProductIds = collect($similarProducts)->pluck('product_id')->toArray();
+    
+                // Truy vấn sản phẩm từ database theo danh sách ID
+                $relatedProducts = $this->product
+                    ->whereIn('id', $similarProductIds)
+                    ->with('productSizes')
+                    ->get()
+                    ->map(function ($product) {
+                        if ($product->productSizes->isNotEmpty()) {
+                            $firstSize = $product->productSizes->first();
+                            $product->price = $firstSize->price + $firstSize->price * $firstSize->discount / 100;
+                            $product->product_size_id = $firstSize->id;
+                            $product->discount = $firstSize->discount;
+                            $product->discounted_price = $firstSize->price;
+                            $product->size = $firstSize->volume;
+                        }
+    
+                        $imagesArray = explode(',', $product->images);
+                        $product->image = trim($imagesArray[0]);
+    
+                        return $product->only(['id', 'slug', 'name', 'product_size_id', 'image', 'price', 'discount', 'discounted_price', 'size']);
+                    });
+    
+                // Sắp xếp lại theo thứ tự của similarProductIds
+                $relatedProducts = $relatedProducts->sortBy(function ($product) use ($similarProductIds) {
+                    return array_search($product['id'], $similarProductIds);
+                })->values();
+    
+                return $relatedProducts;
+            } else {
+                return $this->getRelatedProduct($product_id);
+            }
+        } catch (\Exception $e) {
+            // Log lỗi nếu có ngoại lệ
+            \Log::error('Error fetching similar products: ' . $e->getMessage());
+            return $this->getRelatedProduct($product_id);
+        }
+    }
     
     
 
-    
 }

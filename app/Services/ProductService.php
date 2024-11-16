@@ -93,6 +93,11 @@ class ProductService
         return $this->productRepository->getRelatedProduct($product_id);
     }
 
+    public function getSimilarProduct($product_id)
+    {
+        return $this->productRepository->getSimilarProducts($product_id);
+    }
+
 
     
 

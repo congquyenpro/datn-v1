@@ -163,10 +163,15 @@ class OrderController extends Controller
             'client_order_code' => $order['client_order_code'] ?? null, // Mã đơn hàng riêng của khách hàng (tùy chọn)
             'from_name' => $order['from_name'] ?? 'BK Perfume', // Tên người gửi
             'from_phone' => $order['from_phone'] ?? '0987654321', // Số điện thoại người gửi
-            'from_address' => $order['from_address'] ?? '122, Phường Trương Định, Quận Hai Bà Trưng, Hà Nội, Vietnam', // Địa chỉ người gửi
-            'from_ward_name' => $order['from_ward_name'] ?? 'Phường Trương Định', // Phường/Xã của người gửi
-            'from_district_name' => $order['from_district_name'] ?? 'Quận Hai Bà Trưng', // Quận/Huyện của người gửi
-            'from_province_name' => $order['from_province_name'] ?? 'Hà Nội', // Tỉnh của người gửi
+            'from_address' => $order['from_address'] ?? '122, Phường Trương Định, Quận Hai Bà Trưng, Hà Nội, Vietnam', 
+            'from_ward_name' => $order['from_ward_name'] ?? 'Phường Trương Định', 
+            'from_district_name' => $order['from_district_name'] ?? 'Quận Hai Bà Trưng', 
+            'from_province_name' => $order['from_province_name'] ?? 'Hà Nội', 
+/*             'from_address' => '122, Phường Trương Định, Quận Hai Bà Trưng, Hà Nội, Vietnam', 
+            'from_ward_name' => 'Phường Trương Định', 
+            'from_district_name' => 'Quận Hai Bà Trưng', 
+            'from_province_name' => 'Hà Nội',  */
+
             'to_name' => $order['to_name'] ?? 'TinTest124', // Tên người nhận hàng
             'to_phone' => $order['to_phone'] ?? '0987654321', // Số điện thoại người nhận hàng
             'to_address' => $order['to_address'] ?? '72 Thành Thái, Phường 14, Quận 10, Hồ Chí Minh, Vietnam', // Địa chỉ người nhận hàng

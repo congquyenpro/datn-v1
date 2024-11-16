@@ -17,6 +17,7 @@ const Order = {
                         '<span class="badge m-b-5 mr-1 badge-purple badge-pill">Đang giao hàng</span>',
                         '<span class="badge m-b-5 mr-1 badge-success badge-pill">Đã giao hàng</span>',
                         '<span class="badge m-b-5 mr-1 badge-danger badge-pill">Đã hủy</span>',
+                        '<span class="badge m-b-5 mr-1 badge-danger badge-pill">Hoàn trả</span>',
                     ];
                     var payment_status = [
                         `<span class="badge m-b-5 mr-1 badge-warning badge-pill">Chưa thanh toán</span>`,
@@ -619,6 +620,7 @@ const Order = {
                 <option value="4">Đang giao hàng</option>
                 <option value="5" selected>Đã giao hàng</option>
                 <option value="6">Đã hủy</option>
+                <option value="7">Hoàn trả</option>
             `);
 /*             $('#order-detail-body').append(`
                 <!-- Theo dõi đơn hàng -->
@@ -1112,6 +1114,16 @@ const Order = {
                     $(document).off('click', '#submit-order-ticket');
                     $(document).on('click', '#submit-order-ticket', function() {
                         Api.Order.submitTicket (id, data).done((response) => {
+                            if (response.code == 400) {
+                                if (response.message == "Lỗi gọi API: corev2_tenant_order_create - Lỗi hệ thống - không lấy được thông tin kho"){
+                                    alert('Tạo đơn thất bại: Lỗi hệ thống -  không lấy được thông tin kho gửi hàng - Đổi địa chỉ hoặc liên hệ GHN !');
+                                }
+                                else {
+                                    alert('Tạo đơn thất bại: '+ response.code_message_value);
+                                    return;
+                                }
+
+                            }
                             console.log(response);
                             // Hiển thị thông báo ngay lập tức
                             $('#submit-order-ticket').html(`
@@ -1120,8 +1132,13 @@ const Order = {
 
                             // Ẩn modal sau 3 giây
                             setTimeout(() => {
+                                $('#submit-order-ticket').html(`
+                                    Tạo đơn
+                                `)
                                 $('#exampleModalCenter').modal('hide');
                             }, 3000);
+                        }).fail((response) => {
+                            alert('Tạo đơn thất bại', response);
                         });
                     });
 

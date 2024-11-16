@@ -739,6 +739,22 @@
 <script src="{{asset('customer/assets/js/frontend-plugin.js')}}"></script>
 
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Chọn tất cả các nút Quick View
+        var quickViewButtons = document.querySelectorAll('.quick-wiew-button');
+
+        // Vô hiệu hóa sự kiện click cho các nút Quick View
+        quickViewButtons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();  // Ngừng hành động mặc định (hiển thị modal)
+                event.stopPropagation(); // Ngừng sự kiện click lan truyền
+            });
+        });
+    });
+
+</script>
+
 @yield('page_js')
 
 </body>

@@ -41,6 +41,12 @@ class ProductController extends Controller
         $products = $this->productService->getRelatedProduct($product_id);
         return response()->json($products);
     }
+    //get similar product: using TF-IDF
+    public function getSimilarProduct($product_id)
+    {
+        $products = $this->productService->getSimilarProduct($product_id);
+        return $products;
+    }
 
     //get all attributes-values
     public function getAllAttributes(Request $request)
