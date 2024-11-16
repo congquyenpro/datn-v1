@@ -103,6 +103,11 @@
                                     
                                         @if (is_iterable($sizes) && count($sizes) > 0)
                                             @foreach ($sizes as $size)
+												@php
+													if ($size->quantity == 0) {
+														continue;
+													}
+												@endphp
                                                 <a href="#" class="{{ $size->volume == $selectedSize ? 'active' : '' }}" 
                                                    data-size-id="{{ $size->id }}" 
                                                    data-size-price="{{ $size->price }}">

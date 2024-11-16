@@ -99,6 +99,7 @@ class ProductController extends Controller
                 'attributes.*.value_id' => 'required|integer',
                 'product_variants' => 'required|array',
                 'product_variants.*.size' => 'required|integer',
+                'product_variants.*.oldSize' => 'required|integer',
                 'product_variants.*.price' => 'required|integer',
                 'product_variants.*.discount' => 'nullable|integer',
                 'product_variants.*.quantity' => 'required|integer',

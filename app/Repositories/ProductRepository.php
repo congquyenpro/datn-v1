@@ -253,11 +253,12 @@ class ProductRepository extends BaseRepository
             foreach ($data['product_variants'] as $variant) {
                 // Kiểm tra xem kích thước đã tồn tại chưa
                 $productSize = ProductSize::where('product_id', $product->id)
-                                        ->where('volume', $variant['size'])
+                                        ->where('volume', $variant['oldSize'])
                                         ->first();
                 
                 if ($productSize) {
                     // Nếu kích thước đã tồn tại, cập nhật thông tin
+                    $productSize->volume = $variant['size'];
                     $productSize->quantity = $variant['quantity'];
                     $productSize->price = $variant['price'];
                     $productSize->discount = $variant['discount'] ?? 0;
@@ -275,37 +276,20 @@ class ProductRepository extends BaseRepository
             }
 
             // Cập nhật thuộc tính
-            foreach ($data['attributes'] as $attribute) {
-                // Kiểm tra xem thuộc tính đã tồn tại chưa
-                $productAttribute = ProductAttribute::where('product_id', $product->id)
-                                                    ->where('attribute_value_id', $attribute['value_id'])
-                                                    ->first();
-                
-                if (!$productAttribute) {
-                    // Nếu thuộc tính chưa tồn tại, tạo mới
-                    ProductAttribute::create([
-                        'product_id' => $product->id,
-                        'attribute_value_id' => $attribute['value_id'],
+            foreach ($data['attributes'] as $index => $attribute) {
+                // Lấy tất cả các bản ghi của product_id
+                $productAttributes = ProductAttribute::where('product_id', $product->id)
+                                                    ->get(); // Lấy tất cả các bản ghi có cùng product_id
+            
+                // Lấy bản ghi theo thứ tự để cập nhật `attribute_value_id` theo thứ tự bạn muốn
+                if (isset($productAttributes[$index])) {
+                    // Cập nhật giá trị của attribute_value_id theo thứ tự
+                    $productAttributes[$index]->update([
+                        'attribute_value_id' => $attribute['value_id']
                     ]);
                 }
-                //Nếu đã tồn tại thì cập nhật lại
-/*                 else {
-                    $productAttribute->attribute_value_id = $attribute['value_id'];
-                    $productAttribute->save();
-                } */
-
-                //Nếu thuộc tính đã tồn tại trong db thì xóa thuộc tính cũ đó, sau đó tạo mới
-/*                 else {
-                    ProductAttribute::where('product_id', $product->id)
-                                    ->where('attribute_value_id', $attribute['value_id'])
-                                    ->delete();
-                    ProductAttribute::create([
-                        'product_id' => $product->id,
-                        'attribute_value_id' => $attribute['value_id'],
-                    ]);
-                } */
-
             }
+            
 
             return $product; // Đảm bảo trả về sản phẩm đã được cập nhật
         });

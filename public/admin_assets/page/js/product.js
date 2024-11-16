@@ -496,6 +496,10 @@ const Product = {
                                 <label>Dung lượng *</label>
                                 <input type="text" class="form-control data-size number-type" placeholder="ml" value="${size.size}">
                             </div>
+                            <div class="form-group" style="display:none">
+                                <label>Dung lượng cũ *</label>
+                                <input type="text" class="form-control data-old-size number-type" placeholder="ml" value="${size.size}">
+                            </div>
                             <div class="form-group">
                                 <label>Đơn giá *</label>
                                 <input type="text" class="form-control data-prices number-type" placeholder="" value="${size.price}">
@@ -592,7 +596,9 @@ const Product = {
             // Lấy dữ liệu phân loại sản phẩm
             const itemSizes = Array.from(document.querySelectorAll('#itemContainer .metadata-item')).map(item => ({
                 size: item.querySelector('.data-size')?.value || null,
+                oldSize: item.querySelector('.data-old-size')?.value || 999,
                 price: item.querySelector('.data-prices')?.value || null,
+                
                 discount: item.querySelector('.data-discount')?.value || 0,
                 quantity: item.querySelector('.data-quantity')?.value || 0,
                 entry_price: item.querySelector('.data-entry-prices')?.value || 0
@@ -602,6 +608,16 @@ const Product = {
             if (itemSizes.length === 0) {
                 alert("Vui lòng thêm ít nhất một phân loại sản phẩm!");
                 return null; // Trả về null nếu không có phân loại
+            }
+
+            //Thông báo nếu có phân loại có size trùng nhau
+            const sizeSet = new Set();
+            for (const item of itemSizes) {
+                if (sizeSet.has(item.size)) {
+                    alert("Không thể thêm nhiều phân loại cùng kích thước!");
+                    return null; // Trả về null nếu có phân loại trùng kích thước
+                }
+                sizeSet.add(item.size);
             }
     
             return {
@@ -651,7 +667,9 @@ const Product = {
     
                 // Thêm dữ liệu phân loại sản phẩm vào formData
                 inputData.itemSizes.forEach((variant, index) => {
+
                     formData.append(`product_variants[${index}][size]`, variant.size);
+                    formData.append(`product_variants[${index}][oldSize]`, variant.oldSize) || 0;
                     formData.append(`product_variants[${index}][price]`, variant.price);
                     formData.append(`product_variants[${index}][discount]`, variant.discount || 0);
                     formData.append(`product_variants[${index}][quantity]`, variant.quantity || 0);
@@ -708,9 +726,11 @@ const Product = {
                     const price = attr.querySelector('.data-prices').value;
                     const discount = attr.querySelector('.data-discount').value;
                     const quantity = attr.querySelector('.data-quantity').value;
+
+                    const oldSize = attr.querySelector('.data-old-size').value;
             
                     // Thêm thuộc tính vào formData
-                    formData.append('product_variants[]', JSON.stringify({ size, price, discount, quantity }));
+                    formData.append('product_variants[]', JSON.stringify({ size, price, discount, quantity, oldSize }));
                 });
             
                 // Nếu là chỉnh sửa, thêm ảnh đã có vào formData
