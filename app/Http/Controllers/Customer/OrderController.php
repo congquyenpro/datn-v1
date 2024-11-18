@@ -9,16 +9,19 @@ use Illuminate\Support\Facades\Validator;
 use App\Services\ProductService;
 use App\Services\AttributeValueService;
 use App\Services\OrderService;
+use App\Services\HelperService;
 
 class OrderController extends Controller
 {
     protected $productService;
     protected $attributeValueService;
     protected $orderService;
-    public function __construct(ProductService $productService, AttributeValueService $attributeValueService, OrderService $orderService) {
+    protected $helperService;
+    public function __construct(ProductService $productService, AttributeValueService $attributeValueService, OrderService $orderService, HelperService $helperService) {
         $this->productService = $productService;
         $this->attributeValueService = $attributeValueService;
         $this->orderService = $orderService;
+        $this->helperService = $helperService;
     }
 
     public function createOrder(Request $request)
@@ -45,6 +48,9 @@ class OrderController extends Controller
         }
 
         try {
+            $message = "Đơn hàng mới từ: " . $data['name'] . " - " . $data['phone'];
+            $this->helperService->sendNotification($message);
+
             $order = $this->orderService->createOrder($data);
             return response()->json([
                 'message' => 'Order created successfully',

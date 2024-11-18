@@ -315,6 +315,24 @@
                         <li class="nav-item dropdown">
                             <a class="dropdown-toggle" href="javascript:void(0);">
                                 <span class="icon-holder">
+                                    <i class="fas fa-cogs"></i>
+                                </span>
+                                <span class="title">Hệ thống</span>
+                                <span class="arrow">
+                                    <i class="arrow-icon"></i>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{route('manager.users')}}">Người dùng</a>
+                                </li>
+
+
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle" href="javascript:void(0);">
+                                <span class="icon-holder">
                                     <i class="fas fa-sign-out-alt"></i>
                                 </span>
                                 <span class="title">Đăng xuất</span>

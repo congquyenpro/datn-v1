@@ -9,7 +9,7 @@
         }
     }
 </style>
-<link rel="stylesheet" href="{{asset('customer/page/css/shop.css')}}">:
+<link rel="stylesheet" href="{{asset('customer/page/css/shop.css')}}">
 @endsection
 
 @section('page_content')
@@ -23,7 +23,7 @@
                             <a href="index-2.html">Home</a>
                         </li>
                         <li class="trail-item trail-end active">
-                            Grid Products
+                            Shop
                         </li>
                     </ul>
                 </div>
@@ -96,20 +96,17 @@
                                 Popular Tags
                             </h3>
                             <ul class="tagcloud">
-                                <li class="tag-cloud-link">
-                                    <a href="#">All</a>
-                                </li>
-                                <li class="tag-cloud-link active">
-                                    <a href="#">For You</a>
+                                <li class="tag-cloud-link" >
+                                    <a href="javascript:void(0)" id="tag-all">All</a>
                                 </li>
                                 <li class="tag-cloud-link">
-                                    <a href="#">Best Selling</a>
+                                    <a href="javascript:void(0)" id="tag-for_you">For You</a>
                                 </li>
                                 <li class="tag-cloud-link">
-                                    <a href="#">Top Viewed</a>
+                                    <a href="javascript:void(0)" id="tag-best_selling">Best Selling</a>
                                 </li>
                                 <li class="tag-cloud-link">
-                                    <a href="#">New</a>
+                                    <a href="javascript:void(0)" id="tag-trending">Trending</a>
                                 </li>
                             </ul>
                         </div>
@@ -129,7 +126,7 @@
                         </div>
                         <div class="widget widget-categories one-choice" id="filter-by-gender">
                             <h3 class="widgettitle">Giới tính</h3>
-                            <ul class="list-brand" id="filter-gender">
+                            <ul class="list-categories" id="filter-gender">
                             </ul>
                         </div>
                         <div class="widget widget_filter_price" id="filter-by-price">
@@ -143,6 +140,7 @@
                                 <div class="price-slider-amount">
                                     <span class="from">₫500000</span>
                                     <span class="to">₫2000000 </span>
+                                    <span id="price-filter-btn" style="cursor: pointer"><i class="fa fa-filter" aria-hidden="true"></i></span>
                                 </div>
                             </div>
                         </div>
@@ -418,7 +416,14 @@ window.onload = function() {
 
             const link = `/shop?${urlParams.toString()}`;
             history.pushState(null, '', link);
+
+            //PageProduct.products.getDefaultProducts(1, 9, 'price', 'asc');
         }
+        $('#price-filter-btn').off('click');
+            $('#price-filter-btn').on('click', function() {
+                PageProduct.products.getDefaultProducts(1, 9, 'price', 'asc');
+            });
+
 
         // Khởi động giá hiển thị ban đầu
         $('.price-slider-amount .from').text('₫' + $slider.slider("values", 0));
@@ -427,5 +432,18 @@ window.onload = function() {
         // Gọi hàm để thiết lập giá trị slider từ URL
         markPriceRange();
     });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var quickViewButtons2 = document.querySelectorAll('.quick-view-button');
+        quickViewButtons2.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();  // Ngừng hành động mặc định (hiển thị modal)
+                event.stopPropagation(); // Ngừng sự kiện click lan truyền
+            });
+        });
+    });
+
 </script>
 @endsection

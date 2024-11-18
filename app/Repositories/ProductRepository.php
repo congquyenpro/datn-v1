@@ -10,6 +10,7 @@ use App\Models\AttributeValue;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
+use Auth;
 
 class ProductRepository extends BaseRepository 
 {
@@ -773,6 +774,78 @@ class ProductRepository extends BaseRepository
             \Log::error('Error fetching similar products: ' . $e->getMessage());
             return $this->getRelatedProduct($product_id);
         }
+    }
+
+    public function getCollaborativeFiltering($request){
+        if (isset(Auth::user()->id)) {
+            $user_id = Auth::user()->id;
+        } else {
+            $user_id = 3; //Mặc định cho view
+        }
+        try {
+            // Sử dụng throw() để ném ngoại lệ nếu có lỗi HTTP
+            $response = Http::get('http://127.0.0.1:8080/collaborative', [
+                'user_id' => $user_id
+            ])->throw();
+            
+            // Xử lý dữ liệu phản hồi
+            $products = $response->json();
+            
+            // Kiểm tra nếu API trả về dữ liệu thành công
+            if ($products['code'] === 200 && isset($products['data'])) {
+                $recommendProducts = $products['data'];
+                
+                // Lấy danh sách product_id từ kết quả trả về
+                $recommendProductIds = collect($recommendProducts)->pluck('product_id')->toArray();
+    
+                // Truy vấn sản phẩm từ database theo danh sách ID
+                
+    
+                return  $recommendProductIds;
+            } else {
+                return $this->getRelatedProduct($user_id);
+            }
+        } catch (\Exception $e) {
+            // Log lỗi nếu có ngoại lệ
+            \Log::error('Error fetching recommend products: ' . $e->getMessage());
+            return $this->getRelatedProduct($user_id);
+        }     
+    }
+
+    public function getCollaborativeFiltering2($request){
+        if (isset(Auth::user()->id)) {
+            $user_id = Auth::user()->id;
+        } else {
+            $user_id = 3; //Mặc định cho view
+        }
+        try {
+            // Sử dụng throw() để ném ngoại lệ nếu có lỗi HTTP
+            $response = Http::get('http://127.0.0.1:8080/collaborative-2', [
+                'user_id' => $user_id
+            ])->throw();
+            
+            // Xử lý dữ liệu phản hồi
+            $products = $response->json();
+            
+            // Kiểm tra nếu API trả về dữ liệu thành công
+            if ($products['code'] === 200 && isset($products['data'])) {
+                $recommendProducts = $products['data'];
+                
+                // Lấy danh sách product_id từ kết quả trả về
+                $recommendProductIds = collect($recommendProducts)->pluck('product_id')->toArray();
+    
+                // Truy vấn sản phẩm từ database theo danh sách ID
+                
+    
+                return  $recommendProductIds;
+            } else {
+                return $this->getRelatedProduct($user_id);
+            }
+        } catch (\Exception $e) {
+            // Log lỗi nếu có ngoại lệ
+            \Log::error('Error fetching recommend products: ' . $e->getMessage());
+            return $this->getRelatedProduct($user_id);
+        }     
     }
     
     

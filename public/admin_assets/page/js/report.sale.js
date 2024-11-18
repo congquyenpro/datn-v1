@@ -258,7 +258,7 @@ Report = {
           res.forEach(element => {
             $('#best-selling-body').append(`
               <tr>
-                  <td>1</td>
+                  <td>${element.product_id}</td>
                   <td>
                       <div class="media align-items-center">
                           <div class="avatar avatar-image rounded">
@@ -282,7 +282,7 @@ Report = {
           res.forEach(element => {
             $('#top-view-body').append(`
               <tr>
-                  <td>1</td>
+                  <td>${element.product_id}</td>
                   <td>
                       <div class="media align-items-center">
                           <div class="avatar avatar-image rounded">

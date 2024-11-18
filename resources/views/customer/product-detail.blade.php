@@ -66,9 +66,7 @@
 							</div>
 							<div class="product-details-description">
 								<ul>
-									<li>Vestibulum tortor quam</li>
-									<li>Imported</li>
-									<li>Art.No. 06-7680</li>
+									<li>{{$product->short_description}}</li>
 								</ul>
 							</div>
 							<div class="variations">

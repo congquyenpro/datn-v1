@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Http;
 use App\Models\Transaction;
 use App\Models\Order;
 
+use App\Services\HelperService;
+
 
 class PaymentService
 {
@@ -248,7 +250,13 @@ class PaymentService
                 // Cập nhật trạng thái thanh toán của đơn hàng
                 $order->payment_status = 1;
                 $order->save();
-    
+                
+                // Gửi thông báo qua Telegram
+                $message = 'Thanh toán thành công đơn hàng: ' . $order_code. ', số tiền: ' . number_format($order_value) . 'đ';
+                $helperService = new HelperService();
+                $helperService->sendPaymentNotification($message);
+
+
                 return response()->json(['status' => 'successful', 'message' => 'Payment has been completed']);
             }
         }

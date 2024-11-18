@@ -63,6 +63,22 @@ class TestController extends Controller
     
         $query = Product::with('productSizes');
 
+        if (isset($filters['gender'])) {
+            $gender = 2;
+            switch ($filters['gender']) {
+                case 'male':
+                    $gender = 1;
+                    break;
+                case 'female':
+                    $gender = 0;
+                    break;
+                case 'unisex':
+                    $gender = 2;
+                    break;
+            }
+            $query->where('gender', $gender);
+        }
+
         if (isset($filters['concentration'])) {
             $query->whereHas('productAttributes', function ($query) use ($filters) {
                 $query->whereHas('attributeValue', function ($query) use ($filters) {

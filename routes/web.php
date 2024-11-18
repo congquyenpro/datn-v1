@@ -178,6 +178,7 @@ Route::prefix('admin')->group(function() {
     Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.order']], function() {
         Route::prefix('blog')->group(function() {
             Route::get('/', 'BlogController@showManagerBlog')->name('manager.blog');
+            Route::get('/detail/{id}', 'BlogController@editBog')->name('manager.blog.edit');
             Route::post('/create', 'BlogController@createBlog')->name('manager.blog.create');
             
         });
@@ -195,6 +196,21 @@ Route::prefix('admin')->group(function() {
             Route::get('/revenue-by-day', 'Manager\Report\ReportController@getRevenueByDay')->name('manager.report.revenue.day');
 
             Route::get('/inventory', 'Manager\Report\ReportController@getInventory')->name('manager.report.inventory');
+        });
+    });
+
+    //Quản lý người dùng
+    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.promotion']], function() {
+        Route::prefix('system')->group(function() {
+           Route::get('/users', 'Manager\System\UserController@index')->name('manager.users');
+           Route::get('/user/{user_id}', 'Manager\System\UserController@getAdminUserDetail')->name('manager.users.detail');
+           Route::post('/user/{user_id}', 'Manager\System\UserController@update')->name('manager.users.update');
+           Route::post('/users', 'Manager\System\UserController@store')->name('manager.users.store');
+
+            Route::post('/roles', 'Manager\System\UserController@addRole')->name('manager.roles');
+
+            Route::get('/permission-by-role/{role_id}', 'Manager\System\UserController@getPermissionsByRoleDetail')->name('manager.roles.permission');
+            Route::post('/update-role/{role_id}', 'Manager\System\UserController@updatePermissionsByRole')->name('manager.roles.update');
         });
     });
 
@@ -217,12 +233,14 @@ Route::prefix('/')->group(function() {
         Route::get('/user/infor', 'Customer\DisplayController@getUserJson')->middleware(['customer']);
 
         /* product */
+        Route::get('/product/shop', 'Customer\ProductController@getShop');
         Route::get('/product/type/{type}', 'Customer\ProductController@getProductByType');
         Route::get('/product/detail/{slug}', 'Customer\ProductController@getProductDetail');
         Route::get('/product/related/{product_id}', 'Customer\ProductController@getRelatedProduct');
         //get similar products
         Route::get('/product/similar/{product_id}', 'Customer\ProductController@getSimilarProduct');
 
+        Route::get('/product/collaborative-filtering', 'Customer\ProductController@getCollaborativeFiltering'); 
 
 
         /* Attribute-Value */
@@ -300,4 +318,8 @@ Route::prefix('payment')->group(function() {
     Route::get('/ghn-webhook', 'PaymentController@ghnWebhook');
 });
 
+
+
+/* Telegram test */
+Route::get('tele-test', 'Manager\System\SettingController@sendNotification');
 

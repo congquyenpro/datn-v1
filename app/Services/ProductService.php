@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\ProductRepository;
 use Illuminate\Support\Str;
+use Request;
 
 
 class ProductService
@@ -97,6 +98,18 @@ class ProductService
     {
         return $this->productRepository->getSimilarProducts($product_id);
     }
+
+
+    public function getCollaborativeFiltering($request)
+    {
+        return $this->productRepository->getCollaborativeFiltering($request);
+    }
+
+    public function getCollaborativeFiltering2($request)
+    {
+        return $this->productRepository->getCollaborativeFiltering2($request);
+    }
+
 
 
     

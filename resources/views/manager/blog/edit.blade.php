@@ -21,113 +21,6 @@
             </div>
         </div>
     </div>
-    <div id="main-template" class="card">
-        <div class="card-body">
-            <div class="row m-b-30">
-                <div class="col-lg-8">
-                    <div class="d-md-flex">
-                        <div class="m-b-10 m-r-15">
-                            <select class="custom-select" style="min-width: 180px;">
-                                <option selected>Catergory</option>
-                                <option value="all">All</option>
-                                <option value="Burberry">Burberry</option>
-                                <option value="Calvin Klein">Calvin Klein</option>
-                                <option value="Christian Dior">Christian Dior</option>
-                            </select>
-                        </div>
-                        <div class="m-b-10">
-                            <select class="custom-select" style="min-width: 180px;">
-                                <option selected>Status</option>
-                                <option value="all">All</option>
-                                <option value="inStock">In Stock</option>
-                                <option value="outOfStock">Out of Stock</option>
-                                <option value="outOfStock">Trending</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 text-right">
-                    <button id="create-post" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">
-                        <i class="anticon anticon-plus-circle m-r-5"></i>
-                        <span>Thêm bài đăng</span>
-                    </button>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-hover e-commerce-table">
-                    <thead>
-                        <tr>
-                            <th>
-                                <div class="checkbox">
-                                    <input id="checkAll" type="checkbox">
-                                    <label for="checkAll" class="m-b-0"></label>
-                                </div>
-                            </th>
-                            <th>ID</th>
-                            <th>Tiêu đề</th>
-                            <th>Danh mục</th>
-                            <th>Tác giả</th>
-                            <th>Ngày đăng</th>
-                            <th>Số lượt xem</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($posts as $post)
-                            <tr>
-                                <td>
-                                    <div class="checkbox">
-                                        <input id="check-item-{{ $post->id }}" type="checkbox">
-                                        <label for="check-item-{{ $post->id }}" class="m-b-0"></label>
-                                    </div>
-                                </td>
-                                <td>
-                                    #{{ $post->id }}
-                                </td>
-                                <td>
-                                    {{ $post->title }}
-                                </td>
-                                <td>
-                                    @if($post->tags)
-                                        @php
-                                            // Chuyển tags thành mảng nếu tags là một chuỗi JSON
-                                            $tags = json_decode($post->tags, true);
-                                        @endphp
-                                
-                                        @foreach($tags as $tag)
-                                            <span class="badge badge-pill badge-geekblue m-b-5">{{ $tag }}</span>
-                                        @endforeach
-                                    @else
-                                        <span>Không có tags</span>
-                                    @endif
-                                </td>
-                                
-                                <td>
-                                    {{ $post->user->name }} <!-- Lấy tên người dùng từ quan hệ -->
-                                </td>
-                                <td>
-                                    {{ $post->created_at->format('d-m-Y') }} <!-- Hiển thị ngày tháng -->
-                                </td>
-                                <td>
-                                    {{ $post->views }}
-                                </td>
-                                <td class="text-right">
-                                    <a href="{{route('manager.blog.edit',$post->id)}}" class="btn btn-icon btn-hover btn-sm btn-rounded">
-                                        <i class="anticon anticon-eye"></i>
-                                    </a>
-                                    <button class="btn btn-icon btn-hover btn-sm btn-rounded">
-                                        <i class="anticon anticon-delete"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                    
-                </table>
-            </div>
-        </div>
-    </div>
-
     <div id="post-template">
             <div class="row">
                 <div class="col-12">
@@ -165,7 +58,7 @@
                     <!-- Nút chức năng -->
                     <button class="btn btn-danger btn-tone m-r-5 float-right" id="btn-delete">Xóa</button>
                     <button class="btn btn-primary btn-tone m-r-5 float-right" id="btn-save">Lưu</button>
-                    <button class="btn btn-default m-r-5 float-right" id="btn-cancel">Đóng</button>
+                    <a href="{{route('manager.blog')}}" class="btn btn-default m-r-5 float-right" id="btn-cancel">Đóng</a>
                 </div>
                 
                 <div class="col-sm-12 col-md-8 col-lg-8">
@@ -177,15 +70,15 @@
                                     <form id="post-form" action="/submit" method="POST">
                                         <div class="form-group">
                                             <label for="post-title">Tiêu đề</label>
-                                            <input type="text" class="form-control" id="post-title" name="title" placeholder="Tiêu đề">
+                                            <input type="text" class="form-control" id="post-title" name="title" placeholder="Tiêu đề" value="{{$post->title}}">
                                         </div>
                                         <div class="form-group">
                                             <label for="post-summary">Tóm tắt</label>
-                                            <input type="text" class="form-control" id="post-summary" name="summary" placeholder="Tóm tắt">
+                                            <input type="text" class="form-control" id="post-summary" name="summary" placeholder="Tóm tắt" value="{{$post->summary}}">
                                         </div>
                                         <div class="form-group">
                                             <label for="post-content">Nội dung</label>
-                                            <textarea id="summernote" name="content"></textarea>
+                                            <textarea id="summernote" name="content">{{$post->content}}</textarea>
                                         </div>
                                     </form>
                                 </div>
@@ -200,24 +93,28 @@
                                         <div class="row">
                                             <div class="col-sm-10">
                                                 <div class="radio">
-                                                    <input type="radio" name="comment_status" id="comment-enable" value="enabled" checked>
+                                                    <input type="radio" name="comment_status" id="comment-enable" value="enabled" 
+                                                    @if($post->comment_status == 'enabled') checked @endif>
                                                     <label for="comment-enable">
                                                         Bật
                                                     </label>
                                                 </div>
                                                 <div class="radio">
-                                                    <input type="radio" name="comment_status" id="comment-disable" value="disabled">
+                                                    <input type="radio" name="comment_status" id="comment-disable" value="disabled"
+                                                    @if($post->comment_status == 'disabled') checked @endif>
                                                     <label for="comment-disable">
                                                         Tắt
                                                     </label>
                                                 </div>
                                                 <div class="radio">
-                                                    <input type="radio" name="comment_status" id="comment-auto" value="auto">
+                                                    <input type="radio" name="comment_status" id="comment-auto" value="auto"
+                                                    @if($post->comment_status == 'auto') checked @endif>
                                                     <label for="comment-auto">
                                                         Tạo tự động
                                                     </label>
                                                 </div>
                                             </div>
+                                            
                                         </div>
                                     </fieldset>
                 
@@ -261,22 +158,22 @@
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
                                             <select id="post-status" name="status" class="form-control">
-                                                <option value="public" selected>Công khai</option>
-                                                <option value="hidden">Ẩn</option>
+                                                <option value="public" @if($post->status == 'public') selected @endif>Công khai</option>
+                                                <option value="hidden" @if($post->status == 'hidden') selected @endif>Ẩn</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                
+                        
                         <div class="col-sm-12 col-md-12 col-lg-12">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="m-b-10">Hình ảnh</div>
                                     <div>
                                         <!-- Thẻ img sẽ hiển thị hình ảnh preview -->
-                                        <img src="https://images.pexels.com/photos/965989/pexels-photo-965989.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="post-image" id="post-image" width="100%">
+                                        <img src="/{{$post->image}}" alt="post-image" id="post-image" width="100%">
                                     </div>
                                     <div class="custom-file m-t-20">
                                         <!-- Thẻ input cho phép người dùng chọn file -->
@@ -343,8 +240,159 @@
             });
         });
     </script>    
-    
-    <script src="{{asset('admin_assets/page/js/api.js')}}"></script>
-    <script src="{{asset('admin_assets/page/js/post.js')}}"></script>
+
+    <script>
+        $('#post-guild').hide();
+        $('#view-post-guild').on('click', function() {
+            $('#post-guild').toggle();
+            if ($('#post-guild').is(':visible')) {
+                this.innerHTML = 'Ẩn hướng dẫn';
+            } else {
+                this.innerHTML = 'Xem hướng dẫn';
+            }
+        });        
+    </script>
+
+<script>
+    update = function(id) {
+        console.log("Updating post with id: " + id);
+
+        // Lấy dữ liệu bài viết từ server (AJAX GET)
+        $.ajax({
+            url: '/api/blog/' + id,  // Đảm bảo URL này là chính xác và trả về dữ liệu bài viết
+            method: 'GET',
+            success: function(res) {
+                if (res.status == 200) {
+                    var post = res.data; // Dữ liệu bài viết trả về từ server
+
+                    // Điền dữ liệu vào form update
+                    $('#post-title').val(post.title);
+                    $('#post-summary').val(post.summary);
+                    $('textarea[name="content"]').val(post.content);
+                    $('#post-status').val(post.status);
+                    $('input[name="comment_status"][value="' + post.comment_status + '"]').prop('checked', true);
+                    
+                    // Xử lý tags (tags có thể là chuỗi JSON từ server)
+                    var tags = JSON.parse(post.tags || '[]');
+                    $('#post-tags').val(tags).trigger('change');  // select2 sử dụng trigger('change') để cập nhật giá trị
+
+                    // Hiển thị hình ảnh hiện tại (nếu có)
+                    $('#post-image').attr('src', '/' + post.image); // Cập nhật hình ảnh
+
+                    // Hiển thị form đăng bài và ẩn phần còn lại
+                    $('#post-template').show();
+                    $('#main-template').hide();
+
+                    // Cập nhật ảnh khi người dùng chọn ảnh mới
+                    $('#customFile').on('change', function(event) {
+                        var file = event.target.files[0];
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            $('#post-image').attr('src', e.target.result);  // Cập nhật ảnh preview
+                        };
+                        reader.readAsDataURL(file);
+                    });
+
+                    // Submit dữ liệu khi nhấn nút "Cập nhật"
+                    $('#btn-save').on('click', function() {
+                        // Lấy dữ liệu từ các trường trong form
+                        var title = $('#post-title').val();
+                        var summary = $('#post-summary').val();
+                        var content = $('textarea[name="content"]').val();
+                        var status = $('#post-status').val();
+                        var tags = $('#post-tags').val();
+                        var commentStatus = $('input[name="comment_status"]:checked').val();
+                        var imageFile = $('#customFile')[0].files[0];
+
+                        if (imageFile && imageFile.size > 5 * 1024 * 1024) {
+                            alert("Ảnh quá lớn, vui lòng chọn ảnh có kích thước nhỏ hơn 5MB.");
+                            return;
+                        }
+
+                        // Kiểm tra các trường có rỗng không
+                        if (title == '' || summary == '' || content == '' || tags == '' || !imageFile) {
+                            alert('Vui lòng điền đầy đủ thông tin');
+                            return;
+                        }
+
+                        // Tạo một FormData object để gửi cả file và các trường dữ liệu khác
+                        var formData = new FormData();
+                        formData.append('_method', 'PUT');  // Đặt method PUT để Laravel hiểu đây là update
+                        formData.append('title', title);
+                        formData.append('summary', summary);
+                        formData.append('content', content);
+                        formData.append('status', status);
+                        formData.append('tags', JSON.stringify(tags));
+                        formData.append('comment_status', commentStatus);
+                        formData.append('image', imageFile);
+
+                        // In ra dữ liệu đã lấy từ form
+                        console.log("Dữ liệu gửi lên server: ", formData);
+                        //in chi tiết dữ liệu gửi lên
+                        for (var pair of formData.entries()) {
+                            console.log(pair[0] + ', ' + pair[1]);
+                        }
+
+                        // Gửi dữ liệu lên server (AJAX PUT)
+                        $.ajax({
+                            url: '/api/blog/' + id,  // Đảm bảo URL này chính xác cho việc update bài viết
+                            method: 'POST',
+                            data: formData,
+                            processData: false,  // Không cần phải chuyển dữ liệu thành chuỗi
+                            contentType: false,  // Không cần phải đặt content type, FormData sẽ tự xử lý
+                            success: function(res) {
+                                if (res.status == 200) {
+                                    // Hiển thị thông báo cập nhật thành công
+                                    $('#staus-notice').html(`
+                                        <div class="alert alert-primary alert-dismissible fade show">
+                                            Cập nhật bài viết thành công!
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    `);
+
+                                    setTimeout(function() {
+                                        $('#staus-notice').html('');
+                                        location.reload(); // Reload trang sau 3 giây
+                                    }, 3000);
+                                } else {
+                                    $('#staus-notice').html(`
+                                        <div class="alert alert-danger alert-dismissible fade show">
+                                            Có lỗi xảy ra: ${res.message}
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    `);
+                                }
+
+                                // Gọi lại show để cập nhật
+                                Post.show(id);
+                            },
+                            error: function(xhr, status, error) {
+                                console.log("Có lỗi xảy ra trong quá trình gửi dữ liệu", error);
+                                alert("Có lỗi xảy ra, vui lòng thử lại.");
+                            }
+                        });
+                    });
+                } else {
+                    alert("Không tìm thấy bài viết.");
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log("Có lỗi xảy ra khi lấy dữ liệu bài viết", error);
+                alert("Không thể lấy dữ liệu bài viết, vui lòng thử lại.");
+            }
+        });
+    };
+
+    //get id từ link
+    var url = window.location.href;
+    var id = url.substring(url.lastIndexOf('/') + 1);
+    //update(id);
+
+</script>
+
 
 @endsection

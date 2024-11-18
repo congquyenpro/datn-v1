@@ -95,12 +95,10 @@
                                 <div class="category">
                                     <select title="cate" data-placeholder="All Categories" class="chosen-select"
                                             tabindex="1">
-                                        <option value="United States">Accessories</option>
-                                        <option value="United Kingdom">Accents</option>
-                                        <option value="Afghanistan">Desks</option>
-                                        <option value="Aland Islands">Sofas</option>
-                                        <option value="Albania">New Arrivals</option>
-                                        <option value="Algeria">Bedroom</option>
+                                            <option value="perfume">Perfume</option>
+                                            <option value="trending">Trending</option>
+                                            <option value="male">Nước hoa Nam</option>
+                                            <option value="female">Nước hoa Nữ</option>
                                     </select>
                                 </div>
                                 <div class="inner">
@@ -319,29 +317,23 @@
                     <div class="block-content verticalmenu-content">
                         <ul class="stelina-nav-vertical vertical-menu stelina-clone-mobile-menu">
                             <li class="menu-item">
-                                <a href="#" class="stelina-menu-item-title" title="New Arrivals">New Arrivals</a>
+                                <a href="#" class="stelina-menu-item-title" title="New Arrivals">New</a>
                             </li>
                             <li class="menu-item">
-                                <a title="Hot Sale" href="#" class="stelina-menu-item-title">Hot Sale</a>
+                                <a title="Hot Sale" href="#" class="stelina-menu-item-title">Treding</a>
+                            </li>
+                            <li class="menu-item">
+                                <a title="Hot Sale" href="#" class="stelina-menu-item-title">Top Viewed</a>
                             </li>
                             <li class="menu-item menu-item-has-children">
-                                <a title="Accessories" href="#" class="stelina-menu-item-title">Accessories</a>
+                                <a title="Accessories" href="#" class="stelina-menu-item-title">By Brand</a>
                                 <span class="toggle-submenu"></span>
                                 <ul role="menu" class=" submenu">
                                     <li class="menu-item">
-                                        <a title="Living" href="#" class="stelina-item-title">Living</a>
+                                        <a title="Living" href="#" class="stelina-item-title">Dior</a>
                                     </li>
                                     <li class="menu-item">
-                                        <a title="Accents" href="#" class="stelina-item-title">Accents</a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a title="New Arrivals" href="#" class="stelina-item-title">New Arrivals</a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a title="Accessories" href="#" class="stelina-item-title">Accessories</a>
-                                    </li>
-                                    <li class="menu-item">
-                                        <a title="Bedroom" href="#" class="stelina-item-title">Bedroom</a>
+                                        <a title="Accents" href="#" class="stelina-item-title">Chanel</a>
                                     </li>
                                 </ul>
                             </li>
@@ -586,19 +578,13 @@
                         <h2 class="widgettitle">Quick Menu</h2>
                         <ul class="menu">
                             <li class="menu-item">
-                                <a href="#">New arrivals</a>
+                                <a href="#">New</a>
                             </li>
                             <li class="menu-item">
-                                <a href="#">Life style</a>
+                                <a href="#">Top Viewd</a>
                             </li>
                             <li class="menu-item">
-                                <a href="#">Accents</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#">Tables</a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="#">Dining</a>
+                                <a href="#">Trending</a>
                             </li>
                         </ul>
                     </div>
@@ -693,7 +679,7 @@
             </a>
         </div>
         <div class="footer-device-mobile-item device-home device-cart">
-            <a href="#">
+            <a href="/cart">
 					<span class="icon">
 						<i class="fa fa-shopping-basket" aria-hidden="true"></i>
 						<span class="count-icon" id="cart-count-2">
@@ -739,21 +725,6 @@
 <script src="{{asset('customer/assets/js/frontend-plugin.js')}}"></script>
 
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Chọn tất cả các nút Quick View
-        var quickViewButtons = document.querySelectorAll('.quick-wiew-button');
-
-        // Vô hiệu hóa sự kiện click cho các nút Quick View
-        quickViewButtons.forEach(function(button) {
-            button.addEventListener('click', function(event) {
-                event.preventDefault();  // Ngừng hành động mặc định (hiển thị modal)
-                event.stopPropagation(); // Ngừng sự kiện click lan truyền
-            });
-        });
-    });
-
-</script>
 
 @yield('page_js')
 

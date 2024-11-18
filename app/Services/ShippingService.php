@@ -311,6 +311,39 @@ class ShippingService {
     
         return 'Lỗi khi lấy dữ liệu: ' . $response->status(); // Thông báo lỗi với mã trạng thái
     }
+
+    /* Cron thực hiện cập nhật trạng thái đơn *//* 
+    public function updateOrderStatus() {
+        // Lấy danh sách đơn hàng cần cập nhật trạng thái
+        $orders = Order::where('status', '!=', 'delivered')->get();
+    
+        // Duyệt qua từng đơn hàng
+        foreach ($orders as $order) {
+            // Gọi API để lấy trạng thái đơn hàng
+            $response = Http::withHeaders([
+                'Token' => $this->token,
+                'Content-Type' => 'application/json',
+            ])->withOptions([
+                'verify' => false, // Tắt xác thực SSL
+            ])->get('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipment-detail', [
+                'order_code' => $order->shipping_code
+            ]);
+    
+            // Kiểm tra nếu request thành công
+            if ($response->successful()) {
+                $responseData = $response->json(); // Lấy dữ liệu dưới dạng JSON
+    
+                // Lấy trạng thái từ dữ liệu trả về
+                $status = $responseData['data']['status'] ?? null;
+    
+                // Cập nhật trạng thái đơn hàng
+                if ($status) {
+                    $order->status = $status;
+                    $order->save();
+                }
+            }
+        }
+    } */
     
     
 

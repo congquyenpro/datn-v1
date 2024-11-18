@@ -67,10 +67,16 @@ Api.Atrributes.getAll = () => $.ajax({
     method: 'GET',
 });
 
-//get products from filter to paginate and order
-Api.Product.GetProducts = (filter) => $.ajax({
+//get products from filter to paginate and order === version cũ
+/* Api.Product.GetProducts = (filter) => $.ajax({
     //url: `http://127.0.0.1:3000/products?${filter}`, //?field=price&order=asc&brand=6&gender=3a&volume=6b
     url: `/test?${filter}`,
+    method: 'GET',
+}); */
+//version mới 16/11/2024
+Api.Product.GetProducts = (filter) => $.ajax({
+    //url: `http://127.0.0.1:3000/products?${filter}`, //?field=price&order=asc&brand=6&gender=3a&volume=6b
+    url: `/api-v1/product/shop?${filter}`,
     method: 'GET',
 });
 
@@ -159,4 +165,6 @@ Api.Comment.deleteComment = (id) => $.ajax({
     method: 'DELETE',
     data: {id},
 });
+
+
 

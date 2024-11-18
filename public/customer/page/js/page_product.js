@@ -43,7 +43,7 @@ const PageProduct = {
                     markCheckboxes('filter-brand');
 
                     /* start gender */
-                    const gender = Attributes.brand; //lấy ra các values của attribute gender
+/*                     const gender = Attributes.brand; //lấy ra các values của attribute gender
                     const gender_values = $('#filter-gender');
                     gender.forEach(element => {
                         gender_values.append(`
@@ -53,6 +53,23 @@ const PageProduct = {
                             </li>
                         `);
                     });
+                    markCheckboxes('filter-gender'); */
+
+                    const gender_values = $('#filter-gender');
+                        gender_values.append(`
+                            <li>
+                                <input type="checkbox" id="male">
+                                <label for="male" class="label-text">Nam</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="female">
+                                <label for="female" class="label-text">Nữ</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="unisex">
+                                <label for="unisex" class="label-text">Unisex</label>
+                            </li>
+                        `);
                     markCheckboxes('filter-gender');
                 
                     /* start country */
@@ -170,7 +187,8 @@ const PageProduct = {
                     PageProduct.default.getSelectedValue('filter-frag_time');
                     PageProduct.default.getSelectedValue('filter-frag_distance');
 
-                    
+                    //get selected tag
+                    PageProduct.default.getSelectedTag();
                     
 
                 })
@@ -230,6 +248,69 @@ const PageProduct = {
                 });
             });
         },
+        getSelectedTag: function () {
+            // Lấy tất cả các thẻ <a> trong phần tử có class="tagcloud"
+            const tagLinks = document.querySelectorAll('.tagcloud a');
+        
+            // Kiểm tra tham số tag trong URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const selectedTag = urlParams.get('tag'); // Lấy giá trị của tham số 'tag'
+        
+            // Duyệt qua tất cả các thẻ <a>
+            tagLinks.forEach(link => {
+                // Nếu ID của thẻ <a> trùng với tham số 'tag', thêm class 'active' vào thẻ <li>
+                if (link.id === `tag-${selectedTag}`) {
+                    const parentLi = link.closest('li');
+                    if (parentLi) {
+                        parentLi.classList.add('active');
+                    }
+                }
+        
+                // Bắt sự kiện click cho các thẻ <a>
+                link.addEventListener('click', (event) => {
+                    event.preventDefault(); // Ngừng hành động mặc định của thẻ <a>
+        
+                    const tagId = link.id; // Lấy ID của tag được click (ví dụ: "tag-all", "tag-for_you", ...)
+                    const attName = tagId.split('-')[1]; // Lấy phần tên từ ID (ví dụ: "for_you" -> "you")
+        
+                    // Lấy tất cả tham số hiện tại từ URL
+                    const urlParams = new URLSearchParams(window.location.search);
+        
+                    // Cập nhật URL với tag được chọn
+                    urlParams.set('tag', attName); // Chèn ID tag vào URL dưới dạng tham số
+        
+                    // Nếu có tag khác được chọn, xóa tất cả các tham số tương tự
+                    tagLinks.forEach(otherLink => {
+                        // Bỏ class active ở thẻ <li> chứa <a>
+                        const parentLi = otherLink.closest('li');
+                        if (parentLi) {
+                            parentLi.classList.remove('active');
+                        }
+                    });
+        
+                    // Thêm class active cho thẻ <li> chứa <a> được click
+                    const parentLi = link.closest('li');
+                    if (parentLi) {
+                        parentLi.classList.add('active');
+                    }
+        
+                    // Tạo lại URL mới và cập nhật trình duyệt
+                    const newLink = `/shop?${urlParams.toString()}`;
+                    history.pushState(null, '', newLink);
+        
+                    // Mỗi lần chọn thuộc tính, tự động trở về page 1
+                    if (urlParams.has('page')) {
+                        urlParams.delete('page');
+                        const linkWithoutPage = `/shop?${urlParams.toString()}`;
+                        history.pushState(null, '', linkWithoutPage);
+                    }
+        
+                    // Gọi lại hàm để tải sản phẩm theo các tham số mới
+                    PageProduct.products.getDefaultProducts(1, 9, 'price', 'asc');
+                });
+            });
+        },
+        
         getSortValue: function () {
             $('#sort').on('change', function() {
                 console.log($(this).val());
@@ -319,7 +400,7 @@ const PageProduct = {
                                             <a href="#">Add to Wishlist</a>
                                         </div>
                                     </div>
-                                    <a href="productdetails-rightsidebar.html" class="button quick-wiew-button">Quick View</a>
+                                    <a href="/nuoc-hoa/${product.slug}" class="button quick-wiew-button">Quick View</a>
                                     <div class="loop-form-add-to-cart">
                                         <button class="single_add_to_cart_button button">Add to cart
                                         </button>
@@ -334,7 +415,7 @@ const PageProduct = {
                             <div class="group-info">
                                 <div class="stars-rating">
                                     <div class="star-rating">
-                                        <span class="star-3"></span>
+                                        <span class="star-5"></span>
                                     </div>
                                     <div class="count-star">
                                         (3)

@@ -217,6 +217,13 @@ class OrderController extends Controller
         //$respone = $shipping->calculateFee($data1);
         return response()->json($respone);
     }
+    //Hủy đơn hàng : chú ý 1 số trạng thái mới có thể hủy: ready_to_pick, picking, money_collect_picking, từ picked trở đi không thể hủy
+    public function cancelOrder(Request $request){
+        $order_id = $request->id;
+        $shipping = new ShippingService();
+
+    }
+
 
     public function printOrder(Request $request){
         $order_id = $request->id;

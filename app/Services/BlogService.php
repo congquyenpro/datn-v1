@@ -74,6 +74,7 @@ class BlogService {
         // Trả về thông báo thành công hoặc chuyển hướng
         return $post;
     }
+
     // Hàm xử lý nội dung (content) trước khi lưu vào database
     private function processContent($content)
     {
@@ -97,7 +98,10 @@ class BlogService {
         return $content;
     }
 
-
+    public function getPostById($id)
+    {
+        return Post::find($id);
+    }
     public function getAll()
     {
         return Post::with('user:id,name')->get();

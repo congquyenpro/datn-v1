@@ -18,6 +18,16 @@ class BlogController extends Controller
         $posts = $this->blogService->getAll();
         return view('manager.blog.index',compact('posts'));
     }
+    public function editBog(Request $request){
+        $post = $this->blogService->getPostById($request->id);
+        if (is_string($post->tags)) {
+            $post->tags = explode(',', $post->tags); // Chuyển chuỗi thành mảng
+        }
+        //dd($post);
+        return view('manager.blog.edit',compact('post'));
+    }
+
+
 
     public function createBlog(Request $request){
         try {
