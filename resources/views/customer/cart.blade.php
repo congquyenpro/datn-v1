@@ -82,4 +82,6 @@
 @section('page_js')
     <script src="{{asset('customer/page/js/api.js')}}"></script>
     <script src="{{asset('customer/page/js/shopping_cart.js')}}"></script>
+
+    <script src="{{asset('customer/page/js/cart2.js')}}"></script>
 @endsection

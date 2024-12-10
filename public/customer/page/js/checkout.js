@@ -157,6 +157,11 @@ const Checkout = {
                     }
                 }
                 var order_list = JSON.parse(localStorage.getItem('cart'));
+                //Kiểm tra nếu giỏ hàng trống thông báo giỏ hàng trống
+                if (order_list == null || order_list.length == 0) {
+                    alert('Không có sản phẩm trong giỏ hàng!');
+                    return;
+                }
                 var order_items = [];
                 order_list.forEach(item => {
                     order_items.push({

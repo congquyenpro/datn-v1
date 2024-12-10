@@ -49,7 +49,7 @@ class DisplayController extends Controller
         $orderId = $request->order_id;
         $orderId = substr($orderId, 2);
         try {
-            $order = $this->orderService->getOrderDeatil($orderId);
+            $order = $this->orderService->getOrderDetail($orderId);
             return view('customer.order-detail',compact('order'));
         } catch (\Exception $e) {
             return redirect()->route('customer.home');

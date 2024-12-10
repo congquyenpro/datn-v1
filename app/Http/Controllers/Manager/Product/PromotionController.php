@@ -37,6 +37,11 @@ class PromotionController extends Controller
         return $this->promotionService->create($data);
     }
 
+    public function delete(Request $request) {
+        $promotion = $this->promotionService->delete($request->id);
+        return $promotion;
+    }
+
     //Home: show deal of the day
     public function getDealOfDay(){
         $promotion = $this->promotionService->getDealOfDay();

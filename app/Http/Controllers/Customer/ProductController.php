@@ -374,9 +374,17 @@ class ProductController extends Controller
         // Get all parameters from the request
         $filters = $request->all();
 
-        $product_ids = $this->getCollaborativeFiltering2($request);
+        
     
         $query = Product::with('productSizes');
+
+        //check search theo nội dung
+        if (isset($request->search)) {
+            $filters['search'] = $request->search;
+        
+            $query->where('name', 'like', '%' . $filters['search'] . '%'); // Tìm kiếm theo tên sản phẩm
+        }
+        
 
         //check tag
         if (isset($filters['tag'])) {
@@ -395,6 +403,7 @@ class ProductController extends Controller
                         $query->where('trending', 1);
                         break;
                     }
+                    $product_ids = $this->getCollaborativeFiltering2($request);
                     $query->whereIn('id', $product_ids);
                     break;
             }

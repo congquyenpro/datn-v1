@@ -84,7 +84,7 @@
                 <div class="col-lg-3 col-sm-4 col-md-3 col-xs-7 col-ts-12 header-element">
                     <div class="logo">
                         <a href="/">
-                            <img src="https://placehold.co/169x45" alt="img">
+                            <img src="{{asset('customer/images/logo_1.png')}}" alt="img">
                         </a>
                     </div>
                 </div>
@@ -240,12 +240,13 @@
                                         </ul>
                                         <div class="tab-container">
                                             <div id="header-tab-login" class="tab-panel active">
-                                                <form method="post" class="login form-login">
+                                                <form method="post" class="login form-login" action="{{route('customer.auth.postLogin')}}">
+                                                    @csrf
                                                     <p class="form-row form-row-wide">
-                                                        <input type="email" placeholder="Email" class="input-text">
+                                                        <input type="email" placeholder="Email" class="input-text" name="email">
                                                     </p>
                                                     <p class="form-row form-row-wide">
-                                                        <input type="password" class="input-text" placeholder="Password">
+                                                        <input type="password" class="input-text" placeholder="Password" name="password">
                                                     </p>
                                                     <p class="form-row">
                                                         <label class="form-checkbox">
@@ -262,12 +263,19 @@
                                                 </form>
                                             </div>
                                             <div id="header-tab-rigister" class="tab-panel">
-                                                <form method="post" class="register form-register">
+                                                <form method="post" class="register form-register" action="{{route('customer.auth.register')}}">
+                                                    @csrf
                                                     <p class="form-row form-row-wide">
-                                                        <input type="email" placeholder="Email" class="input-text">
+                                                        <input type="text" placeholder="Name" class="input-text" name="name" required>
                                                     </p>
                                                     <p class="form-row form-row-wide">
-                                                        <input type="password" class="input-text" placeholder="Password">
+                                                        <input type="email" placeholder="Email" class="input-text" name="email" required>
+                                                    </p>
+                                                    <p class="form-row form-row-wide">
+                                                        <input type="password" class="input-text" placeholder="Password" name="password" required>
+                                                    </p>
+                                                    <p class="form-row form-row-wide">
+                                                        <input type="password" class="input-text" placeholder="Confirm password" name="confirm_password" required>
                                                     </p>
                                                     <p class="form-row">
                                                         <input type="submit" class="button" value="Register">
@@ -434,7 +442,7 @@
                                    title="Blogs">Blogs</a>
                                 <span class="toggle-submenu"></span>
                                 <ul class="submenu">
-                                    <li class="menu-item menu-item-has-children">
+{{--                                     <li class="menu-item menu-item-has-children">
                                         <a href="#" class="stelina-menu-item-title" title="Blog Style">Kiến thức</a>
                                         <span class="toggle-submenu"></span>
                                         <ul class="submenu">
@@ -445,21 +453,15 @@
                                                 <a href="bloglist.html">Phân biệt nước hoa</a>
                                             </li>
                                         </ul>
+                                    </li> --}}
+                                    <li class="menu-item">
+                                        <a href="/blogs/kien-thuc-ve-nuoc-hoa" class="stelina-menu-item-title" title="Post Layout">Kinh thức về nước hoa</a>
                                     </li>
                                     <li class="menu-item">
-                                        <a href="#" class="stelina-menu-item-title" title="Post Layout">Kinh nghiệm</a>
+                                        <a href="/blogs/kinh-nghiem-chon-nuoc-hoa" class="stelina-menu-item-title" title="Post Layout">Kinh nghiệm chọn nước hoa</a>
                                     </li>
-                                    <li class="menu-item menu-item-has-children">
-                                        <a href="#" class="stelina-menu-item-title" title="Post Layout">Góc review</a>
-                                        <span class="toggle-submenu"></span>
-                                        <ul class="submenu">
-                                            <li class="menu-item">
-                                                <a href="inblog_left-siderbar.html">Left Sidebar</a>
-                                            </li>
-                                            <li class="menu-item">
-                                                <a href="inblog_right-siderbar.html">Right Sidebar</a>
-                                            </li>
-                                        </ul>
+                                    <li class="menu-item">
+                                        <a href="/blogs/goc-review" class="stelina-menu-item-title" title="Post Layout">Góc review</a>
                                     </li>
                                 </ul>
                             </li>
@@ -478,7 +480,7 @@
         <div class="item mobile-logo">
             <div class="logo">
                 <a href="#">
-                    <img src="https://placehold.co/169x45" alt="img">
+                    <img src="{{asset('customer/images/logo_1.png')}}" alt="img">
                 </a>
             </div>
         </div>

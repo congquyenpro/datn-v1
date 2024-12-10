@@ -56,7 +56,7 @@
 
                     </div>
                     <!-- Nút chức năng -->
-                    <button class="btn btn-danger btn-tone m-r-5 float-right" id="btn-delete">Xóa</button>
+                    {{-- <button class="btn btn-danger btn-tone m-r-5 float-right" id="btn-delete">Xóa</button> --}}
                     <button class="btn btn-primary btn-tone m-r-5 float-right" id="btn-save">Lưu</button>
                     <a href="{{route('manager.blog')}}" class="btn btn-default m-r-5 float-right" id="btn-cancel">Đóng</a>
                 </div>
@@ -188,16 +188,8 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="m-b-10">Từ khóa</div>
-                                    <div>
-                                        <select class="select2" name="tags[]" multiple="multiple" id="post-tags">
-                                            <option value="nước hoa">nước hoa</option>
-                                            <option value="nước hoa nam">nước hoa nam</option>
-                                            <option value="nước hoa Nữ">nước hoa nữ</option>
-                                            <option value="nước hoa chính hãng">nước hoa chính hãng</option>
-                                            <option value="nước hoa dior">nước hoa dior</option>
-                                        </select>
-                                    </div>
-                                    <a href="javascript:void(0)" id="add-tags" class="m-t-5 float-right">Thêm từ khóa</a>
+                                    <input type="text" class="form-control" id="post-tags" placeholder="Các từ khóa cách nhau bởi dấu phẩy" 
+                                        value="{{ is_array($post->tags) ? implode(',', $post->tags) : $post->tags }}">
                                 </div>
                             </div>
                         </div>
@@ -241,7 +233,28 @@
         });
     </script>    
 
-    <script>
+<script src="{{asset('admin_assets/page/js/api.js')}}"></script>
+<script>
+    // Hàm hiển thị bài viết
+    function showPost(id) {
+        console.log("showing post with id: " + id);
+    }
+
+    // Hàm thêm bài viết mới (bật/tắt form đăng bài)
+    function addPost() {
+        
+        $('#create-post').on('click', function() {       
+            $('#post-template').show();
+            $('#main-template').hide();
+        });
+
+        // Hủy bỏ form đăng bài
+        $('#btn-cancel').on('click', function() {
+            $('#main-template').show();
+            $('#post-template').hide();
+        });
+
+        // Nút xem hướng dẫn đăng bài
         $('#post-guild').hide();
         $('#view-post-guild').on('click', function() {
             $('#post-guild').toggle();
@@ -250,147 +263,146 @@
             } else {
                 this.innerHTML = 'Xem hướng dẫn';
             }
-        });        
-    </script>
+        });
+    }
 
-<script>
-    update = function(id) {
-        console.log("Updating post with id: " + id);
+    // Hàm gửi dữ liệu bài viết (submit bài)
+    function submitPost() {
+        $('#btn-save').on('click', function() {
+            var title = $('#post-title').val();  // Tiêu đề
+            var summary = $('#post-summary').val();  // Tóm tắt
+            var content = $('textarea[name="content"]').val();  // Nội dung (editor)
+            var status = $('#post-status').val();  // Trạng thái
+            var tags = $('#post-tags').val();  // Từ khóa
+            var commentStatus = $('input[name="comment_status"]:checked').val();  // Trạng thái bình luận
+            var imageFile = $('#customFile')[0].files[0];  // Lấy file ảnh từ input
+            
+            // Kiểm tra kích thước file ảnh
+            if (imageFile && imageFile.size > 5 * 1024 * 1024) {
+                alert("Ảnh quá lớn, vui lòng chọn ảnh có kích thước nhỏ hơn 5MB.");
+                return;
+            }
 
-        // Lấy dữ liệu bài viết từ server (AJAX GET)
-        $.ajax({
-            url: '/api/blog/' + id,  // Đảm bảo URL này là chính xác và trả về dữ liệu bài viết
-            method: 'GET',
-            success: function(res) {
-                if (res.status == 200) {
-                    var post = res.data; // Dữ liệu bài viết trả về từ server
+            // Kiểm tra các trường có rỗng không
+            if (title == '' || summary == '' || content == '' || tags == '') {
+                alert('Vui lòng điền đầy đủ thông tin');
+                return;
+            }
+            // Lấy đường dẫn của URL
+            var path = window.location.pathname;
 
-                    // Điền dữ liệu vào form update
-                    $('#post-title').val(post.title);
-                    $('#post-summary').val(post.summary);
-                    $('textarea[name="content"]').val(post.content);
-                    $('#post-status').val(post.status);
-                    $('input[name="comment_status"][value="' + post.comment_status + '"]').prop('checked', true);
-                    
-                    // Xử lý tags (tags có thể là chuỗi JSON từ server)
-                    var tags = JSON.parse(post.tags || '[]');
-                    $('#post-tags').val(tags).trigger('change');  // select2 sử dụng trigger('change') để cập nhật giá trị
+            // Tách đường dẫn và lấy ID từ cuối
+            var pathSegments = path.split('/');
 
-                    // Hiển thị hình ảnh hiện tại (nếu có)
-                    $('#post-image').attr('src', '/' + post.image); // Cập nhật hình ảnh
+            // Lấy phần cuối cùng trong đường dẫn, chính là ID
+            var postId = pathSegments[pathSegments.length - 1];
 
-                    // Hiển thị form đăng bài và ẩn phần còn lại
-                    $('#post-template').show();
-                    $('#main-template').hide();
+            // Kiểm tra nếu postId là một số hợp lệ
+            if (!isNaN(postId) && parseInt(postId) > 0) {
+                // Nếu ID hợp lệ, sử dụng postId
+                console.log("ID bài viết:", postId);
+            } else {
+                // Nếu không hợp lệ, xử lý lỗi (ví dụ: hiển thị thông báo lỗi hoặc chuyển hướng)
+                console.error("ID không hợp lệ");
+            }
 
-                    // Cập nhật ảnh khi người dùng chọn ảnh mới
-                    $('#customFile').on('change', function(event) {
-                        var file = event.target.files[0];
-                        var reader = new FileReader();
-                        reader.onload = function(e) {
-                            $('#post-image').attr('src', e.target.result);  // Cập nhật ảnh preview
-                        };
-                        reader.readAsDataURL(file);
-                    });
 
-                    // Submit dữ liệu khi nhấn nút "Cập nhật"
-                    $('#btn-save').on('click', function() {
-                        // Lấy dữ liệu từ các trường trong form
-                        var title = $('#post-title').val();
-                        var summary = $('#post-summary').val();
-                        var content = $('textarea[name="content"]').val();
-                        var status = $('#post-status').val();
-                        var tags = $('#post-tags').val();
-                        var commentStatus = $('input[name="comment_status"]:checked').val();
-                        var imageFile = $('#customFile')[0].files[0];
+            // Tạo một FormData object để gửi cả file và các trường dữ liệu khác
+            var formData = new FormData();
+            formData.append('title', title);
+            formData.append('summary', summary);
+            formData.append('content', content);
+            formData.append('status', status);
+            formData.append('tags', tags);
+            formData.append('comment_status', commentStatus);
+            if (imageFile) {
+                formData.append('image', imageFile);  // Thêm file ảnh vào FormData
+            }  // Thêm file ảnh vào FormData
+            formData.append('id', postId);  // Thêm ID bài viết vào FormData
+        
+            // In ra dữ liệu đã lấy từ form
+            console.log("Dữ liệu gửi lên server: ", formData);
 
-                        if (imageFile && imageFile.size > 5 * 1024 * 1024) {
-                            alert("Ảnh quá lớn, vui lòng chọn ảnh có kích thước nhỏ hơn 5MB.");
-                            return;
-                        }
+            // Gửi dữ liệu lên server qua API
+            Api.Blog.update(formData).done(function(res) {
+                if (res.status == 201) {
+                    $('#staus-notice').html(`
+                        <div class="alert alert-primary alert-dismissible fade show">
+                            Đăng bài thành công!
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    `);
 
-                        // Kiểm tra các trường có rỗng không
-                        if (title == '' || summary == '' || content == '' || tags == '' || !imageFile) {
-                            alert('Vui lòng điền đầy đủ thông tin');
-                            return;
-                        }
-
-                        // Tạo một FormData object để gửi cả file và các trường dữ liệu khác
-                        var formData = new FormData();
-                        formData.append('_method', 'PUT');  // Đặt method PUT để Laravel hiểu đây là update
-                        formData.append('title', title);
-                        formData.append('summary', summary);
-                        formData.append('content', content);
-                        formData.append('status', status);
-                        formData.append('tags', JSON.stringify(tags));
-                        formData.append('comment_status', commentStatus);
-                        formData.append('image', imageFile);
-
-                        // In ra dữ liệu đã lấy từ form
-                        console.log("Dữ liệu gửi lên server: ", formData);
-                        //in chi tiết dữ liệu gửi lên
-                        for (var pair of formData.entries()) {
-                            console.log(pair[0] + ', ' + pair[1]);
-                        }
-
-                        // Gửi dữ liệu lên server (AJAX PUT)
-                        $.ajax({
-                            url: '/api/blog/' + id,  // Đảm bảo URL này chính xác cho việc update bài viết
-                            method: 'POST',
-                            data: formData,
-                            processData: false,  // Không cần phải chuyển dữ liệu thành chuỗi
-                            contentType: false,  // Không cần phải đặt content type, FormData sẽ tự xử lý
-                            success: function(res) {
-                                if (res.status == 200) {
-                                    // Hiển thị thông báo cập nhật thành công
-                                    $('#staus-notice').html(`
-                                        <div class="alert alert-primary alert-dismissible fade show">
-                                            Cập nhật bài viết thành công!
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                    `);
-
-                                    setTimeout(function() {
-                                        $('#staus-notice').html('');
-                                        location.reload(); // Reload trang sau 3 giây
-                                    }, 3000);
-                                } else {
-                                    $('#staus-notice').html(`
-                                        <div class="alert alert-danger alert-dismissible fade show">
-                                            Có lỗi xảy ra: ${res.message}
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                    `);
-                                }
-
-                                // Gọi lại show để cập nhật
-                                Post.show(id);
-                            },
-                            error: function(xhr, status, error) {
-                                console.log("Có lỗi xảy ra trong quá trình gửi dữ liệu", error);
-                                alert("Có lỗi xảy ra, vui lòng thử lại.");
-                            }
-                        });
-                    });
+                    setTimeout(function() {
+                        $('#staus-notice').html('');
+                        location.reload();
+                    }, 3000); // delay 3s
                 } else {
-                    alert("Không tìm thấy bài viết.");
+                    $('#staus-notice').html(`
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            Có lỗi xảy ra: ${res.message}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    `);
                 }
-            },
-            error: function(xhr, status, error) {
-                console.log("Có lỗi xảy ra khi lấy dữ liệu bài viết", error);
-                alert("Không thể lấy dữ liệu bài viết, vui lòng thử lại.");
+
+                // Gọi lại show để cập nhật
+                showPost(1);
+            });
+        });
+    }
+
+    // Hàm tìm kiếm từ khóa trending
+    function keywordSearch() {
+        $('#trending-search').on('click', function() {
+            var keyword = $('#trending-keyword').val();
+
+            // Chuyển đến trang tìm kiếm với từ khóa
+            window.open('https://trends.google.com/trends/explore?geo=VN&q=' + keyword, '_blank');
+        });
+    }
+
+    // Hàm tải ảnh lên
+    function uploadImage() {
+        $('#customFile').on('change', function(event) {
+            // Lấy file được chọn từ input
+            var file = event.target.files[0];
+            
+            // Kiểm tra xem file có hợp lệ không (kiểu ảnh)
+            if (file && file.type.startsWith('image/')) {
+                // Tạo URL đối tượng cho file hình ảnh
+                var reader = new FileReader();
+                
+                // Khi file đã được đọc xong, hiển thị hình ảnh
+                reader.onload = function(e) {
+                    // Cập nhật nguồn hình ảnh cho thẻ img
+                    $('#post-image').attr('src', e.target.result);
+                };
+                
+                // Đọc file dưới dạng URL
+                reader.readAsDataURL(file);
+                
+                // Cập nhật label của input file
+                var fileName = file.name;
+                $('.custom-file-label').text(fileName);
+            } else {
+                alert('Vui lòng chọn một tệp hình ảnh');
             }
         });
-    };
+    }
 
-    //get id từ link
-    var url = window.location.href;
-    var id = url.substring(url.lastIndexOf('/') + 1);
-    //update(id);
+    // Gọi các hàm sau khi DOM đã được tải
+    $(document).ready(function() {
+        showPost(1); // Hiển thị bài viết với id = 1
+        addPost(); // Thêm bài viết
+        submitPost(); // Đăng bài
+        keywordSearch(); // Tìm kiếm từ khóa trending
+        uploadImage(); // Tải ảnh lên
+    });
 
 </script>
 

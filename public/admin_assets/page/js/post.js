@@ -65,7 +65,7 @@ Post = {
         formData.append('summary', summary);
         formData.append('content', content);
         formData.append('status', status);
-        formData.append('tags', JSON.stringify(tags));
+        formData.append('tags', tags);
         formData.append('comment_status', commentStatus);
         formData.append('image', imageFile);  // Thêm file ảnh vào FormData
     
@@ -150,6 +150,35 @@ Post = {
             }
         });
     },
+    delete: function() {
+        $('.btn-delete-post').on('click', function() {
+            console.log("deleting post with id: ", $(this).data('post-id'));
+            id = $(this).data('post-id');
+            title = $(this).data('title');
+            $('.modal-body').html(`Xác nhận xóa bài viết: `+ title + `?`);
+            $('.submit-delete-post').on('click', function() {
+                Api.Blog.delete(id).done(function(res) {
+                    // Kiểm tra status trong response
+                    if (res.status === 'success') {
+                        // Nếu xóa thành công, thực hiện hành động khác
+                        //ẩn modal
+                        $('#deleteModal').modal('hide');
+                        // reload lại trang
+                        location.reload();
+                        //alert(res.message); // Ví dụ: thông báo thành công
+                    } else {
+                        // Nếu có lỗi, thực hiện xử lý lỗi
+                        alert(res.message);  // Hiển thị thông báo lỗi
+                        console.error(res.message);  // Hiển thị thông báo lỗi
+                    }
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                    // Nếu không thể kết nối API hoặc có lỗi mạng, xử lý ở đây
+                    alert('Có lỗi xảy ra, vui lòng thử lại sau');
+                    console.error('Request failed: ' + textStatus, errorThrown);
+                });     
+            });
+        });
+    }
 
 }
 
@@ -164,3 +193,5 @@ Post.submit();
 Post.keywordSearch(); // Search trending keyword
 
 Post.uploadImage(); // Upload image
+
+Post.delete(); // Delete post

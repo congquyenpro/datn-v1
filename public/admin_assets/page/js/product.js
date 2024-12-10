@@ -49,7 +49,7 @@ const Product = {
                                     <label for="check-item-${product.id}" class="m-b-0"></label>
                                 </div>`,
                                 `#${product.id}`,
-                                product.name,
+                                `<a href="/nuoc-hoa/${product.slug}" target="_blank">${product.name}</a>`,
                                 product.category_name,
                                 `<div class="d-flex align-items-center">
                                     <img class="img-fluid rounded" src="${product.images}" style="border: dotted 1px #f0069d; max-width: 60px" alt="">
@@ -57,11 +57,8 @@ const Product = {
                                 productRows,
                                 trendingStatus,
                                 `<div class="text-right">
-                                    <button class="btn btn-icon btn-hover btn-sm btn-rounded view-btn" data-id="${product.id}">
-                                        <i class="anticon anticon-eye"></i>
-                                    </button>
                                     <button class="btn btn-icon btn-hover btn-sm btn-rounded edit-btn" data-id="${product.id}" data-toggle="modal" data-target=".bd-example-modal-xl">
-                                        <i class="anticon anticon-edit"></i>
+                                        <i class="anticon anticon-eye"></i>
                                     </button>
                                     <button class="btn btn-icon btn-hover btn-sm btn-rounded delete-btn" data-id="${product.id}">
                                         <i class="anticon anticon-delete"></i>
@@ -104,6 +101,11 @@ const Product = {
 
                     // Xóa các thuộc tính đã thêm
                     itemContainer.innerHTML = '';
+
+                    //Xóa dữ liệu thẻ input
+                    document.getElementsByName('product_name')[0].value = '';
+                    document.getElementsByName('short_description')[0].value = '';
+                    $('#summernote').summernote('code', '');
             });
             
             // Xử lý gắn dữ liệu cho category select
@@ -202,6 +204,7 @@ const Product = {
                         ['color', ['color']],
                         ['para', ['ul', 'ol', 'paragraph']],
                         ['table', ['table']],
+                        /* ['insert', ['link', 'picture', 'video']], */
                         ['insert', ['link', 'picture', 'video']],
                         ['view', ['fullscreen', 'codeview', 'help']]
                     ]
@@ -502,7 +505,11 @@ const Product = {
                             </div>
                             <div class="form-group">
                                 <label>Đơn giá *</label>
-                                <input type="text" class="form-control data-prices number-type" placeholder="" value="${size.price}">
+                                <input type="number" class="form-control data-prices number-type" placeholder="" value="${size.price}">
+                            </div>
+                            <div class="form-group">
+                                <label>Giá nhập *</label>
+                                <input type="number" class="form-control data-entry-prices number-type" placeholder="" value="${size.entry_price}">
                             </div>
                             <div class="form-group">
                                 <label>Giảm giá *</label>
@@ -510,7 +517,7 @@ const Product = {
                             </div>
                             <div class="form-group">
                                 <label>Số lượng * (Mặc định 0)</label>
-                                <input type="text" class="form-control data-quantity number-type" placeholder="" value="${size.quantity}">
+                                <input type="number" class="form-control data-quantity number-type" placeholder="" value="${size.quantity}">
                             </div>
                             <div class="form-group">
                                 <button class="btn btn-danger metadata-remove" atr="Delete">Xóa thuộc tính</button>
@@ -531,8 +538,12 @@ const Product = {
                                 <input type="text" class="form-control data-size number-type" placeholder="ml">
                             </div>
                             <div class="form-group">
-                                <label>Giá bán * (Tạo mới: Giá nhập = Giá bán)</label>
-                                <input type="text" class="form-control data-prices number-type" placeholder="">
+                                <label>Giá bán *</label>
+                                <input type="number" class="form-control data-prices number-type" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label>Giá nhập *</label>
+                                <input type="number" class="form-control data-entry-prices number-type" placeholder="">
                             </div>
                             <div class="form-group">
                                 <label>Giảm giá *</label>
@@ -540,7 +551,7 @@ const Product = {
                             </div>
                             <div class="form-group">
                                 <label>Số lượng * (Tạo mới: SL có thể bán = SL kho)</label>
-                                <input type="text" class="form-control data-quantity number-type" placeholder="">
+                                <input type="number" class="form-control data-quantity number-type" placeholder="">
                             </div>
                             <div class="form-group">
                                 <button class="btn btn-danger metadata-remove" atr="Delete">Xóa thuộc tính</button>
@@ -587,6 +598,14 @@ const Product = {
                     alert(`Vui lòng chọn hoặc nhập ${attribute.name}!`);
                     return null; // Trả về null nếu thuộc tính không hợp lệ
                 }
+
+                //Kiểm tra nếu attribute.value không phải là số và <0
+/*                 let value = Number(attribute.value);  // Chuyển giá trị sang số
+
+                if (isNaN(value) || value < 0) {
+                    alert(`Vui lòng nhập giá trị hợp lệ cho ${attribute.name}!`);
+                    return null;  // Trả về null nếu thuộc tính không hợp lệ
+                } */
             }
     
             // Lấy dữ liệu từ Summernote và các input
@@ -598,12 +617,37 @@ const Product = {
                 size: item.querySelector('.data-size')?.value || null,
                 oldSize: item.querySelector('.data-old-size')?.value || 999,
                 price: item.querySelector('.data-prices')?.value || null,
-                
+                entry_price: item.querySelector('.data-entry-prices')?.value || null,
                 discount: item.querySelector('.data-discount')?.value || 0,
                 quantity: item.querySelector('.data-quantity')?.value || 0,
                 entry_price: item.querySelector('.data-entry-prices')?.value || 0
             })).filter(item => item.size && item.price); // filter out incomplete items
-    
+            
+
+            // Kiểm tra nếu có giá trị price và entry_price hợp lệ
+            for (const item of itemSizes) {
+                const price = parseFloat(item.price);
+                const entry_price = parseFloat(item.entry_price);
+                const quantity = parseFloat(item.quantity);
+
+                if (isNaN(price) || price <= 0) {
+                    alert("Vui lòng nhập giá trị hợp lệ cho giá sản phẩm!");
+                    return null; // Trả về null nếu price không hợp lệ
+                }
+
+                if (isNaN(entry_price) || entry_price <= 0) {
+                    alert("Vui lòng nhập giá trị hợp lệ cho giá nhập khẩu!");
+                    return null; // Trả về null nếu entry_price không hợp lệ
+                }
+
+                if (isNaN(quantity) || quantity < 0) {
+                    alert("Vui lòng nhập giá trị hợp lệ cho số lượng sản phẩm!");
+                    return null; // Trả về null nếu quantity không hợp lệ
+                }
+
+            }
+
+            
             // Kiểm tra itemSizes
             if (itemSizes.length === 0) {
                 alert("Vui lòng thêm ít nhất một phân loại sản phẩm!");
@@ -619,7 +663,13 @@ const Product = {
                 }
                 sizeSet.add(item.size);
             }
-    
+
+            //Kiểm tra xem có file ảnh nào được chọn không
+            if (files.length === 0) {
+                alert("Không được để trống hình ảnh sản phẩm !");
+                return null; // Trả về null nếu không có ảnh
+            }            
+
             return {
                 productName,
                 shortDescription,
@@ -671,6 +721,7 @@ const Product = {
                     formData.append(`product_variants[${index}][size]`, variant.size);
                     formData.append(`product_variants[${index}][oldSize]`, variant.oldSize) || 0;
                     formData.append(`product_variants[${index}][price]`, variant.price);
+                    formData.append(`product_variants[${index}][entry_price]`, variant.entry_price);
                     formData.append(`product_variants[${index}][discount]`, variant.discount || 0);
                     formData.append(`product_variants[${index}][quantity]`, variant.quantity || 0);
 
@@ -724,13 +775,14 @@ const Product = {
                 attributes.forEach(attr => {
                     const size = attr.querySelector('.data-size').value;
                     const price = attr.querySelector('.data-prices').value;
+                    const entry_price = attr.querySelector('.data-entry_prices').value;
                     const discount = attr.querySelector('.data-discount').value;
                     const quantity = attr.querySelector('.data-quantity').value;
 
                     const oldSize = attr.querySelector('.data-old-size').value;
             
                     // Thêm thuộc tính vào formData
-                    formData.append('product_variants[]', JSON.stringify({ size, price, discount, quantity, oldSize }));
+                    formData.append('product_variants[]', JSON.stringify({ size, price,entry_price, discount, quantity, oldSize }));
                 });
             
                 // Nếu là chỉnh sửa, thêm ảnh đã có vào formData

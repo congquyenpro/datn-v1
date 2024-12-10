@@ -142,9 +142,9 @@ Api.Order.getOrderHistory = (status) => $.ajax({
 
 
 /* Comment */
-Api.Comment.getComments = (slug) => $.ajax({
+Api.Comment.getComments = (slug,type=null) => $.ajax({
     //url: `http://127.0.0.1:3000/comments?slug=${slug}`,
-    url: `/api-v1/comment/all/${slug}`,
+    url: `/api-v1/comment/all/${slug}?type=${type}`,
     method: 'GET',
 });
 
@@ -165,6 +165,8 @@ Api.Comment.deleteComment = (id) => $.ajax({
     method: 'DELETE',
     data: {id},
 });
+
+
 
 
 

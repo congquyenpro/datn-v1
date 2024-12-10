@@ -47,13 +47,17 @@ class OrderController extends Controller
 
     public function getOrderDetail(Request $request){
         $order_id = $request->id;
-        $order = $this->orderService->getOrderDeatil($order_id);
+        $order = $this->orderService->getOrderDetail($order_id);
         return response()->json($order);
     }
 
     public function updateOrder(Request $request){
         $order_id = $request->id;
         $data = $request->data;
+        if($data['status'] == 6){
+            $shipping = new ShippingService();
+            return $shipping->cancelOrder($order_id);
+        }
         try {
             $order = $this->orderService->updateOrder($order_id, $data);
             return response()->json(['status' => 200, 'message' => 'Cập nhật đơn hàng thành công']);
@@ -61,6 +65,14 @@ class OrderController extends Controller
             return response()->json($e->getMessage(), 500);
         }
     }
+
+    //đếm số đơn hàng theo trạng thái
+    public function countOrders(Request $request)
+    {
+        $status = $request->status ?? null;
+        return $this->orderService->countOrder($request->status);
+    }
+    
 
     //Trừ sản phẩm
     public function minusProductQuantity(Request $request){
@@ -221,7 +233,8 @@ class OrderController extends Controller
     public function cancelOrder(Request $request){
         $order_id = $request->id;
         $shipping = new ShippingService();
-
+        $response = $shipping->cancelOrder($order_id);
+        return response()->json($response);
     }
 
 

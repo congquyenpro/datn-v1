@@ -90,16 +90,17 @@
                                 <td>
                                     @if($post->tags)
                                         @php
-                                            // Chuyển tags thành mảng nếu tags là một chuỗi JSON
-                                            $tags = json_decode($post->tags, true);
+                                            // Tách chuỗi tags thành mảng sử dụng dấu phẩy làm phân cách
+                                            $tags = explode(',', $post->tags);
                                         @endphp
-                                
+                                    
                                         @foreach($tags as $tag)
-                                            <span class="badge badge-pill badge-geekblue m-b-5">{{ $tag }}</span>
+                                            <span class="badge badge-pill badge-geekblue m-b-5">{{ trim($tag) }}</span>
                                         @endforeach
                                     @else
                                         <span>Không có tags</span>
                                     @endif
+                                
                                 </td>
                                 
                                 <td>
@@ -115,7 +116,7 @@
                                     <a href="{{route('manager.blog.edit',$post->id)}}" class="btn btn-icon btn-hover btn-sm btn-rounded">
                                         <i class="anticon anticon-eye"></i>
                                     </a>
-                                    <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+                                    <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-delete-post" data-toggle="modal" data-target="#deleteModal" data-post-id="{{$post->id}}" data-title="{{ $post->title }}">
                                         <i class="anticon anticon-delete"></i>
                                     </button>
                                 </td>
@@ -124,6 +125,27 @@
                     </tbody>
                     
                 </table>
+            </div>
+        </div>
+    </div>
+
+    {{-- Delete modal --}}
+    <div class="modal fade" id="deleteModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Xóa bài đăng</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <i class="anticon anticon-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger submit-delete-post">Delete</button>
+                </div>
             </div>
         </div>
     </div>
@@ -163,7 +185,7 @@
 
                     </div>
                     <!-- Nút chức năng -->
-                    <button class="btn btn-danger btn-tone m-r-5 float-right" id="btn-delete">Xóa</button>
+                    {{-- <button class="btn btn-danger btn-tone m-r-5 float-right" id="btn-delete">Xóa</button> --}}
                     <button class="btn btn-primary btn-tone m-r-5 float-right" id="btn-save">Lưu</button>
                     <button class="btn btn-default m-r-5 float-right" id="btn-cancel">Đóng</button>
                 </div>
@@ -221,31 +243,7 @@
                                         </div>
                                     </fieldset>
                 
-                                    <div class="m-b-10">Danh sách bình luận (28)</div>
-                                    <div class="comments-list">
-                                        <div class="comment m-b-5">
-                                            <div class="comment-by">
-                                                <span class="comment-author"><strong>Công Nguyễn</strong></span>
-                                                <span class="comment-date m-l-10 font-italic">5/11/2024</span>
-                                            </div>
-                                            <span>Tuyệt vời !</span>
-                                            <div class="">
-                                                <a href="javascript:void(0)" class="m-r-10 text-info">Trả lời</a>
-                                                <a href="javascript:void(0)" class="text-danger">Xóa</a>
-                                            </div>
-                                        </div>
-                                        <div class="comment m-b-5">
-                                            <div class="comment-by">
-                                                <span class="comment-author"><strong>Nguyễn Công</strong></span>
-                                                <span class="comment-date m-l-10 font-italic">5/11/2024</span>
-                                            </div>
-                                            <span>Bài viết hữu ích</span>
-                                            <div class="">
-                                                <a href="javascript:void(0)" class="m-r-10 text-info">Trả lời</a>
-                                                <a href="javascript:void(0)" class="text-danger">Xóa</a>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -291,7 +289,8 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="m-b-10">Từ khóa</div>
-                                    <div>
+                                    <input type="text" class="form-control" id="post-tags" placeholder="Các từ khóa cách nhau bởi dấu phẩy">
+{{--                                     <div>
                                         <select class="select2" name="tags[]" multiple="multiple" id="post-tags">
                                             <option value="nước hoa">nước hoa</option>
                                             <option value="nước hoa nam">nước hoa nam</option>
@@ -299,7 +298,7 @@
                                             <option value="nước hoa chính hãng">nước hoa chính hãng</option>
                                             <option value="nước hoa dior">nước hoa dior</option>
                                         </select>
-                                    </div>
+                                    </div> --}}
                                     <a href="javascript:void(0)" id="add-tags" class="m-t-5 float-right">Thêm từ khóa</a>
                                 </div>
                             </div>

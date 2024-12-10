@@ -7,6 +7,7 @@ const Api = {
     Warehouse: {},
     Blog: {},
     Report: {},
+    Promotion: {},
 };
 (() => {
     $.ajaxSetup({
@@ -85,6 +86,11 @@ Api.Order.UpdateOrder = (id, data) => $.ajax({
     data: { id, data },
 });
 
+//Count Order
+Api.Order.CountOrder = () => $.ajax({
+    url: `/admin/order/count-order`,
+    method: 'GET',
+});
 
 /* Connect Shipping Partner */
 Api.Order.createTicket = (id,data) => $.ajax({
@@ -184,7 +190,17 @@ Api.Blog.store = (data) => $.ajax({
     contentType: false, // Không đặt Content-Type, để trình duyệt tự động
     
 });
-
+Api.Blog.update = (data) => $.ajax({
+    url: `/admin/blog/update`,
+    method: 'POST',
+    data: data,
+    processData: false, // Không xử lý dữ liệu, để trình duyệt tự xử lý FormData
+    contentType: false, // Không đặt Content-Type, để trình duyệt tự động
+});
+Api.Blog.delete = (id) => $.ajax({
+    url: `/admin/blog/delete/${id}`,
+    method: 'GET',
+});
 
 /* Report */
 Api.Report.getReport = (start_date,end_date) => $.ajax({
@@ -219,3 +235,10 @@ Api.Product.GetTopViewed = () => $.ajax({
       url: `/api-v1/product/type/top_view`,
       method: 'GET',
   });
+
+
+  /* Promotions */
+Api.Promotion.delete = (id) => $.ajax({
+    url: `/admin/promotions/delete/${id}`,
+    method: 'GET',
+});

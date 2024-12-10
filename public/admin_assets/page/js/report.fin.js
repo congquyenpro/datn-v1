@@ -110,7 +110,7 @@ FinReport = {
                         <td class="font-weight-bold">I. Doanh Thu Bán Hàng (1+2+3-4)</td>
                         <td id="pre_1" >${res.sale.revenue}</td>
                         <td id="now_1">${res.sale_last_month.revenue}</td>
-                        <td id="rate1"></td>
+                        <td id="rate1">${res.sale.revenue - res.sale_last_month.revenue}</td>
                     </tr>
 
                     <!-- Dòng 1.1 -->
@@ -163,7 +163,7 @@ FinReport = {
                         <td class="font-weight-bold">II. Chi Phí Bán Hàng (1+2+3)</td>
                         <td id="pre_5">${res.sale.total_cost_sale}</td>
                         <td id="now_5">${res.sale_last_month.total_cost_sale}</td>
-                        <td id="rate5"></td>
+                        <td id="rate5">${res.sale.total_cost_sale - res.sale_last_month.total_cost_sale}</td>
                     </tr>
                     <tr>
                         <td> 1. Chi phí giá vốn hàng hóa</td>
@@ -213,7 +213,7 @@ FinReport = {
                         <td class="font-weight-bold">IV. Chi Phí Khác</td>
                         <td>${res.sale.other_cost}</td>
                         <td>${res.sale_last_month.other_cost}</td>
-                        <td>0</td>
+                        <td>${res.sale.other_cost - res.sale_last_month.other_cost}</td>
                     </tr>
                     <tr>
                         <td> 1. Phiếu chi</td>
@@ -229,7 +229,7 @@ FinReport = {
                         <td>Lợi Nhuận (I + III - II - IV)</td>
                         <td id="pre_9">${res.sale.profit}</td>
                         <td id="now_9">${res.sale_last_month.profit}</td>
-                        <td id="rate_9"></td>
+                        <td id="rate_9">${res.sale.profit - res.sale_last_month.profit}</td>
                     </tr>
                 </tbody>
             </table>
@@ -245,23 +245,23 @@ FinReport = {
                 [''],
                 // Định dạng các hàng từ dữ liệu nhận về
                 ['Chỉ Tiêu Báo Cáo', 'Kỳ Hiện Tại', 'Kỳ Trước', 'Thay Đổi'],
-                ['I. Doanh Thu Bán Hàng (1+2+3-4)', data.sale.revenue, data.sale_last_month.revenue, ''], // Dòng 1
+                ['I. Doanh Thu Bán Hàng (1+2+3-4)', data.sale.revenue, data.sale_last_month.revenue, data.sale.revenue-data.sale_last_month.revenue], // Dòng 1
                 [' 1. Tiền Hàng Thực Bán (1a-1b)', data.sale.total_real_sale, data.sale_last_month.total_real_sale, ''],
                 ['   a. Tiền Hàng Bán Ra', data.sale.total_sale, data.sale_last_month.total_sale, ''],
                 ['   b. Tiền Hàng Trả Lại', data.sale.total_return_sale, data.sale_last_month.total_return_sale, ''],
 /*                 [' 2. Thuế VAT', 0, 0, 0],
                 [' 3. Phí giao hàng thu của khách', 0, 0, 0],
                 [' 4. Chiết khấu', 0, 0, 0], */
-                ['II. Chi Phí Bán Hàng (1+2+3)', data.sale.total_cost_sale, data.sale_last_month.total_cost_sale, ''],
+                ['II. Chi Phí Bán Hàng (1+2+3)', data.sale.total_cost_sale, data.sale_last_month.total_cost_sale, data.sale.total_cost_sale - data.sale_last_month.total_cost_sale],
                 [' 1. Chi phí giá vốn hàng hóa', data.sale.total_entry_value, data.sale_last_month.total_entry_value, ''],
                 [' 2. Phí giao hàng trả đối tác', data.sale.total_shipping_cost, data.sale_last_month.total_shipping_cost, ''],
                 [' 3. Thanh toán bằng điểm', 0, 0, 0],
                 ['III. Thu Nhập Khác (1+2)', 0, 0, 0],
                 [' 1. Phiếu thu', 0, 0, 0],
                 [' 2. Phí khách trả hàng', 0, 0, 0],
-                ['IV. Chi Phí Khác', data.sale.other_cost, data.sale_last_month.other_cost, 0],
+                ['IV. Chi Phí Khác', data.sale.other_cost, data.sale_last_month.other_cost, data.sale.other_cost - data.sale_last_month.other_cost],
                 [' 1. Phiếu chi', data.sale.other_cost, data.sale_last_month.other_cost, 0],
-                ['Lợi Nhuận (I + III - II - IV)', data.sale.profit, data.sale_last_month.profit, ''],
+                ['Lợi Nhuận (I + III - II - IV)', data.sale.profit, data.sale_last_month.profit, data.sale.profit - data.sale_last_month.profit],
             ];
     
             // Tạo sheet từ dữ liệu

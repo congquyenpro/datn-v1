@@ -57,11 +57,11 @@
                         </form>
                         <div class="grid-view-mode">
                             <div class="inner">
-                                <a href="listproducts.html" class="modes-mode mode-list">
+                                <a href="javascript:void(0)" class="modes-mode mode-list">
                                     <span></span>
                                     <span></span>
                                 </a>
-                                <a href="gridproducts.html" class="modes-mode mode-grid  active">
+                                <a href="javascript:void(0)" class="modes-mode mode-grid  active">
                                     <span></span>
                                     <span></span>
                                     <span></span>

@@ -6,21 +6,7 @@
 
 @section('meta_tags')
 <meta name="description" content="{{$post->summary}}">
-    @php
-        $tag_list = ''; // Khởi tạo biến tag_list trước khi vòng lặp bắt đầu
-    @endphp
-
-    @foreach ($tags as $tag)
-        @php
-            // Nối mỗi tag vào $tag_list, thêm dấu phẩy sau mỗi tag
-            $tag_list .= $tag . ', ';
-        @endphp
-    @endforeach
-
-    @php
-        $tag_list = rtrim($tag_list, ', ');
-    @endphp
-<meta name="keywords" content="{{$tag_list}}">
+<meta name="keywords" content="{{$tags}}">
 @endsection
 
 @section('page_content')
@@ -94,18 +80,24 @@
                             Tags:
                         </h3>
                         <ul class="tagcloud">
-                            @foreach ($tags as $tag)
+                            @php
+                                // Chuyển chuỗi tags thành mảng bằng dấu phẩy
+                                $tagsArray = explode(',', $tags);
+                            @endphp
+                        
+                            @foreach ($tagsArray as $tag)
                                 <li class="tag-cloud-link">
-                                    <a href="#">{{$tag}}</a>
+                                    <a href="#">{{ trim($tag) }}</a> <!-- Dùng trim để loại bỏ khoảng trắng nếu có -->
                                 </li>
                             @endforeach
                         </ul>
+                        
                     </div>
                     <div class="view-share">
                         <div class="author-view">
                             <div class="author">
                                 <div class="avt">
-                                    <img src="assets/images/avt-blog1.png" alt="img">
+                                    <img src="/admin_assets/images/logo_banner/BKP.png" alt="img">
                                 </div>
                                 <h3 class="name">
                                     BkPerfume
@@ -141,21 +133,29 @@
                         <h3 class="custom_blog_title">
                             Comments <span class="count">(2)</span>
                         </h3>
-                        <form class="comment-form">
-                            <p class="comment-reply-content">
-                                <textarea  rows="6" placeholder="Write your comment" class="input-form"></textarea>
-                            </p>
-                            <p class="form-submit">
-                                <span class="controll">
-                                    <i class="icon fa fa-file-image-o" aria-hidden="true"></i>
-                                    <i class="icon fa fa-paperclip" aria-hidden="true"></i>
-                                    <i class="icon fa fa-smile-o" aria-hidden="true"></i>
-                                    <button class="submit button">POST A COMMENT</button>		
-                                </span>	
-                            </p>
-                        </form>
-                        <ul class="comment-list">
-                            <li class="comment">
+                        @if (!Auth::check())
+                            <div style="margin-bottom: 10px; cursor:pointer;" id="view-more-comments">
+                                <div style="border: 1px dotted;padding: 4px;text-align: center;font-weight: bold;font-size: 14px;color: #ab8e66;"><a href="{{route('customer.auth.login')}}">Đăng nhập để bình luận</a></div>
+                            </div>
+                        @else
+                            <form class="comment-form">
+                                <p class="comment-reply-content">
+                                    <textarea  rows="3" placeholder="Write your comment" class="input-form" id="comment-form"></textarea>
+                                </p>
+                                <p class="form-submit">
+                                    <span class="controll">
+    <!-- 										<i class="icon fa fa-file-image-o" aria-hidden="true"></i>
+                                        <i class="icon fa fa-paperclip" aria-hidden="true"></i> -->
+                                        <i class="icon fa fa-smile-o" aria-hidden="true"></i>
+                                        <a href="javascript:void()" class="submit button" id="submit-comment">POST A COMMENT</a>		
+                                    </span>	
+                                </p>
+                            </form>
+                        @endif
+
+                        <ul class="comment-list" id="list-comments">
+
+<!-- 								<li class="comment">
                                 <div class="comment-item">
                                     <div class="author-view">
                                         <div class="author">
@@ -241,15 +241,15 @@
                                         </div>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> -->
                         </ul>
                     </div>
                     <div class="pagination clearfix style1">
                         <div class="nav-link">
                             <a href="#" class="page-numbers"><i class="icon fa fa-angle-left" aria-hidden="true"></i></a>
-                            <a href="#" class="page-numbers">1</a>
+                            <a href="#" class="page-numbers current">1</a>
                             <a href="#" class="page-numbers">2</a>
-                            <a href="#" class="page-numbers current">3</a>
+                            <a href="#" class="page-numbers">3</a>
                             <a href="#" class="page-numbers"><i class="icon fa fa-angle-right" aria-hidden="true"></i></a>
                         </div>
                     </div>
@@ -279,62 +279,44 @@
                         <h3 class="widgettitle">Danh mục</h3>
                         <ul class="list-categories">
                             <li>
-                                <input type="checkbox" id="cb1">
+                                <input type="checkbox" id="cb1" 
+                                       @if ($post->category == 'Kiến thức về nước hoa') checked @endif>
                                 <label for="cb1" class="label-text">
-                                    Kiến thức
+                                    Kiến thức về nước hoa
                                 </label>
                             </li>
                             <li>
-                                <input type="checkbox" id="cb2">
+                                <input type="checkbox" id="cb2" disabled 
+                                       @if ($post->category == 'Kinh nghiệm chọn nước hoa') checked @endif>
                                 <label for="cb2" class="label-text">
-                                    Chia sẻ
+                                    Kinh nghiệm chọn nước hoa
                                 </label>
                             </li>
                             <li>
-                                <input type="checkbox" id="cb3">
+                                <input type="checkbox" id="cb3" disabled 
+                                       @if ($post->category == 'Góc Review') checked @endif>
                                 <label for="cb3" class="label-text">
-                                    Review
+                                    Góc Review
                                 </label>
                             </li>
-                        </ul>
+                        </ul>                        
                     </div>
                     <div class="widget widget-post">
                         <h3 class="widgettitle">Popular Articles</h3>
                         <ul class="stelina-posts">
-                            <li class="widget-post-item">
-                                <div class="thumb-blog">
-                                    <img src="assets/images/sidebar-post1.jpg" alt="img">
-                                </div>
-                                <div class="post-content">
-                                    <div class="cat">
-                                        <a href="#">Life Style</a>
+                            @foreach ($latestPosts as $ltp)
+                                <li class="widget-post-item">
+                                    <div class="thumb-blog">
+                                        <img src="/{{$ltp->image}}" alt="img">
                                     </div>
-                                    <h5 class="post-title"><a href="#">9 Quicks Tips That Will Change <span>[...]</span></a></h5>
-                                </div>
-                            </li>
-                            <li class="widget-post-item">
-                                <div class="thumb-blog">
-                                    <img src="assets/images/sidebar-post2.jpg" alt="img">
-                                </div>
-                                <div class="post-content">
-                                    <div class="cat">
-                                        <a href="#">Lookbook</a>
+                                    <div class="post-content">
+                                        <div class="cat">
+                                            <a href="#">Chia sẻ</a>
+                                        </div>
+                                        <h5 class="post-title"><a href="/post/{{$ltp->slug}}">{{$ltp->title}} <span>[...]</span></a></h5>
                                     </div>
-                                    <h5 class="post-title"><a href="#">9 Quicks Tips That Will Change <span>[...]</span></a></h5>
-                                </div>
-                            </li>
-                            <li class="widget-post-item">
-                                <div class="thumb-blog">
-                                    <img src="assets/images/sidebar-post3.jpg" alt="img">
-                                </div>
-                                <div class="post-content">
-                                    <div class="cat">
-                                        <a href="#">Street Style</a>
-                                    </div>
-                                    <h5 class="post-title"><a href="#">9 Quicks Tips That Will Change <span>[...]</span></a></h5>
-                                </div>
-                            </li>
-
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                     <div class="widget widget-tags">
@@ -343,25 +325,22 @@
                         </h3>
                         <ul class="tagcloud">
                             <li class="tag-cloud-link">
-                                <a href="#">Office</a>
+                                <a href="#">Nước hoa</a>
                             </li>
                             <li class="tag-cloud-link">
-                                <a href="#">Accents</a>
-                            </li>
-                            <li class="tag-cloud-link">
-                                <a href="#">Flowering</a>
+                                <a href="#">Nước hoa Nam</a>
                             </li>
                             <li class="tag-cloud-link active">
-                                <a href="#">Accessories</a>
+                                <a href="#">Nước hoa chính hãng</a>
                             </li>
                             <li class="tag-cloud-link">
-                                <a href="#">Hot</a>
+                                <a href="#">Nước hoa nữ</a>
                             </li>
                             <li class="tag-cloud-link">
-                                <a href="#">Tables</a>
+                                <a href="#">Trending</a>
                             </li>
                             <li class="tag-cloud-link">
-                                <a href="#">Dining</a>
+                                <a href="#">Nước hoa Dior</a>
                             </li>
                         </ul>
                     </div>
@@ -385,5 +364,114 @@
 @section('page_js')
     <script src="{{asset('customer/page/js/api.js')}}"></script>
     <script src="{{asset('customer/page/js/cart.js')}}"></script>
-    <script src="{{asset('customer/page/js/index.js')}}"></script>
+  {{--   <script src="{{asset('customer/page/js/index.js')}}"></script> --}}
+
+    <script>
+        function getComments() {
+            const listComments = $('#list-comments');
+
+            let pathname = window.location.pathname;
+
+            // Tách các phần trong đường dẫn theo dấu '/'
+            let pathParts = pathname.split('/');
+
+            // Giả sử phần cần lấy luôn nằm ở cuối URL sau phần '/nuoc-hoa/'
+            let postSlug = pathParts[pathParts.length - 1];
+            let type= "post";
+            let avatar_list = [
+                "/customer/page/images/user_avatar.jpeg",
+                
+            ]
+
+            Api.Comment.getComments(postSlug, type).done(function(data){
+                listComments.html('');
+                data.forEach(element => {
+                    const formattedDate = new Date(element.created_at).toLocaleDateString('vi-VN', {
+                        day: 'numeric', month: 'long', year: 'numeric'
+                    });
+                    listComments.append(`
+                            <li class="comment">
+                                <div class="comment-item">
+                                    <div class="author-view">
+                                        <div class="author">
+                                            <div class="avt" style = "margin-right: 15px">
+                                                <img src="${avatar_list[0]}" alt="img">
+                                            </div>
+                                            <h3 class="name">
+                                               ${element.user.name}
+                                            </h3>
+                                        </div>
+                                        <div class="date-reply-comment">
+                                            <span class="date-comment">
+                                                ${formattedDate}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="comment-body">
+                                        <div class="comment-content">
+                                            <p>
+                                                ${element.content}
+                                            </p>
+                                        </div>
+                                        <div class="comment-reply-link">
+                                            <span class="Comment">
+                                                <i class="icon fa fa-commenting" aria-hidden="true"></i>
+                                                Reply
+                                            </span>
+                                            <span class="like">
+                                                <i class="icon fa fa-thumbs-o-up" aria-hidden="true"></i>
+                                                1
+                                            </span>
+                                            <span class="dislike">
+                                                <i class="icon fa fa-thumbs-o-down" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                    `);
+                });
+            });
+        };
+        getComments();
+        function addComment() {
+            $('#submit-comment').off('click');
+            $('#submit-comment').on('click', function(e) {
+                e.preventDefault();
+                var content = $('#comment-form').val();
+
+                //Check nếu null
+                if (content == '') {
+                    alert('Vui lòng nhập đủ thông tin');
+                    return;
+                }
+
+
+                // Lấy URL hiện tại của trang
+                const url = window.location.pathname;  // Lấy toàn bộ URL (chỉ lấy phần đường dẫn)
+
+                // Tách chuỗi theo dấu "/"
+                const parts = url.split('/');
+
+                // Lấy phần cuối cùng trong mảng parts (phần bạn cần)
+                const slug = parts[parts.length - 1];  // "versace-eros-edt"
+
+                var data = {
+                    commentable_type: 'post',
+                    slug: slug,
+                    content: content,
+                };
+                Api.Comment.createComment(data).done(function(res){
+                    if (res.status == 201){
+                        alert('Bình luận thành công !');
+                        getComments();
+                        //Xóa nội dung comment cũ
+                        $('#comment-form').val('');
+                    }
+                });
+            });
+
+        };
+        addComment();
+    </script>
 @endsection

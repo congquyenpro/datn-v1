@@ -47,6 +47,29 @@ class BlogController extends Controller
         }
         //return response()->json($post, 201);
     }
+    public function updateBlog(Request $request){
+        $id = $request->id;
+        try {
+            $post = $this->blogService->update($request, $id);
+            $response = [
+                'status' => 201,
+                'message' => 'Post updated',
+                'post' => $post
+            ];
+            return response()->json($response, 201);
+        } catch (\Exception $e) {
+            $response = [
+                'status' => 500,
+                'message' => 'Error: ' . $e->getMessage()
+            ];
+            return response()->json($response, 500);
+        }
+        //return response()->json($post, 201);
+    }
+    public function deleteBlog(Request $request){
+        $post = $this->blogService->delete($request);
+        return $post;
+    }
 
     public function getAll (){
         $posts = $this->blogService->getAll();
@@ -61,7 +84,15 @@ class BlogController extends Controller
     }
     public function getPostBySlug(Request $request){
         $post = $this->blogService->getPostBySlug($request->slug);
-        $tags = json_decode($post->tags);
-        return view('customer.blog.detail',compact('post','tags'));
+        $latestPosts = $this->blogService->getLatestPosts();
+        $tags = $post->tags;
+        return view('customer.blog.detail',compact('post','tags','latestPosts'));
+    }
+
+    public function getPostByCategory(Request $request){
+        $slug = $request->slug;
+        $posts = $this->blogService->getPostByCategory($slug);
+        //return $posts;
+        return view('customer.blog.all',compact('posts','slug'));
     }
 }

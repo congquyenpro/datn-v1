@@ -22,6 +22,7 @@ class Post extends Model
         'tags',
         'image',
         'views',
+        'category',
         'user_id',  // user_id là người đăng bài
     ];
 

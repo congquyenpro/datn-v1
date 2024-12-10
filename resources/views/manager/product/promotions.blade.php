@@ -92,10 +92,7 @@
                                 <button class="btn btn-icon btn-hover btn-sm btn-rounded">
                                     <i class="anticon anticon-eye"></i>
                                 </button>
-                                <button class="btn btn-icon btn-hover btn-sm btn-rounded pull-right">
-                                    <i class="anticon anticon-edit"></i>
-                                </button>
-                                <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+                                <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-remove-promotion" data-promotion-id="{{$ls->id}}" data-toggle="modal" data-target="#deleteModal">
                                     <i class="anticon anticon-delete"></i>
                                 </button>
                             </td>
@@ -171,6 +168,27 @@
         </div>
     </div>
 </div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Xóa chương trình khuyến mãi</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="anticon anticon-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                Xác nhận xóa ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger btn-submit-remove">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('page_js')
@@ -237,8 +255,8 @@
             }
 
             // Kiểm tra nếu ngày kết thúc sau ngày bắt đầu
-            var start = new Date(startDate.split('-').reverse().join('-'));
-            var end = new Date(endDate.split('-').reverse().join('-'));
+            var start = new Date(startDate.split('/').reverse().join('/'));
+            var end = new Date(endDate.split('/').reverse().join('/'));
 
             if (start > end) {
                 alert('Ngày kết thúc phải sau ngày bắt đầu.');
@@ -246,5 +264,31 @@
                 return;
             }
         }
+    </script>
+
+    <script src="{{asset('admin_assets/page/js/api.js')}}"></script>
+    <script>
+        
+        function deletePromotion(){
+            $('.btn-remove-promotion').click(function(){
+                var id = $(this).data('promotion-id');
+                console.log(id);
+                $('.btn-submit-remove').click(function(){
+                    Api.Promotion.delete(id).done(function(response){
+                        if(response.status == "success"){
+                            $('#deleteModal').modal('hide');
+                            location.reload();
+                        }else{
+                            alert('Xóa không thành công');
+                        }
+
+                    }).fail(function(response){
+                        alert('Xóa không thành công');
+                        console.log(response);
+                    });
+                });
+            });
+        }
+        deletePromotion();
     </script>
 @endsection

@@ -7,7 +7,7 @@
     <title>BKPerfume - @yield('page_title')</title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="https://placehold.co/65x65">
+    <link rel="shortcut icon" href="{{asset('admin_assets/images/logo_banner/BKP.png')}}">
 
 
     <!-- page css -->
@@ -30,8 +30,8 @@
             <div class="header">
                 <div class="logo logo-dark">
                     <a href="/admin">
-                        <img src="https://placehold.co/130x65" alt="Logo">
-                        <img class="logo-fold" src="https://placehold.co/80x65" alt="Logo">
+                        <img src="{{asset('admin_assets/images/logo_banner/BKPerfume.png')}}" alt="Logo" style=" margin-top: 17px; ">
+                        <img class="logo-fold" src="{{asset('admin_assets/images/logo_banner/BKP.png')}}" alt="Logo">
                     </a>
                 </div>
                 <div class="logo logo-white">
@@ -126,14 +126,14 @@
                         <li class="dropdown dropdown-animated scale-left">
                             <div class="pointer" data-toggle="dropdown">
                                 <div class="avatar avatar-image  m-h-10 m-r-15">
-                                    <img src="https://placehold.co/128x128"  alt="">
+                                    <img src="{{asset('admin_assets/images/logo_banner/user-profile-icon-illustration-vector.jpg')}}"  alt="">
                                 </div>
                             </div>
                             <div class="p-b-15 p-t-20 dropdown-menu pop-profile">
                                 <div class="p-h-20 p-b-15 m-b-10 border-bottom">
                                     <div class="d-flex m-r-50">
                                         <div class="avatar avatar-lg avatar-image">
-                                            <img src="https://placehold.co/128x128" alt="">
+                                            <img src="{{asset('admin_assets/images/logo_banner/user-profile-icon-illustration-vector.jpg')}}" alt="">
                                         </div>
                                         <div class="m-l-10">
                                             <p class="m-b-0 text-dark font-weight-semibold">Quyền Nguyễn</p>
@@ -150,13 +150,13 @@
                                         <i class="anticon font-size-10 anticon-right"></i>
                                     </div>
                                 </a>
-                                <a href="javascript:void(0);" class="dropdown-item d-block p-h-15 p-v-10">
+                                <a href="{{route('manager.auth.logout')}}" class="dropdown-item d-block p-h-15 p-v-10">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>
                                             <i class="anticon opacity-04 font-size-16 anticon-logout"></i>
                                             <span class="m-l-10">Logout</span>
                                         </div>
-                                        <i class="anticon font-size-10 anticon-right"></i>
+                                        
                                     </div>
                                 </a>
                             </div>
@@ -176,7 +176,7 @@
                 <div class="side-nav-inner">
                     <ul class="side-nav-menu scrollable">
                         <li class="nav-item dropdown">
-                            <a class="dropdown-toggle" href="javascript:void(0);">
+                            <a class="dropdown-toggle" href="/admin">
                                 <span class="icon-holder">
                                     <i class="fas fa-chart-area"></i>
                                 </span>
@@ -331,7 +331,7 @@
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="dropdown-toggle" href="javascript:void(0);">
+                            <a class="dropdown-toggle" href="{{route('manager.auth.logout')}}">
                                 <span class="icon-holder">
                                     <i class="fas fa-sign-out-alt"></i>
                                 </span>

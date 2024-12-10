@@ -52,8 +52,19 @@ class PromotionService
     }
 
     public function delete($id){
-        $promotion = Promotion::find($id);
-        $promotion->delete();
+        try {
+            Promotion::destroy($id);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Khuyến mãi đã được xóa thành công!',
+            ], 200); // Mã trạng thái HTTP thành công là 200 hoặc 204
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Có lỗi xảy ra khi xóa khuyến mãi!',
+                'error' => $e->getMessage(),  // Thêm thông tin chi tiết về lỗi
+            ], 500); // Mã trạng thái HTTP lỗi là 500
+        }
     }
 
 

@@ -143,6 +143,9 @@ Route::prefix('admin')->group(function() {
 
             Route::post('/update-order', 'Manager\Order\OrderController@updateOrder')->name('manager.order.update');
 
+            //count order
+            Route::get('/count-order', 'Manager\Order\OrderController@countOrders')->name('manager.order.count');
+
             //test trừ đi số sản phẩm
             Route::get('/minus/{id}', 'Manager\Order\OrderController@minusProductQuantity')->name('manager.order.minusProductQuantity');
 
@@ -180,7 +183,8 @@ Route::prefix('admin')->group(function() {
             Route::get('/', 'BlogController@showManagerBlog')->name('manager.blog');
             Route::get('/detail/{id}', 'BlogController@editBog')->name('manager.blog.edit');
             Route::post('/create', 'BlogController@createBlog')->name('manager.blog.create');
-            
+            Route::post('/update', 'BlogController@updateBlog')->name('manager.blog.update');
+            Route::get('/delete/{id}', 'BlogController@deleteBlog')->name('manager.blog.delete');
         });
     });
 
@@ -299,6 +303,8 @@ Route::prefix('/')->group(function() {
     /* Post & Comment*/
     Route::get('/post/{slug}','BlogController@getPostBySlug')->name('customer.post.detail');
     
+    /* Post by category */
+    Route::get('/blogs/{slug}','BlogController@getPostByCategory')->name('customer.post.category');
 });
 
 

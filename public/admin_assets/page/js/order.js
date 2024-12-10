@@ -1,8 +1,9 @@
 const Order = {
     orderList: {
         show: () => {
-            
+            Order.orderList.countOrder();
             $(document).on('click', '.status-event', function() {
+                Order.orderList.countOrder();
                 var status = $(this).data('id');
                 //gắn cho class status-event is-active
                 $('.status-event').removeClass('is-select');
@@ -36,9 +37,6 @@ const Order = {
                         action: `
                         <button class="btn btn-icon btn-hover btn-sm btn-rounded view-order" data-id="${order.id}" data-status="${order.status}" >
                             <i class="anticon anticon-eye"></i>
-                        </button>
-                        <button class="btn btn-icon btn-hover btn-sm btn-rounded">
-                            <i class="anticon anticon-delete"></i>
                         </button>
                         `
                     }));
@@ -105,8 +103,27 @@ const Order = {
                             Order.update.updateDefaultStatus();
                             break;
                         case 6:
+                            Order.template.showShippingPage(id);
+                            $('#order_status_update').html(`
+                                <option value="1">Đã xác nhận</option>
+                                <option value="2">Đã hoàn thiện</option>
+                                <option value="3">Chờ lấy hàng</option>
+                                <option value="4">Đang giao hàng</option>
+                                <option value="5">Đã giao hàng</option>
+                                <option value="6" selected>Đã hủy</option>
+                            `);
                             break;
                         default:
+                            Order.template.showShippingPage(id);
+                            $('#order_status_update').html(`
+                                <option value="1">Đã xác nhận</option>
+                                <option value="2">Đã hoàn thiện</option>
+                                <option value="3">Chờ lấy hàng</option>
+                                <option value="4">Đang giao hàng</option>
+                                <option value="5">Đã giao hàng</option>
+                                <option value="6">Đã hủy</option>
+                                <option value="7" selected>Hoàn trả</option>
+                            `);
                             break;
                     }
                 });
@@ -116,6 +133,14 @@ const Order = {
 
             });
         },
+        countOrder: () => {
+            Api.Order.CountOrder().done((response) => {
+                console.log(response);
+                response.forEach((element, index) => {
+                    $(`#status-${element.status}`).text(`(${element.count})`);
+                });
+            });
+        }
     },
     template: {
         showDefault: (id) => {
@@ -604,7 +629,7 @@ const Order = {
                 <option value="3">Chờ lấy hàng</option>
                 <option value="4" selected >Đang giao hàng</option>
                 <option value="5">Đã giao hàng</option>
-                <option value="6">Đã hủy</option>
+                
             `);
         },
         showShippingPage: (id) => {
@@ -619,7 +644,7 @@ const Order = {
                 <option value="3">Chờ lấy hàng</option>
                 <option value="4">Đang giao hàng</option>
                 <option value="5" selected>Đã giao hàng</option>
-                <option value="6">Đã hủy</option>
+               
                 <option value="7">Hoàn trả</option>
             `);
 /*             $('#order-detail-body').append(`
@@ -1435,6 +1460,7 @@ Order.orderList.show(); // Output: Order List
 Order.orderList.viewDetail(); // Output: View Order Detail
 
 Order.report.export(); // Output: Export Excel
+
 
 
 //Order.template.showDefault(); // Output: Order Detail

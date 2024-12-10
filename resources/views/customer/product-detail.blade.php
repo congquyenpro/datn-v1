@@ -267,7 +267,7 @@
                                         </div>
 										@if (!Auth::check())
 											<div style="margin-bottom: 10px; cursor:pointer;" id="view-more-comments">
-												<div style="border: 1px dotted;padding: 4px;text-align: center;font-weight: bold;font-size: 14px;color: #ab8e66;">Đăng nhập để đánh giá</div>
+												<div style="border: 1px dotted;padding: 4px;text-align: center;font-weight: bold;font-size: 14px;color: #ab8e66;"><a href="{{route('customer.auth.login')}}">Đăng nhập để đánh giá</a></div>
 											</div>
 										@else
 											<div class="review_form_wrapper">

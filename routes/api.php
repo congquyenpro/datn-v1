@@ -20,3 +20,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::post('/warehouse/store', 'Manager\Warehouse\WarehouseController@store')->name('manager.warehouse.store');
+
+Route::post('/webhook/ghn', 'WebhookController@handleWebhook')->name('webhook.ghn');
+
+Route::post('/webhook/order', 'WebhookController@lookupOrderDetail')->name('webhook.order');
+
+Route::get('/webhook/order', 'WebhookController@updateOrderStatus')->name('webhook.order.update');
+
+Route::get('/webhook/order/all', 'Manager\Order\OrderController@getOrders')->name('webhook.order.update');

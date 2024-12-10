@@ -33,15 +33,23 @@ class OrderService
         }
         return $orders;
     }
-    public function getOrderDeatil($order_id)
+    public function getOrderDetail($order_id)
     {
         $order = $this->orderRepository->getOrderDetail($order_id);
         return $order;
     }
     public function updateOrder($order_id, $data)
     {
+        
         $order = $this->orderRepository->update($order_id, $data);
         return $order;
+    }
+
+    //count order
+    public function countOrder($status=null)
+    {
+        $count = $this->orderRepository->countOrder($status);
+        return $count;
     }
 
     //Trừ đi số lượng sản phẩm của order đã xác nhận

@@ -16,10 +16,13 @@ const ProductDetail = {
             Api.Comment.getComments(productSlug).done(function(data){
                 listComments.html('');
                 data.forEach(element => {
+                    const formattedDate = new Date(element.created_at).toLocaleDateString('vi-VN', {
+                        day: 'numeric', month: 'long', year: 'numeric'
+                    });
                     listComments.append(`
                     <div class="conment-container">
                     <a href="#" class="avatar">
-                        <img src="/customer/page/images/user_avatar.jpeg" alt="img" style=" width: 60px; height: 60px; ">
+                        <img src="/customer/page/images/user_avatar.jpeg" alt="img" style=" width: 60px; height: 60px; border-radius: 40px ">
                     </a>
                     <div class="comment-text">
                         <div class="stars-rating">
@@ -33,7 +36,7 @@ const ProductDetail = {
                         <p class="meta">
                             <strong class="author">${element.user['name']}</strong>
                             <span>-</span>
-                            <span class="time">12/10/2024</span>
+                            <span class="time">${formattedDate }</span>
                         </p>
                         <div class="description">
                             <p>${element.content}</p>

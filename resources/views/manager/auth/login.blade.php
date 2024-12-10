@@ -7,7 +7,7 @@
     <title>Sign In</title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="">
+    <link rel="shortcut icon" href="{{asset('admin_assets/images/logo_banner/BKP.png')}}">
 
     <!-- page css -->
 
@@ -21,7 +21,7 @@
         <div class="container-fluid">
             <div class="d-flex full-height p-v-15 flex-column justify-content-between">
                 <div class="d-none d-md-flex p-h-40">
-                    <img src="https://placehold.co/130x65" alt="">
+                    <img src="{{asset('admin_assets/images/logo_banner/logo2.png')}}" alt="">
                 </div>
                 <div class="container">
                     <div class="row align-items-center">
@@ -66,7 +66,7 @@
                             </div>
                         </div>
                         <div class="offset-md-1 col-md-6 d-none d-md-block">
-                            <img class="img-fluid" src="https://placehold.co/1400x1250" alt="">
+                            <img class="img-fluid" src="{{asset('admin_assets/images/logo_banner/BKECM.png')}}" alt="">
                         </div>
                     </div>
                 </div>

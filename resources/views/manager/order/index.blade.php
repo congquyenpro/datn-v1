@@ -63,7 +63,7 @@
                             <div>Chờ xử lý</div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div>(20)</div>
+                            <div id="status-0">(0)</div>
                         </div>
                     </div>
                     <div class="status-event" atr="Pending" data-id="1">
@@ -72,7 +72,7 @@
                             <div>Đã xác nhận</div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div>(10)</div>
+                            <div id="status-1">(0)</div>
                         </div>
                     </div>
                     <div class="status-event" atr="Pending" data-id="2">
@@ -81,7 +81,7 @@
                             <div>Đã hoàn thiện</div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div>(5)</div>
+                            <div id="status-2">(0)</div>
                         </div>
                     </div>
                     <div class="status-event" atr="Pending" data-id="3">
@@ -90,7 +90,7 @@
                             <div>Chờ lấy hàng</div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div>(66)</div>
+                            <div id="status-3">(0)</div>
                         </div>
                     </div>
                     <div class="status-event" atr="Pending" data-id="4">
@@ -99,7 +99,7 @@
                             <div>Đang giao hàng</div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div>(20)</div>
+                            <div id="status-4">(0)</div>
                         </div>
                     </div>
                     <div class="status-event" atr="Pending" data-id="5">
@@ -108,7 +108,7 @@
                             <div>Đã giao hàng</div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div>(280)</div>
+                            <div id="status-5">(0)</div>
                         </div>
                     </div>
 
@@ -118,7 +118,7 @@
                             <div>Hủy đơn</div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div>(60)</div>
+                            <div id="status-6">(0)</div>
                         </div>
                     </div>
 
@@ -128,7 +128,7 @@
                             <div>Hoàn trả</div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div>(30)</div>
+                            <div id="status-7">(0)</div>
                         </div>
                     </div>
 

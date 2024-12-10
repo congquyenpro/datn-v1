@@ -12,4 +12,5 @@ class ReportService {
     public function getAll() {
         return $this->transaction->orderBy('id', 'desc')->get();
     }
+    
 }

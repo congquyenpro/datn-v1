@@ -2,10 +2,12 @@
 namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use App\Models\Order;
+use App\Repositories\OrderRepository;
 
 class ShippingService {
     private $token = 'a26e2748-971a-11ee-b1d4-92b443b7a897';
     private $shopId = '190517';
+
 
     //Tính phí dịch vụ trước khi Tạo đơn
     public function calculateFee($data) {
@@ -16,6 +18,51 @@ class ShippingService {
         ])->withOptions([
             'verify' => false, // Tắt xác thực SSL
         ])->post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee', $data);
+    
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            // Xử lý lỗi
+            return $response->json();
+        }
+    }
+    //Hủy đơn
+    public function cancelOrder($order_id){
+        //Kiểm tra trạng thái hiện tại xem đã đến giai đoạn connect với ship chưa
+        $order = Order::where('id', $order_id)->first();
+
+/*         if($order->status != 'ready_to_pick' && $order->status != 'picking' && $order->status != 'money_collect_picking'){
+            return response()->json(['status' => 500, 'message' => 'Không thể hủy đơn hàng']);
+        } */
+        if($order->status == 4 or $order->status == 5 or $order->status == 6){
+            return response()->json(['status' => 500, 'message' => 'Không thể hủy đơn hàng']);
+        }
+
+        //Cập nhật trạng thái đơn hàng
+        $order->status = 6;
+        //Lấy ra log cũ
+        $log = json_decode($order->log);
+        //Thêm log mới
+        if (!is_array($log)) {
+            //chuyển về log cũ về mảng
+            $log = [$log];
+        }
+        $log[] = date('Y-m-d H:i:s') . ' - ' . 'Đã hủy';
+        $order->log = json_encode($log);
+        $order->save();
+        
+        $data['order_codes'] = [$order->shipping_code]; 
+        //Kiểm tra loại đơn hàng có phải của GHN không
+        if($order->delivery_company_code != 'GHN' or $order->shipping_code == null){
+            return response()->json(['status' => 200, 'message' => 'Hủy đơn hàng thành công']);
+        }        
+        $response = Http::withHeaders([
+            'Token' => $this->token,
+            'Content-Type' => 'application/json',
+            'ShopId' => $this->shopId
+        ])->withOptions([
+            'verify' => false, // Tắt xác thực SSL
+        ])->post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/switch-status/cancel', $data);
     
         if ($response->successful()) {
             return $response->json();
@@ -344,6 +391,61 @@ class ShippingService {
             }
         }
     } */
+    
+    
+    /* Tra cứu trạng thái đơn theo mã đơn GHN*/
+    
+    public function lookupOrderDetail($order_code, $phone=null){
+        $data['order_code'] = $order_code;
+
+        //Kiểm tra đơn vị vận chuyển
+        $order = Order::where('shipping_code', $order_code)->first();
+        if($order->delivery_company_code != 'GHN'){
+
+            $orderModel = new Order();  // Tạo một thể hiện của Order
+            $orderRepository = new OrderRepository($orderModel);
+            $orderDetail = $orderRepository->getOrderDetail($order->id);
+
+            return response()->json(['code' => 200, 'data' => $orderDetail, 'shipping_type' => 2]);
+        }
+
+
+        $response = Http::withHeaders([
+            'Token' => $this->token,
+            'Content-Type' => 'application/json',
+        ])->withOptions([
+            'verify' => false, // Tắt xác thực SSL
+        ])->post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/detail', $data);
+    
+        if ($response->successful()) {
+            // Lấy dữ liệu từ phản hồi JSON
+            $responseData = $response->json();
+            
+            // Chỉnh sửa dữ liệu trước khi trả về (ví dụ, ẩn một phần số điện thoại người gửi)
+            $responseData['data']['from_phone'] = $this->maskPhoneNumber($responseData['data']['from_phone']);
+            $responseData['data']['return_phone'] = $this->maskPhoneNumber($responseData['data']['return_phone']);
+            $responseData['data']['to_phone'] = $this->maskPhoneNumber($responseData['data']['to_phone']);
+            
+            // Trả về dữ liệu đã được chỉnh sửa
+            return $responseData;
+        } else {
+            // Xử lý lỗi
+            return $response->json();
+        }
+        
+    }
+    private function maskPhoneNumber($phoneNumber) {
+        // Kiểm tra nếu số điện thoại có ít nhất 4 chữ số
+        if (strlen($phoneNumber) >= 4) {
+            // Giữ lại 4 số cuối và che phần còn lại
+            $maskedPhone = str_repeat('*', strlen($phoneNumber) - 4) . substr($phoneNumber, -4);
+            return $maskedPhone;
+        }
+        return $phoneNumber; // Trả về số điện thoại gốc nếu không đủ dài
+    }
+
+    
+    
     
     
 

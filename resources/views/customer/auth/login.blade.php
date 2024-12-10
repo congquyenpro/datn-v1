@@ -58,7 +58,12 @@
                                         </p>
                                         <p class="form-row">
                                             <input type="submit" class="button-submit" value="Đăng nhập">
+                    
                                         </p>
+                                        <div class="form-row">
+                                            <a href="{{route('customer.auth.register')}}" class="forgot-pw">Bạn chưa có tài khoản? Đăng ký ngay</a>
+                                        </div>
+
                                     </form>
                                 </div>
                             </div>

@@ -114,4 +114,32 @@ class BaseRepository implements IBaseRepository
         $str = preg_replace('/([\s]+)/', '-', $str);
         return $str;
     }
+
+
+    /* Process image upload */
+    public function uploadImage($file, $folder_name)
+    {
+        // Kiểm tra xem file có hợp lệ không
+        if ($file && $file->isValid()) {
+            // Tạo tên file duy nhất (thêm thời gian và tên file gốc)
+            $fileName = time() . '-' . $file->getClientOriginalName();
+
+            // Kiểm tra nếu thư mục không tồn tại, tạo nó
+            $directory = public_path('images/' . $folder_name); // Thư mục động theo folder_name
+            if (!is_dir($directory)) {
+                mkdir($directory, 0777, true);  // Tạo thư mục nếu chưa tồn tại
+            }
+
+            // Di chuyển file vào thư mục đã tạo
+            $file->move($directory, $fileName);
+
+            // Trả về đường dẫn tương đối của file đã upload
+            return 'images/' . $folder_name . '/' . $fileName;  // Đường dẫn tương đối để lưu vào DB hoặc dùng sau này
+        }
+
+        // Trả về thông báo lỗi nếu không có file hoặc file không hợp lệ
+        return null;
+    }
+ 
+    
 }

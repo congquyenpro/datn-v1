@@ -40,7 +40,7 @@
                                         </p>
                                         <p class="form-row form-row-wide">
                                             <label class="text">Mật khẩu</label>
-                                            <input title="name" type="text" class="input-text" required name="password">
+                                            <input title="name" type="password" class="input-text" required name="password">
                                         </p>
                                         <p class="form-row form-row-wide">
                                             <label class="text">Xác nhận mật khẩu</label>
@@ -48,7 +48,7 @@
                                         </p>
                                         <p class="form-row">
                                             <span class="inline">
-                                                <input type="checkbox" id="cb2" name="agree_policy">
+                                                <input type="checkbox" id="cb2" name="agree_policy" required>
                                                 <label for="cb2" class="label-text">Tôi đồng ý với <span>Điều khoản</span></label>
                                             </span>
                                         </p>

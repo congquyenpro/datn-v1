@@ -43,6 +43,7 @@ class ProductController extends Controller
                 'product_variants' => 'required|array',
                 'product_variants.*.size' => 'required|integer',
                 'product_variants.*.price' => 'required|integer',
+                'product_variants.*.entry_price' => 'required|integer',
                 'product_variants.*.discount' => 'nullable|integer',
                 'product_variants.*.quantity' => 'required|integer',
 
@@ -101,6 +102,7 @@ class ProductController extends Controller
                 'product_variants.*.size' => 'required|integer',
                 'product_variants.*.oldSize' => 'required|integer',
                 'product_variants.*.price' => 'required|integer',
+                'product_variants.*.entry_price' => 'required|integer',
                 'product_variants.*.discount' => 'nullable|integer',
                 'product_variants.*.quantity' => 'required|integer',
             ]);

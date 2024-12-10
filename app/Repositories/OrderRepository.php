@@ -33,6 +33,47 @@ class OrderRepository extends BaseRepository implements IBaseRepository
         return $order;
         //return $this->order->with('orderItems')->find($order_id);
     }
+
+    //count order
+    public function countOrder($order_status)
+    {
+        // Các trạng thái cần kiểm tra (từ 0 đến 7)
+        $statuses = [0, 1, 2, 3, 4, 5, 6, 7];
+    
+        // Nếu có filter theo trạng thái
+        if ($order_status) {
+            // Đếm số lượng đơn hàng cho trạng thái cụ thể
+            $counts = Order::where('status', $order_status)
+                           ->select('status', \DB::raw('count(*) as count'))
+                           ->groupBy('status')
+                           ->get();
+            
+            // Nếu không có đơn hàng cho trạng thái đó, trả về count = 0
+            if ($counts->isEmpty()) {
+                return response()->json([
+                    'status' => $order_status,
+                    'count' => 0
+                ]);
+            }
+        } else {
+            // Nếu không có filter theo trạng thái, trả về số lượng đơn hàng cho tất cả các trạng thái
+            $counts = collect();  // Sử dụng collection để chứa kết quả
+    
+            foreach ($statuses as $status) {
+                // Đếm số lượng đơn hàng cho mỗi trạng thái
+                $count = Order::where('status', $status)->count();
+                
+                // Thêm kết quả vào collection
+                $counts->push([
+                    'status' => $status,
+                    'count' => $count
+                ]);
+            }
+        }
+    
+        return $counts;
+    }
+
     public function update($order_id, $data)
     {
 
@@ -253,7 +294,7 @@ class OrderRepository extends BaseRepository implements IBaseRepository
         return $orders;
     }
 
-    public function getOrderByUser($user_id, $status)
+    public function getOrderByUser_7_12($user_id, $status)
     {
         //if ($status == 3) $status = 2;
     
@@ -322,6 +363,106 @@ class OrderRepository extends BaseRepository implements IBaseRepository
     
         return $orders;
     }
+    public function getOrderByUser($user_id, $status)
+    {
+        if ($status == 3) {
+            $sql = "
+            SELECT 
+            o.id AS order_id,
+            o.value,
+            o.status,
+            GROUP_CONCAT(p.images) AS images,
+            ps.product_id,
+            p.name AS product_name,
+            ps.id AS product_size_id,
+            ps.volume AS product_size_name,
+            MAX(oi.item_value) AS product_size_price, -- Sử dụng MAX hoặc các hàm tổng hợp khác
+            MAX(ps.discount) AS product_size_discount, -- Hàm tổng hợp
+            p.images AS product_image
+            FROM 
+                Orders o
+            JOIN 
+                Order_Items oi ON oi.order_id = o.id
+            JOIN 
+                Product_Sizes ps ON ps.id = oi.product_size_id
+            JOIN 
+                Products p ON p.id = ps.product_id
+            WHERE 
+                o.customer_id = ? AND (o.status = 3 OR o.status = 2)
+            GROUP BY 
+                o.id, o.value, o.status, ps.product_id, ps.id, p.images, p.name, ps.volume
+            ORDER BY 
+                o.order_date DESC;    
+            ";
+        }else{
+            $sql = "
+            SELECT 
+            o.id AS order_id,
+            o.value,
+            o.status,
+            GROUP_CONCAT(p.images) AS images,
+            ps.product_id,
+            p.name AS product_name,
+            ps.id AS product_size_id,
+            ps.volume AS product_size_name,
+            MAX(oi.item_value) AS product_size_price, -- Sử dụng MAX hoặc các hàm tổng hợp khác
+            MAX(ps.discount) AS product_size_discount, -- Hàm tổng hợp
+            p.images AS product_image
+            FROM 
+                Orders o
+            JOIN 
+                Order_Items oi ON oi.order_id = o.id
+            JOIN 
+                Product_Sizes ps ON ps.id = oi.product_size_id
+            JOIN 
+                Products p ON p.id = ps.product_id
+            WHERE 
+                o.customer_id = ? AND o.status = ?
+            GROUP BY 
+                o.id, o.value, o.status, ps.product_id, ps.id, p.images, p.name, ps.volume
+            ORDER BY 
+                o.order_date DESC;    
+            ";
+        }
+
+
+    
+        $orders = DB::select($sql, [$user_id, $status]);
+
+        // Chuẩn bị dữ liệu
+        $orderData = [];
+        foreach ($orders as $order) {
+            $orderId = $order->order_id;
+        
+            // Khởi tạo nếu chưa tồn tại đơn hàng trong danh sách
+            if (!isset($orderData[$orderId])) {
+                $orderData[$orderId] = [
+                    'order_id' => $order->order_id,
+                    'value' => $order->value,
+                    'status' => $order->status,
+                    'images' => explode(',', $order->images),
+                    'product_size_info' => []
+                ];
+            }
+        
+            // Thêm sản phẩm vào danh sách
+            $orderData[$orderId]['product_size_info'][] = [
+                'product_id' => $order->product_id,
+                'product_name' => $order->product_name,
+                'product_size_id' => $order->product_size_id,
+                'product_size_name' => $order->product_size_name,
+                'product_size_price' => $order->product_size_price,
+                'product_size_discount' => $order->product_size_discount,
+                'image' => explode(',', $order->product_image)[0] ?? null // Lấy ảnh đầu tiên
+            ];
+        }
+        
+        // Định dạng kết quả
+        $finalOrders = array_values($orderData); // Chuyển từ key-value sang mảng chỉ số
+        return $finalOrders;
+        
+    }
+
     public function getOrderByUser3($user_id, $status)
     {
         //if ($status == 3) $status = 2;
