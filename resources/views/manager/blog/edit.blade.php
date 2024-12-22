@@ -73,6 +73,14 @@
                                             <input type="text" class="form-control" id="post-title" name="title" placeholder="Tiêu đề" value="{{$post->title}}">
                                         </div>
                                         <div class="form-group">
+                                            <label for="category-select">Chuyên mục</label>
+                                            <select id="category-select" name="category" class="form-control">
+                                                <option value="Kiến thức về nước hoa" @if($post->category == 'Kiến thức về nước hoa') selected @endif>Kiến thức về nước hoa</option>
+                                                <option value="Kinh nghiệm chọn nước hoa" @if($post->category == 'Kinh nghiệm chọn nước hoa') selected @endif>Kinh nghiệm chọn nước hoa</option>
+                                                <option value="Góc review" @if($post->category == 'Góc review') selected @endif>Góc review</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
                                             <label for="post-summary">Tóm tắt</label>
                                             <input type="text" class="form-control" id="post-summary" name="summary" placeholder="Tóm tắt" value="{{$post->summary}}">
                                         </div>
@@ -273,6 +281,7 @@
             var summary = $('#post-summary').val();  // Tóm tắt
             var content = $('textarea[name="content"]').val();  // Nội dung (editor)
             var status = $('#post-status').val();  // Trạng thái
+            var category = $('#category-select').val();  // Danh mục
             var tags = $('#post-tags').val();  // Từ khóa
             var commentStatus = $('input[name="comment_status"]:checked').val();  // Trạng thái bình luận
             var imageFile = $('#customFile')[0].files[0];  // Lấy file ảnh từ input
@@ -313,6 +322,7 @@
             formData.append('summary', summary);
             formData.append('content', content);
             formData.append('status', status);
+            formData.append('category', category);
             formData.append('tags', tags);
             formData.append('comment_status', commentStatus);
             if (imageFile) {
@@ -328,7 +338,7 @@
                 if (res.status == 201) {
                     $('#staus-notice').html(`
                         <div class="alert alert-primary alert-dismissible fade show">
-                            Đăng bài thành công!
+                            Cập nhật bài viết thành công!
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>

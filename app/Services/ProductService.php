@@ -60,6 +60,11 @@ class ProductService
         return $this->productRepository->deleteProduct($id);
     }
 
+    public function softDeleteProduct($id)
+    {
+        return $this->productRepository->softDeleteProduct($id);
+    }
+
     public function editProduct($id, $data)
     {
         // Cập nhật sản phẩm

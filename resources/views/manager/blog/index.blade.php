@@ -202,6 +202,14 @@
                                             <input type="text" class="form-control" id="post-title" name="title" placeholder="Tiêu đề">
                                         </div>
                                         <div class="form-group">
+                                            <label for="category-select">Chuyên mục</label>
+                                            <select id="category-select" name="category" class="form-control">
+                                                <option value="Kiến thức về nước hoa" selected>Kiến thức về nước hoa</option>
+                                                <option value="Kinh nghiệm chọn nước hoa" >Kinh nghiệm chọn nước hoa</option>
+                                                <option value="Góc review">Góc review</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
                                             <label for="post-summary">Tóm tắt</label>
                                             <input type="text" class="form-control" id="post-summary" name="summary" placeholder="Tóm tắt">
                                         </div>

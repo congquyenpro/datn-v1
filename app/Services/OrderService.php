@@ -21,14 +21,14 @@ class OrderService
     }
 
     //Admin
-    public function getOrders($order_status)
+    public function getOrders($order_status, $order_timeframe)
     {
         switch ($order_status) {
             case 1202:
                 $orders = $this->orderRepository->all();
                 break;
             default:
-                $orders = $this->orderRepository->getOrdersByStatus($order_status);
+                $orders = $this->orderRepository->getOrdersByStatus($order_status, $order_timeframe);
                 break;
         }
         return $orders;

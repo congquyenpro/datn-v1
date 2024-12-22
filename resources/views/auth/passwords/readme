@@ -1,0 +1,4 @@
+/password/reset (Form nhập email để gửi link reset)
+/password/email (POST request để gửi link reset)
+/password/reset/{token} (Form nhập mật khẩu mới)
+/password/update (POST request để cập nhật mật khẩu mới)

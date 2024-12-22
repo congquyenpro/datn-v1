@@ -36,22 +36,10 @@
                     <div class="row m-b-30">
                         <div class="col-lg-8">
                             <div class="d-md-flex">
-                                <div class="m-b-10 m-r-15">
-                                    <select class="custom-select" style="min-width: 180px;">
-                                        <option selected>Catergory</option>
-                                        <option value="all">All</option>
-                                        <option value="Burberry">Burberry</option>
-                                        <option value="Calvin Klein">Calvin Klein</option>
-                                        <option value="Christian Dior">Christian Dior</option>
-                                    </select>
-                                </div>
                                 <div class="m-b-10">
                                     <select class="custom-select" style="min-width: 180px;">
                                         <option selected>Status</option>
                                         <option value="all">All</option>
-                                        <option value="inStock">In Stock</option>
-                                        <option value="outOfStock">Out of Stock</option>
-                                        <option value="outOfStock">Trending</option>
                                     </select>
                                 </div>
                             </div>
@@ -76,6 +64,7 @@
                                     <th>ID</th>
                                     <th>Tên</th>
                                     <th>Quyền</th>
+                                    <th>Trạng thái</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -100,11 +89,22 @@
                                                 {{$role->name}}
                                             @endforeach
                                         </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                @if ($user->status == 1)
+                                                    <div class="badge badge-success badge-dot m-r-10"></div>
+                                                    <div>Active</div>
+                                                @else 
+                                                    <div class="badge badge-danger badge-dot m-r-10"></div>
+                                                    <div>Deactive</div>
+                                                @endif
+                                            </div>
+                                        </td>
                                         <td class="text-right">
                                             <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-edit-user" data-id="{{$user->id}}" data-toggle="modal" data-target=".bd-example-modal-lg-2">
                                                 <i class="anticon anticon-eye"></i>
                                             </button>
-                                            <button class="btn btn-icon btn-hover btn-sm btn-rounded">
+                                            <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-delete-user" data-toggle="modal" data-target="#deleteModal" data-id="{{$user->id}}">
                                                 <i class="anticon anticon-delete"></i>
                                             </button>
                                         </td>
@@ -126,11 +126,8 @@
                             <div class="d-md-flex">
                                 <div class="m-b-10 m-r-15">
                                     <select class="custom-select" style="min-width: 180px;">
-                                        <option selected>Catergory</option>
+                                        <option selected>Status</option>
                                         <option value="all">All</option>
-                                        <option value="Burberry">Burberry</option>
-                                        <option value="Calvin Klein">Calvin Klein</option>
-                                        <option value="Christian Dior">Christian Dior</option>
                                     </select>
                                 </div>
                             </div>
@@ -327,6 +324,24 @@
         </div>
     </div>
 
+    {{-- Form delete user and role --}}
+    <div class="modal fade" id="deleteModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Xóa</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <i class="anticon anticon-close"></i>
+                    </button>
+                </div>
+                <div id="delete-model-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 @endsection
 
 @section('page_js')
@@ -381,6 +396,15 @@
                                     <div class="col-sm-10">
                                         <select name="role_id" id="inputState" class="form-control">
                                             ${roleOptions}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-form-label col-sm-2 pt-0">Trạng thái</label>
+                                    <div class="col-sm-10">
+                                        <select name="status" id="inputStatus" class="form-control">
+                                            <option value="1">Activate</option>
+                                            <option value="0">Deactivate</option>
                                         </select>
                                     </div>
                                 </div>
@@ -457,9 +481,9 @@
                                     <div class="col-sm-10">
                                         @foreach ($all_permissions as $ap)
                                             <div class="checkbox">
-                                                <input type="checkbox" name="permission_id[]" id="role_permission{{$ap->id}}" value="{{$ap->id}}" 
+                                                <input type="checkbox" name="permission_id[]" id="role_permission{{$ap->id}}_2" value="{{$ap->id}}" 
                                                 ${assignedPermissions.includes({{ $ap->id }}) ? 'checked' : ''}>
-                                                <label for="role_permission{{$ap->id}}">{{$ap->description}}</label>
+                                                <label for="role_permission{{$ap->id}}_2">{{$ap->description}}</label>
                                             </div>
                                         @endforeach
                                     </div>
@@ -503,6 +527,24 @@
                     }
                 });
             });
+
+            //delete user
+            $('.btn-delete-user').click(function(){
+                let id = $(this).data('id');
+                $('#delete-model-body').html(`
+                <form action="" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        Xác nhận xóa người dùng?
+                            <input type="hidden" name="id" value="${id}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-danger" value="Xóa người dùng"></input>
+                    </div>
+                </form>
+                `)
+            })
 
         });
 

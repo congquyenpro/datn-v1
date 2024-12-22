@@ -42,6 +42,7 @@ Post = {
         var summary = $('#post-summary').val();  // Tóm tắt
         var content = $('textarea[name="content"]').val();  // Nội dung (editor)
         var status = $('#post-status').val();  // Trạng thái
+        var category = $('#category-select').val();  // Danh mục 
         var tags = $('#post-tags').val();  // Từ khóa
         // Nếu tags là chuỗi, bạn sẽ tách nó thành mảng (nếu người dùng nhập thủ công vào một input)
         console.log(typeof tags);  // Kiểm tra kiểu dữ liệu của tags
@@ -65,6 +66,7 @@ Post = {
         formData.append('summary', summary);
         formData.append('content', content);
         formData.append('status', status);
+        formData.append('category', category);
         formData.append('tags', tags);
         formData.append('comment_status', commentStatus);
         formData.append('image', imageFile);  // Thêm file ảnh vào FormData

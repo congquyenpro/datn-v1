@@ -150,6 +150,9 @@ class WebhookController extends Controller
                 'status' => 200
             ], 200);
         }else {
+            if ($order_status == 5) {
+                $order->payment_status = 1;
+            }
             $order->status = $order_status;
             $data_log_index = [
                 0 => 'Chờ xử lý',

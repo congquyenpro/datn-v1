@@ -87,12 +87,27 @@ class UserController extends Controller
         //dd($role_id);
         return response()->json($permissions);
     }
-    public function updatePermissionsByRole(Request $request)
+    public function updatePermissionsByRole1(Request $request)
     {
         $role_id = $request->role_id;
         $permissions = $this->userService->updatePermissionsByRole($role_id);
         return response()->json($permissions);
     }
     
+    public function updatePermissionsByRole(Request $request)
+    {
+        $data = $request->all();
+        $role_id = $request->role_id;
+
+        // Kiểm tra xem permission_id có phải là mảng không và không rỗng
+        if (isset($data['permission_id']) && is_array($data['permission_id']) && !empty($data['permission_id'])) {
+            // Nếu có quyền được chọn, thêm vào dữ liệu
+            $permissions = $data['permission_id'];
+        } else {
+            // Nếu không có quyền nào được chọn, trả về lỗi hoặc thông báo
+            return redirect()->back()->with('error', 'Vui lòng chọn ít nhất một quyền');
+        }
+        $role = $this->userService->updatePermissionsByRole_New($role_id, $data, $permissions);
+    }
 
 }

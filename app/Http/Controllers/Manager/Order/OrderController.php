@@ -40,8 +40,8 @@ class OrderController extends Controller
     //not paging
     public function getOrders(Request $request){
         $order_status = $request->order_status ?? 0;
-        $orders = $this->orderService->getOrders($order_status);
-        
+        $order_timeframe = $request->order_timeframe ?? 'current_month';
+        $orders = $this->orderService->getOrders($order_status,$order_timeframe);
         return response()->json($orders);
     }
 
@@ -241,6 +241,9 @@ class OrderController extends Controller
     public function printOrder(Request $request){
         $order_id = $request->id;
         $shipping_code = Order::where('id', $order_id)->value('shipping_code');
+        if ($shipping_code != 'GHN') {
+            return response()->json(['status' => 500, 'message' => 'Phiếu đóng gói sử dụng dịch vụ ngoài']);
+        }
 
         $print = new ShippingService();
         $response = $print->printOrder($shipping_code);

@@ -31,6 +31,7 @@ class ProductController extends Controller
                 'product_name' => 'required|string|max:255',
                 'category_id' => 'required|integer',
                 'gender' => 'required|integer',
+                'status' => 'required|integer',
                 'short_description' => 'required|string',
                 'description' => 'required|string',
 
@@ -92,6 +93,7 @@ class ProductController extends Controller
                 'product_name' => 'required|string|max:255',
                 'category_id' => 'required|integer',
                 'gender' => 'required|integer',
+                'status' => 'required|integer',
                 'short_description' => 'required|string',
                 'description' => 'required|string',
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048', // Hình ảnh hợp lệ
@@ -120,8 +122,16 @@ class ProductController extends Controller
         }
     }
     
-    public function delete(Request $request){
-        $this->productService->deleteProduct($request->id);
+    public function softDelete(Request $request){
+        /* $this->productService->deleteProduct($request->id); */
+
+        //Kiểm tra nếu sản phẩm đã được mua (nhập) thì chỉ thực hiện xóa mềm
+        try {
+            $this->productService->softDeleteProduct($request->id);
+            return response()->json(['message' => 'Product deleted successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error: ' . $e->getMessage()], 500);
+        }
     }
 
 

@@ -58,6 +58,7 @@ class UserService
         $user->update([
             'name' => $data['name'],
             'email' => $data['email'],
+            'status' => $data['status'],
             'password' => $data['password'] ?? $user->password, // Nếu không có mật khẩu mới, giữ nguyên mật khẩu cũ
         ]);
     
@@ -133,6 +134,40 @@ class UserService
         return $role;
     }
 
+    public function updatePermissionsByRole_New($role_id, $data, $permissions)
+    {
+        // Tìm vai trò theo ID
+        $role = Role::find($role_id);
+    
+        if (!$role) {
+            // Nếu không tìm thấy vai trò, trả về lỗi hoặc thông báo
+            return response()->json(['error' => 'Role not found'], 404);
+        }
+    
+        // Cập nhật tên vai trò
+        $role->update([
+            'name' => $data['name'], // Cập nhật tên vai trò
+        ]);
+    
+        // Xử lý quyền:
+        // Nếu có quyền mới được truyền vào, thực hiện cập nhật quyền cho vai trò
+        if (!empty($permissions)) {
+            // Xóa tất cả quyền cũ liên kết với vai trò này
+            DB::table('permission_role')->where('role_id', $role_id)->delete();
+    
+            // Gắn lại các quyền mới
+            foreach ($permissions as $permission_id) {
+                DB::table('permission_role')->insert([
+                    'role_id' => $role_id,
+                    'permission_id' => $permission_id,
+                ]);
+            }
+        }
+    
+        // Trả về vai trò đã cập nhật
+        return $role;
+    }
+    
 
 
     /* Customer */

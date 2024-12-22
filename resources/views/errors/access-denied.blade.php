@@ -20,7 +20,7 @@
     <title>Error</title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{asset('admin_assets/assets/images/logo/favicon.png')}}">
+    <link rel="shortcut icon" href="{{asset('admin_assets/images/logo_banner/BKP.png')}}">
 
     <!-- page css -->
 
@@ -34,7 +34,7 @@
         <div class="container-fluid">
             <div class="d-flex full-height p-v-20 flex-column justify-content-between">
                 <div class="d-none d-md-flex p-h-40">
-                    <img src="{{asset('admin_assets/assets/images/logo/logo.png')}}" alt="">
+                    <img src="{{asset('admin_assets/images/logo_banner/BKP.png')}}" alt="">
                 </div>
                 <div class="container">
                     <div class="row align-items-center">
@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <div class="d-none d-md-flex  p-h-40 justify-content-between">
-                    <span class="">© 2019 ThemeNate</span>
+                    <span class="">© 2024 BKPerfume</span>
                     <ul class="list-inline">
                         <li class="list-inline-item">
                             <a class="text-dark text-link" href="">Legal</a>

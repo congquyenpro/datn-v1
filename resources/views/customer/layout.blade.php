@@ -30,6 +30,19 @@
 
     @yield('meta_tags')
     @yield('page_css')
+    <style>
+        .bpFab{
+            z-index: 9998;
+            position: fixed;
+            bottom: 1.5rem;
+            right: -1.5rem;
+            height: 7rem !important;
+            width: 9rem !important;
+            border-radius: 9999px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+    </style>
 
     {{-- <link rel="stylesheet" href="test.css"> --}}
 </head>
@@ -692,7 +705,7 @@
             </a>
         </div>
         <div class="footer-device-mobile-item device-home device-user">
-            <a href="login.html">
+            <a href="/profile">
 					<span class="icon">
 						<i class="fa fa-user" aria-hidden="true"></i>
 					</span>
@@ -726,7 +739,45 @@
 <script src="{{asset('customer/assets/js/jquery.scrollbar.min.js')}}"></script>
 <script src="{{asset('customer/assets/js/frontend-plugin.js')}}"></script>
 
-
+<script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
+<script defer>
+window.botpress.on("webchat:ready", (conversationId) => {
+    /* botpress.open(); */
+});
+window.botpress.init({
+    "botId": "c70ddd5a-2b85-44d9-87b5-0f3b5205a596",
+    "configuration": {
+        "composerPlaceholder": "Em là Mia, em có thể giúp gì cho anh/chị?",
+        "botName": "Trợ lý ảo Mia",
+        "botAvatar": "https://files.bpcontent.cloud/2024/12/21/16/20241221160614-PGBFOO2C.png",
+        "botDescription": "Tư vấn sản phẩm BKPerfume",
+        "website": {
+        "title": "https://bkperfume.asia/",
+        "link": "https://bkperfume.asia/"
+        },
+        "email": {
+        "title": "bkperfume@gmail.com",
+        "link": "bkperfume@gmail.com"
+        },
+        "phone": {
+        "title": "0818635618",
+        "link": "0818635618"
+        },
+        "termsOfService": {
+        
+        },
+        "privacyPolicy": {
+        
+        },
+        "color": "#ab8e66",
+        "variant": "solid",
+        "themeMode": "light",
+        "fontFamily": "inter",
+        "radius": 1
+    },
+    "clientId": "0b836a9b-c163-461e-8710-c73ca8af2ab7"
+});
+</script>
 
 @yield('page_js')
 

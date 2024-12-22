@@ -54,7 +54,7 @@
                                                 <input type="checkbox" id="cb1">
                                                 <label for="cb1" class="label-text">Ghi nhớ</label>
                                             </span>
-                                            <a href="#" class="forgot-pw">Quên mật khẩu?</a>
+                                            <a href="{{route('customer.auth.forgot')}}" class="forgot-pw">Quên mật khẩu?</a>
                                         </p>
                                         <p class="form-row">
                                             <input type="submit" class="button-submit" value="Đăng nhập">
@@ -63,7 +63,21 @@
                                         <div class="form-row">
                                             <a href="{{route('customer.auth.register')}}" class="forgot-pw">Bạn chưa có tài khoản? Đăng ký ngay</a>
                                         </div>
+                                                                                    <!-- Hiển thị thông báo lỗi nếu có lỗi -->
+                                            @if ($errors->any())
+                                                <div>
+                                                    <ul>
+                                                        @foreach ($errors->all() as $error)
+                                                            <li style="color: red">{{ $error }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            @endif
 
+                                            <!-- Hiển thị thông báo thành công -->
+                                            @if (session('status'))
+                                                <div>{{ session('status') }}</div>
+                                            @endif
                                     </form>
                                 </div>
                             </div>

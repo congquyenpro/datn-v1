@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Manager;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -19,6 +20,14 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
+
+        //Kiểm tra cả status xong nếu là 0 thì là disable
+        $user = User::where('email', $request->email)->first();
+        if ($user && $user->status == 0) {
+            return back()->withErrors([
+                'email' => 'Tài khoản của bạn đã bị khóa.',
+            ]);
+        }        
         // Kiểm tra thông tin đăng nhập
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             // Đăng nhập thành công, chuyển hướng đến trang dashboard

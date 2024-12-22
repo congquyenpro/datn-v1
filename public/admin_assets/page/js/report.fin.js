@@ -263,7 +263,7 @@ FinReport = {
                 [' 1. Phiếu chi', data.sale.other_cost, data.sale_last_month.other_cost, 0],
                 ['Lợi Nhuận (I + III - II - IV)', data.sale.profit, data.sale_last_month.profit, data.sale.profit - data.sale_last_month.profit],
             ];
-    
+            
             // Tạo sheet từ dữ liệu
             const ws = XLSX.utils.aoa_to_sheet(transformedData);
     

@@ -324,10 +324,11 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="{{route('manager.users')}}">Người dùng</a>
+                                    <a href="{{route('manager.users')}}">Nhân viên</a>
                                 </li>
-
-
+                                <li>
+                                    <a href="{{route('manager.customer')}}">Khách hàng</a>
+                                </li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">

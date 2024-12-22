@@ -1,30 +1,74 @@
+
 const Order = {
     orderList: {
         show: () => {
             Order.orderList.countOrder();
+
             $(document).on('click', '.status-event', function() {
+
+                //Lọc theo tháng
+                var timeframe = $('#month-select').val();
+
                 Order.orderList.countOrder();
                 var status = $(this).data('id');
                 //gắn cho class status-event is-active
                 $('.status-event').removeClass('is-select');
                 $(this).addClass('is-select');
-                Api.Order.GetOrdersList(status).done((response) => {
-                    console.log(response);
-                    var order_status = [
-                        `<span class="badge m-b-5 mr-1 badge-orange badge-pill">Chờ xử lý</span>`,
-                        '<span class="badge m-b-5 mr-1 badge-cyan badge-pill">Đã xác nhận</span>',
-                        '<span class="badge m-b-5 mr-1 badge-geekblue badge-pill">Đã hoàn thiện</span>',
-                        '<span class="badge m-b-5 mr-1 badge-gold badge-pill">Chờ lấy hàng</span>',
-                        '<span class="badge m-b-5 mr-1 badge-purple badge-pill">Đang giao hàng</span>',
-                        '<span class="badge m-b-5 mr-1 badge-success badge-pill">Đã giao hàng</span>',
-                        '<span class="badge m-b-5 mr-1 badge-danger badge-pill">Đã hủy</span>',
-                        '<span class="badge m-b-5 mr-1 badge-danger badge-pill">Hoàn trả</span>',
-                    ];
-                    var payment_status = [
-                        `<span class="badge m-b-5 mr-1 badge-warning badge-pill">Chưa thanh toán</span>`,
-                        `<span class="badge m-b-5 mr-1 badge-success badge-pill">Đã thanh toán</span>`,
-                    ];
-                    const formattedData = response.map(order => ({
+                Order.orderList.getOrdersList(status, timeframe);
+
+                //off change event
+/*                 $('#month-select').off('change');
+                $('#month-select').on('change', function() {
+                    timeframe = $(this).val();
+                    Order.orderList.getOrdersList(status, timeframe);
+                }); */
+            });
+
+            //Khởi tạo
+            var init_status = 0;
+            $('.status-event[data-id="' + init_status + '"]').trigger('click');
+        },
+        getOrdersList: (status, timeframe) => {
+            Api.Order.GetOrdersList(status, timeframe).done((response) => {
+                console.log(response);
+                var order_status = [
+                    `<span class="badge m-b-5 mr-1 badge-orange badge-pill">Chờ xử lý</span>`,
+                    '<span class="badge m-b-5 mr-1 badge-cyan badge-pill">Đã xác nhận</span>',
+                    '<span class="badge m-b-5 mr-1 badge-geekblue badge-pill">Đã hoàn thiện</span>',
+                    '<span class="badge m-b-5 mr-1 badge-gold badge-pill">Chờ lấy hàng</span>',
+                    '<span class="badge m-b-5 mr-1 badge-purple badge-pill">Đang giao hàng</span>',
+                    '<span class="badge m-b-5 mr-1 badge-success badge-pill">Đã giao hàng</span>',
+                    '<span class="badge m-b-5 mr-1 badge-danger badge-pill">Đã hủy</span>',
+                    '<span class="badge m-b-5 mr-1 badge-danger badge-pill">Hoàn trả</span>',
+                ];
+                var payment_status = [
+                    `<span class="badge m-b-5 mr-1 badge-warning badge-pill">Chưa thanh toán</span>`,
+                    `<span class="badge m-b-5 mr-1 badge-success badge-pill">Đã thanh toán</span>`,
+                ];
+                const formattedData = response.map(order => ({
+                    id: order.id,
+                    name: `
+                        <p><i class="far fa-user m-r-10"></i>${order.name}</p>
+                        <p><i class="far fa-address-book m-r-10"></i>TEST</p>
+                        <p><i class="fas fa-phone-alt m-r-10"></i>${order.phone}</p>
+                    `,
+                    order_price: order.value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }), // Định dạng giá
+                    order_date: order.order_date,
+                    status: order_status[order.status] + payment_status[order.payment_status], // nếu đơn hàng đã giao thì trạng thái thanh toán => đã thanh toán
+                    action: `
+                    <button class="btn btn-icon btn-hover btn-sm btn-rounded view-order" data-id="${order.id}" data-status="${order.status}" >
+                        <i class="anticon anticon-eye"></i>
+                    </button>
+                    `
+                }));
+                const formattedData_Test = response.map(order => {
+                    // Kiểm tra nếu order.status là 5 thì gán payment_status = 1
+                    let paymentStatus = order.payment_status;
+                    if (order.status === 5) {
+                        paymentStatus = 1;
+                    }
+                
+                    return {
                         id: order.id,
                         name: `
                             <p><i class="far fa-user m-r-10"></i>${order.name}</p>
@@ -33,34 +77,30 @@ const Order = {
                         `,
                         order_price: order.value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }), // Định dạng giá
                         order_date: order.order_date,
-                        status: order_status[order.status] + payment_status[order.payment_status], // Hoặc bất kỳ thông tin trạng thái nào bạn muốn hiển thị
+                        status: order_status[order.status] + payment_status[paymentStatus], // Nếu đơn hàng đã giao thì trạng thái thanh toán => đã thanh toán
                         action: `
-                        <button class="btn btn-icon btn-hover btn-sm btn-rounded view-order" data-id="${order.id}" data-status="${order.status}" >
-                            <i class="anticon anticon-eye"></i>
-                        </button>
+                            <button class="btn btn-icon btn-hover btn-sm btn-rounded view-order" data-id="${order.id}" data-status="${order.status}" >
+                                <i class="anticon anticon-eye"></i>
+                            </button>
                         `
-                    }));
-                    $('#orders_list').DataTable({
-                        data: formattedData,
-                        columns: [
-                            { data: 'id' },
-                            { data: 'name' },
-                            { data: 'order_price' },
-                            { data: 'order_date' },
-                            { data: 'status' },
-                            { data: 'action' }
-                        ],
-                        autoWidth: false ,
-                        responsive: true,
-                        destroy: true, //Thêm destroy để reset bảng trước khi select status_type mới
-                    });
+                    };
                 });
-
+                
+                $('#orders_list').DataTable({
+                    data: formattedData,
+                    columns: [
+                        { data: 'id' },
+                        { data: 'name' },
+                        { data: 'order_price' },
+                        { data: 'order_date' },
+                        { data: 'status' },
+                        { data: 'action' }
+                    ],
+                    autoWidth: false ,
+                    responsive: true,
+                    destroy: true, //Thêm destroy để reset bảng trước khi select status_type mới
+                });
             });
-
-            //Khởi tạo
-            var init_status = 0;
-            $('.status-event[data-id="' + init_status + '"]').trigger('click');
         },
         viewDetail: () => {
             $(document).on('click', '.view-order', function() {
@@ -140,7 +180,17 @@ const Order = {
                     $(`#status-${element.status}`).text(`(${element.count})`);
                 });
             });
-        }
+        },
+        showByMonth: () => {
+            var timeframe = $('#month-select').val();
+            Order.orderList.show(timeframe);
+
+            $('#month-select').change(function() {
+                timeframe = $(this) .val();
+                Order.orderList.show(timeframe);
+            });
+            
+        },
     },
     template: {
         showDefault: (id) => {
@@ -606,6 +656,9 @@ const Order = {
                 var order_id = $(this).data('order-id');
                 console.log(order_id);
                 Api.Order.printTicket(order_id).done((response) => {
+                    if (response.status = 500) {
+                        alert('Đơn hàng liên kết đối tác vận chuyển ngoài !');
+                    }
                     // Giả sử response chứa đường dẫn đến tệp in
                     var printUrl = response; // Thay đổi thành trường chính xác chứa URL
                 
@@ -1440,7 +1493,9 @@ const Order = {
                 var selectedElement = document.querySelector('.status-event.is-select');
                 // Lấy giá trị của thuộc tính data-id
                 var dataId = selectedElement ? selectedElement.getAttribute('data-id') : 0;
-                Api.Order.GetOrdersList(dataId).done((response) => {
+                var timeframe = $('#month-select').val();
+                console.log(timeframe);
+                Api.Order.GetOrdersList(dataId,timeframe).done((response) => {
                     console.log(response);
 
                     const timestamp = Date.now();
@@ -1456,7 +1511,8 @@ const Order = {
     } 
 }
 
-Order.orderList.show(); // Output: Order List
+Order.orderList.show(); // Output: Order List => khoong theo moth
+//Order.orderList.showByMonth(); // Output: Order List => theo moth
 Order.orderList.viewDetail(); // Output: View Order Detail
 
 Order.report.export(); // Output: Export Excel

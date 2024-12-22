@@ -8,6 +8,7 @@ const Api = {
     Blog: {},
     Report: {},
     Promotion: {},
+    Customer: {},
 };
 (() => {
     $.ajaxSetup({
@@ -64,13 +65,17 @@ Api.Product.EditProduct = (formData) => $.ajax({
     processData: false, // Đặt false để ngăn jQuery tự động chuyển đổi formData thành chuỗi query
     contentType: false, // Đặt false để jQuery không đặt header `Content-Type` (formData sẽ tự thêm header đúng)
 });
+Api.Product.SoftDeleteProduct = (product_id) => $.ajax({
+    url: '/admin/product/soft-delete/' + product_id,
+    method: 'GET',
+});
 
 
 
 
-Api.Order.GetOrdersList = (order_status) => $.ajax({
+Api.Order.GetOrdersList = (order_status, timeframe) => $.ajax({
     //url: `http://127.0.0.1:3000/orders_list`,
-    url : `/admin/order/all?order_status=${order_status}`,
+    url : `/admin/order/all?order_status=${order_status}&order_timeframe=${timeframe}`,
     method: 'GET',
 });
 
@@ -224,6 +229,12 @@ Api.Report.getInventory = () => $.ajax({
       method: 'GET',
   });
 
+//Lấy doanh thu ngày hiện tại
+Api.Report.getReportRevenue = () => $.ajax({
+    url: `/admin/report/report-today`,
+    method: 'GET',
+});
+
 //Get best seller and top viewed product từ bên customer làm report
 Api.Product.GetBestSeller = () => $.ajax({
     /* url: `http://127.0.0.1:3000/best-seller`, */
@@ -241,4 +252,23 @@ Api.Product.GetTopViewed = () => $.ajax({
 Api.Promotion.delete = (id) => $.ajax({
     url: `/admin/promotions/delete/${id}`,
     method: 'GET',
+});
+
+/* Customer */
+Api.Customer.getAll = (customer_type) => $.ajax({
+    url: `/admin/system/customers/orders?customer_type=${customer_type}`,
+    method: 'GET',
+});
+Api.Customer.viewDetail = (urser_id) => $.ajax({
+    url: `/admin/system/customer/detail?user_id=${urser_id}`,
+    method: 'GET',
+});
+Api.Customer.viewInfor = (urser_id) => $.ajax({
+    url: `/admin/system/customer/infor?user_id=${urser_id}`,
+    method: 'GET',
+});
+Api.Customer.setStatus = (user_id, status) => $.ajax({
+    url: `/admin/system/customer/status`,
+    method: 'POST',
+    data: { user_id, status },
 });

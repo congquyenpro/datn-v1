@@ -24,7 +24,7 @@
                 <div class="col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="card-title"><b>DOANH THU NGÀY</b></div>
+                            <div class="card-title"><b>THỐNG KÊ NGÀY</b></div>
                             <hr>
                             <div class="row">
                                 <div class="col-sm-6 col-md-6 col-lg-4">
@@ -35,7 +35,7 @@
                                                     <i class="anticon anticon-dollar"></i>
                                                 </div>
                                                 <div class="m-l-15">
-                                                    <h4 class="m-b-0">20,000,000₫</h4>
+                                                    <h4 class="m-b-0" id="today-revenue">0</h4>
                                                     <p class="m-b-0 text-muted">Doanh thu</p>
                                                 </div>
                                             </div>
@@ -47,10 +47,10 @@
                                         <div class="card-body">
                                             <div class="media align-items-center">
                                                 <div class="avatar avatar-icon avatar-lg avatar-blue">
-                                                    <i class="anticon anticon-dollar"></i>
+                                                    <i class="anticon anticon-shopping-cart"></i>
                                                 </div>
                                                 <div class="m-l-15">
-                                                    <h4 class="m-b-0">50</h4>
+                                                    <h4 class="m-b-0" id="today-order">0</h4>
                                                     <p class="m-b-0 text-muted">Đơn hàng</p>
                                                 </div>
                                             </div>
@@ -62,10 +62,10 @@
                                         <div class="card-body">
                                             <div class="media align-items-center">
                                                 <div class="avatar avatar-icon avatar-lg avatar-blue">
-                                                    <i class="anticon anticon-dollar"></i>
+                                                    <i class="anticon anticon-usergroup-add"></i>
                                                 </div>
                                                 <div class="m-l-15">
-                                                    <h4 class="m-b-0">20</h4>
+                                                    <h4 class="m-b-0" id="today-customer">0</h4>
                                                     <p class="m-b-0 text-muted">Khách hàng</p>
                                                 </div>
                                             </div>
@@ -162,8 +162,8 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Sản phẩm</th>
-                                                <th>Đã bán</th>
-                                                <th>Doanh thu</th>
+                                                <th>Lượt bán</th>
+                         
                                             </tr>
                                         </thead>
                                         <tbody id="best-selling-body">
@@ -188,7 +188,7 @@
                                                 <th>ID</th>
                                                 <th>Sản phẩm</th>
                                                 <th>Lượt xem</th>
-                                                <th>Doanh thu</th>
+                                               
                                             </tr>
                                         </thead>
                                         <tbody id="top-view-body">
@@ -209,7 +209,7 @@
                     <div class="row m-b-15">
                         <div class="col-sm-4 col-md-4">
                             <div class="img-news m-t-5">
-                                <img src="https://placehold.co/100x100" alt="" srcset="" width="100%" height="50px">
+                                <img src="{{asset('admin_assets/images/news/News.png')}}" alt="" srcset="" width="100%" height="50px">
                             </div>
                         </div>
                         <div class="col-sm-8 col-md-8">
@@ -230,7 +230,7 @@
                             </div>
                         </div>
                         <div class="col-sm-8 col-md-8">
-                            <h6><a href="http://">Giải pháp Marketing Zalo hiệu quả</a> <p style="font-size: 12px;">5/10/2024</p></h6>
+                            <h6><a href="http://">Giải pháp tự động hóa chăm sóc khách hàng</a> <p style="font-size: 12px;">5/10/2024</p></h6>
                             
                         </div>
                         
@@ -242,7 +242,7 @@
                             </div>
                         </div>
                         <div class="col-sm-8 col-md-8">
-                            <h6><a href="http://">Hội thảo xây dựng thương hiệu</a> <p style="font-size: 12px;">5/10/2024</p></h6>
+                            <h6><a href="http://">Tích hợp trợ lý ảo</a> <p style="font-size: 12px;">5/10/2024</p></h6>
                             
                         </div>
                     </div>
@@ -441,7 +441,7 @@
 <script src="{{asset('admin_assets/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
 <script>
     // Thiết lập dữ liệu cho biểu đồ
-    const ctx = document.getElementById('myChart').getContext('2d');
+/*     const ctx = document.getElementById('myChart').getContext('2d');
     const myChart = new Chart(ctx, {
         type: 'bar', // Chọn loại biểu đồ là cột dọc
         data: {
@@ -477,7 +477,7 @@
                 }
             }
         }
-    });
+    }); */
 </script>
 
 <script>

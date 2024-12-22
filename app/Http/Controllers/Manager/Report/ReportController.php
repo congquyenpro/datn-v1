@@ -44,8 +44,8 @@ class ReportController extends Controller
         return response()->json($data);
     }
 
-
-    public function getSalesReport($startDate, $endDate)
+    //Hàm cũ : tính sp bán ra, giá vốn dựa trên đơn đã xuất (chỉ trừ đơn hủy và hoàn)
+    public function getSalesReport_Old($startDate, $endDate)
     {
         //old-version: total_sale và total_shipping_cost(query2) NOT IN (0, 6, 7)=> đơn trả lại không được tính là đã bán
         //new-version: total_sale và total_shipping_cost(query2): NOT IN (0, 6) => đơn trả lại cũng được tính là đã bán
@@ -110,6 +110,72 @@ class ReportController extends Controller
             'profit' => $profit
         ];
     }
+
+    //Hàm mới: tính sp bán ra, giá vốn dựa trên đơn đã hoàn thành (status = 5,7) => thuật ngữ: doanh thu thuần
+    public function getSalesReport($startDate, $endDate)
+    {
+        $query = "
+        SELECT 
+            COALESCE(SUM(CASE WHEN od.status IN (5,7) THEN oi.item_value ELSE 0 END), 0) AS total_sale,
+            COALESCE(SUM(CASE WHEN od.status = 7 THEN oi.item_value ELSE 0 END), 0) AS total_return_sale,
+            COALESCE(SUM(CASE WHEN od.status = 5 THEN oi.entry_price ELSE 0 END), 0) AS total_entry_value,
+            COALESCE(SUM(CASE WHEN od.status = 5 THEN od.shipping_cost ELSE 0 END), 0) AS total_shipping_cost
+            
+        FROM orders AS od
+        JOIN order_items oi ON oi.order_id = od.id
+        WHERE 
+            od.order_date BETWEEN ? AND ?
+        ";
+        $query2 = "
+        SELECT 
+            COALESCE(SUM(CASE WHEN od.status NOT IN (0, 6) THEN od.shipping_cost ELSE 0 END), 0) AS total_shipping_cost
+        FROM orders AS od
+        WHERE 
+            od.order_date BETWEEN ? AND ?
+        ";
+    
+/*         $startDate = "2024-11-09 16:28:04";
+        $endDate = "2024-12-09 16:29:0"; */
+
+        // Thực thi query với tham số
+        $salesData = \DB::select($query, [$startDate, $endDate]);
+        $shipping_cost = \DB::select($query2, [$startDate, $endDate]);
+
+        $total_sale = $salesData[0]->total_sale;
+        $total_return_sale = $salesData[0]->total_return_sale;
+        $total_entry_value = $salesData[0]->total_entry_value;
+        $total_shipping_cost = $shipping_cost[0]->total_shipping_cost;
+        
+        //1. Doanh thu bán hàng = Tiền hàng thực bán + (Thuế VAT, Phí giao hàng thu khách, Chiết khấu) (set = 0)
+        $total_real_sale = $total_sale - $total_return_sale; // = revenue
+        $revenue = $total_real_sale;
+
+        //2. Chi phí bán hàng = Tổng giá vốn + Tổng phí giao hàng + Thanh toán bằng điểm (=0)
+        $total_cost_sale = $total_entry_value + $total_shipping_cost; // = cost
+
+        //3. Thu nhập khác = Phiếu thu + phí khách trả hàng (Hiện tại chưa có)
+        $other_income = 0;
+
+        //4. Chi phí khác = Phiếu chi (Hiện tại lấy từ transaction)
+        $other_cost = (int) $this->getTransaction($startDate, $endDate)[0]->total_trans_out;
+
+        //Lợi nhuận = Doanh thu bán hàng - Chi phí bán hàng + Thu nhập khác - Chi phí khác = 1 - 2 + 3 - 4
+        $profit = $revenue - $total_cost_sale + $other_income - $other_cost;
+
+        return [
+            'total_sale' => $total_sale,
+            'total_return_sale' => $total_return_sale,
+            'total_entry_value' => $total_entry_value,
+            'total_shipping_cost' => $total_shipping_cost,
+            'total_real_sale' => $total_real_sale,
+            'revenue' => $revenue,
+            'total_cost_sale' => $total_cost_sale,
+            'other_income' => $other_income,
+            'other_cost' => $other_cost,
+            'profit' => $profit
+        ];
+    }
+
 
     public function getTransaction($startDate, $endDate)
     {
@@ -229,6 +295,44 @@ class ReportController extends Controller
         
         // Trả về dữ liệu dưới dạng JSON
         return response()->json($data);
+    }
+
+    public function getReportToday(Request $request) {
+        
+        // Get doanh thu ngày hiện tại
+        $currentDate = \Carbon\Carbon::now();
+
+        $startDate = $currentDate->startOfDay()->format('Y-m-d 00:00:00');
+        $endDate = $currentDate->endOfDay()->format('Y-m-d 23:59:59');
+
+        $salesData = $this->getSalesReport($startDate, $endDate);
+
+        //Count số đơn hàng hôm nay
+        $query = "
+            SELECT 
+                COUNT(*) AS total_order
+            FROM orders AS od
+            WHERE 
+                od.order_date BETWEEN ? AND ?
+        ";
+        $total_order = \DB::select($query, [$startDate, $endDate]);
+
+        //Count số khách hàng mới hôm nay
+        $query = "
+            SELECT 
+                COUNT(*) AS total_new_customer
+            FROM users AS us
+            WHERE 
+                us.created_at BETWEEN ? AND ?
+        ";
+        $total_new_customer = \DB::select($query, [$startDate, $endDate]);
+
+        $data = [
+            'revenue' => $salesData['revenue'],
+            'total_order' => $total_order[0]->total_order,
+            'total_new_customer' => $total_new_customer[0]->total_new_customer
+        ];
+        return $data;
     }
     
 

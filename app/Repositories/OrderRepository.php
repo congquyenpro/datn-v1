@@ -17,9 +17,41 @@ class OrderRepository extends BaseRepository implements IBaseRepository
         parent::__construct($order);
         $this->order = $order;
     }
-    public function getOrdersByStatus($status)
+    public function getOrdersByStatus($status, $order_timeframe)
     {
-        return $this->order->where('status', $status)->get();
+        //return $this->order->where('status', $status)->get();
+
+        /* Có cả month */
+        // Giả sử $timeframe là tham số được truyền vào để xác định khoảng thời gian (ví dụ: 'current_month', 'last_3_months', 'all')
+        $timeframe = $order_timeframe; // Thay thế với giá trị thực tế mà bạn muốn
+
+        $query = $this->order->where('status', $status);
+
+        switch ($timeframe) {
+            case 'current_month':
+                // Lọc theo tháng hiện tại
+                $query->whereBetween('order_date', [
+                    now()->startOfMonth(), 
+                    now()->endOfMonth()
+                ]);
+                break;
+
+            case 'last_3_months':
+                // Lọc theo 3 tháng gần đây
+                $query->whereBetween('order_date', [
+                    now()->subMonths(3), 
+                    now()->endOfMonth()
+                ]);
+                break;
+
+            case 'all_months':
+                // Không có điều kiện về order_date
+                // Thực hiện truy vấn mặc định
+                break;
+        }
+
+        return $query->get();
+
     }
     public function getOrderDetail($order_id)
     {
@@ -93,6 +125,11 @@ class OrderRepository extends BaseRepository implements IBaseRepository
             $this->minusProductQuantity($order_id);
         }
 
+        //Nếu trạng thái order = 5 tức đã hoàn thành => chuyển payment_status = 1
+        if ($data['status'] == 5) {
+            $order->payment_status = 1;
+        }
+
 
         $order->status = $data['status'];
         $data_log_index = [
@@ -136,6 +173,39 @@ class OrderRepository extends BaseRepository implements IBaseRepository
             $product_size->save();
         }
         //return $order_items;
+    }
+
+    //Quản lý order của người dùng
+    public function getCustomerOrderList($customer_type)
+    {
+        // Lấy ra khách hàng hệ thống - đã có tài khoản
+        if ($customer_type =='system') {
+            $order_user_list = $this->order
+            ->join('users AS u', 'u.id', '=', 'orders.customer_id')  // INNER JOIN
+            ->select('orders.customer_id', 'orders.name', 'u.status', DB::raw('SUM(orders.value) AS tong_chi_tieu'))
+            ->groupBy('orders.customer_id', 'orders.name', 'u.status')
+            ->where('orders.customer_id', '!=', 3)  // Lọc theo trạng thái hoạt động
+            ->get();  // Lấy kết quả
+        }
+        else {
+            $order_user_list = $this->order
+            ->join('users AS u', 'u.id', '=', 'orders.customer_id')  // INNER JOIN
+            ->select('orders.customer_id', 'orders.name', 'u.status', DB::raw('SUM(orders.value) AS tong_chi_tieu'))
+            ->groupBy('orders.customer_id', 'orders.name', 'u.status')
+            ->where('orders.customer_id', 3)  // Lọc theo trạng thái hoạt động
+            ->get();  // Lấy kết quả
+        }
+        return $order_user_list;
+    }
+    public function getCustomerDetail($customer_id)
+    {
+        $order_user_detail = $this->order
+        ->join('users AS u', 'u.id', '=', 'orders.customer_id')  // INNER JOIN
+        ->select('orders.customer_id', 'orders.name','u.address', 'u.email', 'u.status', DB::raw('SUM(orders.value) AS tong_chi_tieu'))
+        ->groupBy('orders.customer_id', 'orders.name', 'u.status','u.address', 'u.email')
+        ->where('orders.customer_id', $customer_id)  // Lọc theo trạng thái hoạt động
+        ->get();  // Lấy kết quả
+        return $order_user_detail;
     }
 
 
@@ -363,6 +433,8 @@ class OrderRepository extends BaseRepository implements IBaseRepository
     
         return $orders;
     }
+
+    //Lấy Order theo status
     public function getOrderByUser($user_id, $status)
     {
         if ($status == 3) {
@@ -597,6 +669,12 @@ class OrderRepository extends BaseRepository implements IBaseRepository
     
         // Chuyển kết quả thành mảng và trả về
         return array_values($groupedOrders);
+    }
+
+    //Lấy tất cả order của user
+    public function getUserOrderDetail($customer_id){
+        $orders = $this->order->where('customer_id', $customer_id)->get();
+        return $orders;
     }
     
     

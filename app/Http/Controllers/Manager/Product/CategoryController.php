@@ -54,20 +54,30 @@ class CategoryController extends Controller
             ]);
         }
     }
-    public function deleteCategory(Request $request) {
+    public function deleteCategory(Request $request)
+    {
         $request->validate([
             'id' => 'required',
         ]);
     
         try {
-            $this->categoryService->delete($request->id);
+            // Gọi phương thức delete từ service
+            $result = $this->categoryService->delete($request->id);
+    
+            // Kiểm tra nếu có thông báo lỗi từ repository
+            if ($result === 'Danh mục này có sản phẩm, không thể xóa!') {
+                return back()->withErrors(['error' => $result]);
+            }
+    
             return back()->with('success', 'Xóa danh mục thành công');
         } catch (\Exception $e) {
+            // Xử lý lỗi bất kỳ
             return back()->withErrors([
-                'error' => 'Có lỗi xảy ra!',
+                'error' => 'Có lỗi xảy ra! ' . $e->getMessage(),
             ]);
         }
-    }    
+    }
+       
 
     /* api get all */
     public function getAll(){

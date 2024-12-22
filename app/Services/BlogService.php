@@ -15,6 +15,7 @@ class BlogService {
             'content' => 'required|string',
             'tags' => 'nullable',
             'status' => 'required|in:public,hidden',
+            'category' => 'required|string',
             'comment_status' => 'required|in:enabled,disabled,auto',
             'image' => 'required|image|mimes:jpg,jpeg,png,gif,webp',  // Hình ảnh nếu có thì phải là ảnh với dung lượng tối đa 2MB
         ]);
@@ -25,6 +26,7 @@ class BlogService {
         $post->summary = $validatedData['summary'] ?? null;
         $post->content = $this->processContent($validatedData['content']);
         $post->status = $validatedData['status'];
+        $post->category = $validatedData['category'];
         $post->comment_status = $validatedData['comment_status'];
 
         // Tạo slug chuẩn SEO từ title
@@ -83,6 +85,7 @@ class BlogService {
             'content' => 'required|string',
             'tags' => 'nullable',
             'status' => 'required|in:public,hidden',
+            'category' => 'required|string',
             'comment_status' => 'required|in:enabled,disabled,auto',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,gif,webp',  // Ảnh là tùy chọn
         ]);
@@ -95,6 +98,7 @@ class BlogService {
         $post->summary = $validatedData['summary'] ?? null;
         $post->content = $this->processContent($validatedData['content']);
         $post->status = $validatedData['status'];
+        $post->category = $validatedData['category'];
         $post->comment_status = $validatedData['comment_status'];
     
         // Nếu title thay đổi, tạo lại slug. Nếu không thì giữ nguyên slug cũ

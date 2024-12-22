@@ -60,7 +60,7 @@ const Product = {
                                     <button class="btn btn-icon btn-hover btn-sm btn-rounded edit-btn" data-id="${product.id}" data-toggle="modal" data-target=".bd-example-modal-xl">
                                         <i class="anticon anticon-eye"></i>
                                     </button>
-                                    <button class="btn btn-icon btn-hover btn-sm btn-rounded delete-btn" data-id="${product.id}">
+                                    <button class="btn btn-icon btn-hover btn-sm btn-rounded delete-btn" data-id="${product.id}" data-toggle="modal" data-target="#deleteModal">
                                         <i class="anticon anticon-delete"></i>
                                     </button>
                                 </div>`
@@ -573,10 +573,26 @@ const Product = {
             });
         },
 
-        deleteProduct: () => {}
+        deleteProduct: () => {
+            //Soft delete
+            $(document).on('click', '.delete-btn', function () {
+                const productId = $(this).data('id');
+                console.log('Deleting product with ID:', productId);
+                if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?')) {
+                    Api.Product.SoftDeleteProduct(productId).then((response) => {
+                        alert('Sản phẩm đã được xóa thành công!');
+                        Product.productsList.show(); // Refresh danh sách sản phẩm
+                    }).catch((error) => {
+                        alert('Có lỗi xảy ra khi xóa sản phẩm!');
+                        
+                        console.error("Error deleting product:", error);
+                    });
+                }
+            });
+        }
     },
     formSubmit: {
-        handleInput: () => {
+        handleInput: (isEdit) => {
             const productName = document.getElementById('formGroupExampleInput').value.trim();
             const shortDescription = document.querySelector('textarea[name="short_description"]').value.trim();
             const genderValue = document.querySelector('input[name="gender"]:checked')?.value;
@@ -665,7 +681,7 @@ const Product = {
             }
 
             //Kiểm tra xem có file ảnh nào được chọn không
-            if (files.length === 0) {
+            if (files.length === 0 && isEdit === false) {
                 alert("Không được để trống hình ảnh sản phẩm !");
                 return null; // Trả về null nếu không có ảnh
             }            
@@ -685,7 +701,7 @@ const Product = {
     
         addProduct: () => {
             function handleSubmit(isEdit = false) {
-                const inputData = Product.formSubmit.handleInput();
+                const inputData = Product.formSubmit.handleInput(isEdit);
                 if (!inputData) return; // Kiểm tra xem dữ liệu có hợp lệ không
     
                 const formData = new FormData();
@@ -971,3 +987,6 @@ Product.productDetail.editProduct();
 // Add attribute
 //Xóa dữ liệu trước khi thêm??
 Product.attribute.addAttribute();
+
+// Delete product
+Product.productDetail.deleteProduct();

@@ -142,21 +142,10 @@
                         <div class="col-lg-8">
                             <div class="d-md-flex">
                                 <div class="m-b-10 m-r-15">
-                                    <select class="custom-select" style="min-width: 180px;">
-                                        <option selected>Catergory</option>
-                                        <option value="all">All</option>
-                                        <option value="Burberry">Burberry</option>
-                                        <option value="Calvin Klein">Calvin Klein</option>
-                                        <option value="Christian Dior">Christian Dior</option>
-                                    </select>
-                                </div>
-                                <div class="m-b-10">
-                                    <select class="custom-select" style="min-width: 180px;">
-                                        <option selected>Status</option>
-                                        <option value="all">All</option>
-                                        <option value="inStock">In Stock</option>
-                                        <option value="outOfStock">Out of Stock</option>
-                                        <option value="outOfStock">Trending</option>
+                                    <select class="custom-select" id="month-select" style="min-width: 180px;">
+                                        <option value="current_month" selected>Tháng hiện tại</option>
+                                        <option value="last_3_months">3 tháng gần nhất</option>
+                                        <option value="all_months">Tất cả</option>
                                     </select>
                                 </div>
                             </div>

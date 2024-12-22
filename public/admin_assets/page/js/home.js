@@ -313,6 +313,16 @@ Report = {
       formatCurrency : (number) => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number);
       }
+    },
+
+    today: {
+      show : () => {
+        Api.Report.getReportRevenue().done((res) => {
+          $('#today-revenue').text(res.revenue + ' ₫');
+          $('#today-order').text(res.total_order);
+          $('#today-customer').text(res.total_new_customer);
+        });
+      }
     }
   
 }
@@ -324,3 +334,5 @@ Report.saleReport.init();
 Report.product.getBestSeller();
 Report.product.getTopViewed();
 Report.inventory.getInventory();
+
+Report.today.show();

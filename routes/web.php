@@ -105,7 +105,10 @@ Route::prefix('admin')->group(function() {
         Route::get('/product/get/{id}', 'Manager\Product\ProductController@getProductDetail')->name('manager.product.show');
 
         Route::post('/product', 'Manager\Product\ProductController@store')->name('manager.product.add');
+
+        //delete and soft delete
         Route::get('/product/delete/{id}', 'Manager\Product\ProductController@delete')->name('manager.product.delete');
+        Route::get('/product/soft-delete/{id}', 'Manager\Product\ProductController@softDelete')->name('manager.product.softDelete');
 
         //update product
         Route::post('/product/update', 'Manager\Product\ProductController@update')->name('manager.product.update');
@@ -199,6 +202,9 @@ Route::prefix('admin')->group(function() {
             Route::get('/revenue-by-month', 'Manager\Report\ReportController@getRevenueByMonth')->name('manager.report.revenue.month');
             Route::get('/revenue-by-day', 'Manager\Report\ReportController@getRevenueByDay')->name('manager.report.revenue.day');
 
+            //Lấy doanh thu ngày hiện tại
+            Route::get('/report-today', 'Manager\Report\ReportController@getReportToday')->name('manager.report.revenue.today');
+
             Route::get('/inventory', 'Manager\Report\ReportController@getInventory')->name('manager.report.inventory');
         });
     });
@@ -217,6 +223,17 @@ Route::prefix('admin')->group(function() {
             Route::post('/update-role/{role_id}', 'Manager\System\UserController@updatePermissionsByRole')->name('manager.roles.update');
         });
     });
+
+    //Quản lý khách hàng
+    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.promotion']], function() {
+        Route::prefix('system')->group(function() {
+           Route::get('/customers', 'Manager\System\CustomerController@index')->name('manager.customer');
+           Route::get('/customer/detail', 'Manager\System\CustomerController@getUserOrderDetail')->name('manager.customer.detail');
+           Route::get('/customer/infor', 'Manager\System\CustomerController@getUserInfor')->name('manager.customer.infor');
+           Route::post('/customer/status', 'Manager\System\CustomerController@setUserStatus')->name('manager.customer.status');
+           Route::get('/customers/orders', 'Manager\System\CustomerController@getCustomerOrderList')->name('manager.customer.order');
+        });
+    });    
 
 
 });
@@ -272,6 +289,11 @@ Route::prefix('/')->group(function() {
     Route::get('/register','Customer\AuthController@register')->name('customer.auth.register');
     Route::post('/register','Customer\AuthController@postRegister')->name('customer.auth.postRegister');
 
+    /* Reset Password */
+    Route::get('/forgot-password','Customer\AuthController@forgotPassword')->name('customer.auth.forgot');
+    Route::get('/password/reset/{token}', 'Customer\AuthController@showResetForm')->name('password.reset');
+    Route::post('/password/email', 'Customer\AuthController@sendResetLink')->name('password.email');
+    Route::post('/password/reset/update', 'Customer\AuthController@resetPassword')->name('password.update');
 
     /* Home */
     Route::get('/','Customer\DisplayController@displayHome')->name('customer.home');
@@ -329,3 +351,8 @@ Route::prefix('payment')->group(function() {
 /* Telegram test */
 Route::get('tele-test', 'Manager\System\SettingController@sendNotification');
 
+
+
+/* Tra cứu đơn */
+Route::get('/tra-cuu-don', function(){return view('manager.order.lookup');})->name('customer.lookup-order');
+Route::get('/auto-update', function(){return view('manager.order.auto-update');})->name('customer.auto-order');
