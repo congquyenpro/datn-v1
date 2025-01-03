@@ -8,7 +8,7 @@
 				<div class="breadcrumb-trail breadcrumbs">
 					<ul class="trail-items breadcrumb">
 						<li class="trail-item trail-begin">
-							<a href="index-2.html">Home</a>
+							<a href="/">Home</a>
 						</li>
 						<li class="trail-item">
 							<a href="#">Accents</a>
@@ -85,7 +85,7 @@
 										@endphp
 										
 										@foreach ($genders as $key => $value)
-											<a href="#" class="{{ $gender == $key ? 'active' : '' }}">{{ $value }}</a>
+											<a href="javascript:void(0)" class="{{ $gender == $key ? 'active' : '' }}">{{ $value }}</a>
 										@endforeach
 									</div>
 								</div>
@@ -126,7 +126,7 @@
 								</div>
 								<div class="size-chart-wrapp">
 									<div class="btn-size-chart">
-										<a id="size_chart" href="assets/images/size-chart.jpg" class="fancybox">View Size Chart</a>
+										<a id="" href="javascript:void()" class="fancybox">View Size Chart</a>
 									</div>
 								</div>
 								<div class="quantity-add-to-cart">
@@ -151,7 +151,7 @@
 								<a data-toggle="tab" aria-expanded="true" href="#information">Information </a>
 							</li>
 							<li class="">
-								<a data-toggle="tab" aria-expanded="true" href="#reviews">Reviews (212)</a>
+								<a data-toggle="tab" aria-expanded="true" href="#reviews">Reviews</a>
 							</li>
 						</ul>
 						<div class="tab-container">

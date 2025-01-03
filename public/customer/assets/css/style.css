@@ -2528,7 +2528,8 @@ blockquote .author .desc {
 .customer_login input[type="password"] {
 	margin-bottom: 0;
 	width: 100%;
-	border-color: #f1f1f1;
+	/* border-color: #f1f1f1; */
+	border-color: #d8d6d6;
 }
 .customer_login input[type="checkbox"] {
 	display: none;

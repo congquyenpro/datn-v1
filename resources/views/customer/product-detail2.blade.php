@@ -12,7 +12,7 @@
 				<div class="breadcrumb-trail breadcrumbs">
 					<ul class="trail-items breadcrumb">
 						<li class="trail-item trail-begin">
-							<a href="index-2.html">Home</a>
+							<a href="/">Home</a>
 						</li>
 						<li class="trail-item">
 							<a href="#">Perfume</a>

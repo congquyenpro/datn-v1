@@ -23,9 +23,11 @@ OrderHistory = {
                     "Chờ xác nhận",
                     "Đã xác nhận",
                     "Chờ giao hàng",
+                    "Chờ giao hàng",
                     "Đang giao hàng",
                     "Đã giao hàng",
-                    "Đã hủy"
+                    "Đã hủy",
+                    "Đã trả hàng"
                 ]
                 
                 // Làm sạch nội dung cũ trước khi thêm mới

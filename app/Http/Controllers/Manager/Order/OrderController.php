@@ -240,8 +240,10 @@ class OrderController extends Controller
 
     public function printOrder(Request $request){
         $order_id = $request->id;
-        $shipping_code = Order::where('id', $order_id)->value('shipping_code');
-        if ($shipping_code != 'GHN') {
+        $order = Order::find($order_id);
+        $shipping_code = $order->shipping_code;
+        $delivery_company_code = $order->delivery_company_code;
+        if ($delivery_company_code != 'GHN') {
             return response()->json(['status' => 500, 'message' => 'Phiếu đóng gói sử dụng dịch vụ ngoài']);
         }
 

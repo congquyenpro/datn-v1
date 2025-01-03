@@ -24,12 +24,12 @@
                                                 Spring Summer <br/>Collection
                                             </h3>
                                             <div class="price">
-                                                New Price:
+                                                Save Price:
                                                 <span class="number-price">
-														$270.00
+														2.680.000₫ 
 													</span>
                                             </div>
-                                            <a href="#" class="button btn-shop-the-look bgroud-style">Shop now</a>
+                                            <a href="{{route('customer.shop')}}" class="button btn-shop-the-look bgroud-style">Shop now</a>
                                         </div>
                                     </div>
                                 </div>
@@ -45,10 +45,10 @@
                                             <div class="price">
                                                 Save Price:
                                                 <span class="number-price">
-														$170.00
+														2.500.000₫ 
 													</span>
                                             </div>
-                                            <a href="#" class="button btn-shop-product">Shop now</a>
+                                            <a href="{{route('customer.shop')}}" class="button btn-shop-product">Shop now</a>
                                         </div>
                                     </div>
                                 </div>
@@ -56,7 +56,7 @@
                                     <div class="slider-inner equal-element">
                                         <div class="slider-infor">
                                             <h5 class="title-small">
-                                                Stelina Best Collection
+                                                BKPerfume Best Collection
                                             </h5>
                                             <h3 class="title-big">
                                                 A range of <br/>perfume
@@ -64,10 +64,10 @@
                                             <div class="price">
                                                 New Price:
                                                 <span class="number-price">
-														$250.00
+														3.000.000₫ 
 													</span>
                                             </div>
-                                            <a href="#" class="button btn-chekout">Shop now</a>
+                                            <a href="{{route('customer.shop')}}" class="button btn-chekout">Shop now</a>
                                         </div>
                                     </div>
                                 </div>
@@ -79,9 +79,9 @@
                             <div class="item-banner style7">
                                 <div class="inner">
                                     <div class="banner-content">
-                                        <h3 class="title">Pick Your <br/>Items</h3>
+                                        <h3 class="title">Find your<br/> Vibe</h3>
                                         <div class="description">
-                                            Adipiscing elit curabitur senectus sem
+                                            Find Your Perfect Fragrance
                                         </div>
                                         <a href="{{route('customer.shop')}}" class="button btn-lets-do-it">Shop now</a>
                                     </div>
@@ -94,9 +94,9 @@
                                     <div class="banner-content">
                                         <h3 class="title">Best Of<br/>Products</h3>
                                         <div class="description">
-                                            Cras pulvinar loresum dolor conse
+                                            Discover Your Scent
                                         </div>
-                                        <span class="price">$379.00</span>
+                                        <a href="{{route('customer.shop')}}" class="button btn-lets-do-it">Discover</a>
                                     </div>
                                 </div>
                             </div>
@@ -124,7 +124,7 @@
                                         <h4 class="stelina-subtitle">TOP STAFF PICK</h4>
                                         <h3 class="title">Best Collection</h3>
                                         <div class="description">
-                                            Proin interdum magna primis id consequat
+                                            Explore our Best Collection, the finest perfumes for every occasion.
                                         </div>
                                         <a href="#" class="button btn-shop-now">Shop now</a>
                                     </div>
@@ -141,7 +141,7 @@
                                         <span class="code">
 												Use code:
 												<span>
-													STELINA
+													BKP24
 												</span>
 												Get 25% Off for all items!
 											</span>
@@ -192,7 +192,7 @@
                 </div>
                 <div class="tab-container">
                     <div id="bestseller" class="tab-panel active">
-                        <a href="#" class="more-nav" style=" display: flex; float: right; color:#ab8e66; font-weight: bold; font-size: 18px; ">View More</a>
+                        <a href="/shop?tag=best_selling" class="more-nav" style=" display: flex; float: right; color:#ab8e66; font-weight: bold; font-size: 18px; ">View More</a>
                         <div class="stelina-product">
                             <ul class="row list-products auto-clear equal-container product-grid">
                                 <div id="best-seller-products"></div>
@@ -201,7 +201,7 @@
                         </div>
                     </div>
                     <div id="new_arrivals" class="tab-panel">
-                        <a href="#" class="more-nav" style=" display: flex; float: right; color:#ab8e66; font-weight: bold; font-size: 18px; ">View More</a>
+                        <a href="/shop?tag=all" class="more-nav" style=" display: flex; float: right; color:#ab8e66; font-weight: bold; font-size: 18px; ">View More</a>
                         <div class="stelina-product">
                             <ul class="row list-products auto-clear equal-container product-grid">
                                 <div id="new-arrival-product"></div>
@@ -210,7 +210,7 @@
                         </div>
                     </div>
                     <div id="top-viewed" class="tab-panel">
-                        <a href="#" class="more-nav" style=" display: flex; float: right; color:#ab8e66; font-weight: bold; font-size: 18px; ">View More</a>
+                        <a href="/shop?tag=all" class="more-nav" style=" display: flex; float: right; color:#ab8e66; font-weight: bold; font-size: 18px; ">View More</a>
                         <div class="stelina-product">
                             <ul class="row list-products auto-clear equal-container product-grid">
                                 <div id="top-viewed-product"></div>

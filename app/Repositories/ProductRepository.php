@@ -662,6 +662,7 @@ class ProductRepository extends BaseRepository
     
         return $this->product
             ->where('category_id', $categoryId)
+            ->where('id', '!=', $product_id)
             ->with('productSizes') // Load productSizes relationship
             ->limit(5)
             ->get()
@@ -734,6 +735,7 @@ class ProductRepository extends BaseRepository
         return null;
     }
     
+    //Hàm lấy sản phẩm gợi ý lấy data trực tiếp từ DB (triển khai vps)
     public function getSimilarProducts($product_id)
     {
         try {
@@ -860,7 +862,238 @@ class ProductRepository extends BaseRepository
             return $this->getRelatedProduct($user_id);
         }     
     }
+
+    //Lấy sản phẩm & lịch sử mua trực tiếp từ DB (recommend_service triển khai host riêng, gọi qua api)
+    public function getProductsFromDB()
+    {
+        // Truy vấn lấy tất cả sản phẩm và các thuộc tính liên quan
+        return DB::table('products as p')
+            ->select(
+                'p.id as product_id',
+                'p.name as product_name',
+                DB::raw("MAX(CASE WHEN a.id = 1 THEN av.value END) AS 'nong_do'"),
+                DB::raw("MAX(CASE WHEN a.id = 2 THEN av.value END) AS 'phong_cach'"),
+                DB::raw("MAX(CASE WHEN a.id = 3 THEN av.value END) AS 'nhom_huong'"),
+                DB::raw("MAX(CASE WHEN a.id = 4 THEN av.value END) AS 'do_luu_huong'"),
+                DB::raw("MAX(CASE WHEN a.id = 5 THEN av.value END) AS 'do_toa_huong'"),
+                DB::raw("MAX(CASE WHEN a.id = 6 THEN av.value END) AS 'xuat_xu'"),
+                DB::raw("MAX(CASE WHEN a.id = 7 THEN av.value END) AS 'thuong_hieu'"),
+                DB::raw("MAX(CASE WHEN a.id = 8 THEN av.value END) AS 'nhom_tuoi'")
+            )
+            ->join('Product_Attributes as pa', 'p.id', '=', 'pa.product_id')
+            ->join('Attribute_Values as av', 'pa.attribute_value_id', '=', 'av.id')
+            ->join('Attributes as a', 'av.attribute_id', '=', 'a.id')
+            ->groupBy('p.id', 'p.name')
+            ->get();
+    }
+
+    public function getProductsForRecommend()
+    {
+        try {
+            // Lấy tất cả sản phẩm
+            $products = $this->getProductsFromDB();
+
+            if ($products->isEmpty()) {
+                return response()->json(['message' => 'Không tìm thấy sản phẩm', 'code' => 404], 404);
+            }
+
+            // Chuyển kết quả thành mảng dữ liệu theo định dạng yêu cầu
+            $productData = $products->map(function ($product) {
+                return [
+                    'product_id' => $product->product_id,
+                    'product_name' => $product->product_name,
+                    'combined_features' => "{$product->nong_do} {$product->phong_cach} {$product->nhom_huong} "
+                        . "{$product->do_luu_huong} {$product->do_toa_huong} {$product->xuat_xu} "
+                        . "{$product->thuong_hieu} {$product->nhom_tuoi}",
+                ];
+            });
+
+            // Chuẩn bị dữ liệu để gửi lên server
+            $responseData = [
+                'product_id' => 101, // Hoặc giá trị từ request, tùy theo yêu cầu
+                'data' => $productData
+            ];
+
+            // Trả về kết quả theo định dạng yêu cầu
+            //return response()->json($responseData);
+            return $responseData;
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Lỗi từ server: ' . $e->getMessage(), 'code' => 500], 500);
+        }
+    }    
     
+    // Hàm lấy dữ liệu mua hàng của người dùng
+    public function getUserPurchasesFromDB()
+    {
+        // Truy vấn dữ liệu mua hàng của người dùng
+        return DB::table('orders as o')
+            ->join('order_items as oi', 'oi.order_id', '=', 'o.id')
+            ->join('product_sizes as ps', 'ps.id', '=', 'oi.product_size_id')
+            ->join('products as pd', 'pd.id', '=', 'ps.product_id')
+            ->select('o.customer_id', 'pd.id as product_id')
+            ->get();
+    }
+    public function getUserPurchasesForRecommend()
+    {
+        try {
+            // Lấy dữ liệu mua hàng
+            $purchases = $this->getUserPurchasesFromDB();
+
+            if ($purchases->isEmpty()) {
+                return response()->json(['message' => 'Không có dữ liệu mua hàng', 'code' => 404], 404);
+            }
+
+            // Lọc dữ liệu theo user_id từ request
+            //$userId = $request->input('user_id');
+            $userId = 3;
+            $userPurchases = $purchases->where('customer_id', $userId);
+
+            if ($userPurchases->isEmpty()) {
+                return response()->json(['message' => 'Không tìm thấy dữ liệu mua hàng của người dùng', 'code' => 404], 404);
+            }
+
+            // Chuẩn bị dữ liệu theo định dạng yêu cầu
+            $responseData = [
+                'user_id' => $userId,  // user_id của người dùng cần đề xuất
+                'data' => $purchases->map(function ($purchase) {
+                    return [
+                        'customer_id' => $purchase->customer_id,
+                        'product_id' => $purchase->product_id,
+                    ];
+                })->values()->all() // Chuyển thành mảng dữ liệu mà không có key index
+            ];
+
+            // Trả về dữ liệu theo định dạng yêu cầu
+            //return response()->json($responseData);
+            return $responseData;
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Lỗi từ server: ' . $e->getMessage(), 'code' => 500], 500);
+        }
+    }
+
+    public function getSimilarProducts_Ngrok($product_id)
+    {
+        try {
+            // Lấy tất cả các sản phẩm và các đặc điểm của chúng
+            $productsForRecommend = $this->getProductsForRecommend();
+
+            if (empty($productsForRecommend['data'])) {
+                return response()->json(['message' => 'Không có dữ liệu sản phẩm', 'code' => 404], 404);
+            }
+
+            // Gửi yêu cầu đến API /recommend với dữ liệu sản phẩm đã lấy
+            $response = Http::post('https://b6a9-104-154-160-80.ngrok-free.app/recommend', [
+                'product_id' => $product_id,
+                'data' => $productsForRecommend['data']
+            ])->throw();
+
+            // Xử lý dữ liệu phản hồi từ API
+            $products = $response->json();
+
+            if ($products['code'] === 200 && isset($products['data'])) {
+                $similarProducts = $products['data'];
+
+                // Lấy danh sách product_id từ kết quả trả về
+                $similarProductIds = collect($similarProducts)->pluck('product_id')->toArray();
+
+                // Truy vấn sản phẩm từ database theo danh sách ID
+                $relatedProducts = $this->product
+                    ->whereIn('id', $similarProductIds)
+                    ->with('productSizes')
+                    ->get()
+                    ->map(function ($product) {
+                        if ($product->productSizes->isNotEmpty()) {
+                            $firstSize = $product->productSizes->first();
+                            $product->price = $firstSize->price + $firstSize->price * $firstSize->discount / 100;
+                            $product->product_size_id = $firstSize->id;
+                            $product->discount = $firstSize->discount;
+                            $product->discounted_price = $firstSize->price;
+                            $product->size = $firstSize->volume;
+                        }
+
+                        $imagesArray = explode(',', $product->images);
+                        $product->image = trim($imagesArray[0]);
+
+                        return $product->only(['id', 'slug', 'name', 'product_size_id', 'image', 'price', 'discount', 'discounted_price', 'size']);
+                    });
+
+                // Sắp xếp lại theo thứ tự của similarProductIds
+                $relatedProducts = $relatedProducts->sortBy(function ($product) use ($similarProductIds) {
+                    return array_search($product['id'], $similarProductIds);
+                })->values();
+
+                return $relatedProducts;
+            } else {
+                return $this->getRelatedProduct($product_id); // fallback
+            }
+        } catch (\Exception $e) {
+            // Log lỗi nếu có ngoại lệ
+            \Log::error('Error fetching similar products: ' . $e->getMessage());
+            return $this->getRelatedProduct($product_id); // fallback
+        }
+    }
+    public function getCollaborativeFiltering_Ngrok($request)
+    {
+        // Lấy user_id từ session hoặc mặc định là 3
+        //$user_id = Auth::check() ? Auth::user()->id : 3;
+        $user_id = $request->user_id;
+    
+        try {
+            // Lấy dữ liệu mua hàng của người dùng từ getUserPurchasesForRecommend
+            $userPurchasesForRecommend = $this->getUserPurchasesForRecommend();
+    
+            if (empty($userPurchasesForRecommend['data'])) {
+                return response()->json(['message' => 'Không có dữ liệu mua hàng của người dùng', 'code' => 404], 404);
+            }
+    
+            // Gửi yêu cầu đến API /collaborative với dữ liệu mua hàng của người dùng
+            $response = Http::post('http://127.0.0.1:8080/collaborative', [
+                'user_id' => $user_id,
+                'data' => $userPurchasesForRecommend['data']
+            ])->throw();
+    
+            // Xử lý dữ liệu phản hồi từ API
+            $products = $response->json();
+    
+            if ($products['code'] === 200 && isset($products['data'])) {
+                $recommendProducts = $products['data'];
+    
+                // Lấy danh sách product_id từ kết quả trả về
+                $recommendProductIds = collect($recommendProducts)->pluck('product_id')->toArray();
+    
+                // Truy vấn sản phẩm từ database theo danh sách ID
+                $recommendedProducts = $this->product
+                    ->whereIn('id', $recommendProductIds)
+                    ->with('productSizes')
+                    ->get()
+                    ->map(function ($product) {
+                        if ($product->productSizes->isNotEmpty()) {
+                            $firstSize = $product->productSizes->first();
+                            $product->price = $firstSize->price + $firstSize->price * $firstSize->discount / 100;
+                            $product->product_size_id = $firstSize->id;
+                            $product->discount = $firstSize->discount;
+                            $product->discounted_price = $firstSize->price;
+                            $product->size = $firstSize->volume;
+                        }
+    
+                        $imagesArray = explode(',', $product->images);
+                        $product->image = trim($imagesArray[0]);
+    
+                        return $product->only(['id', 'slug', 'name', 'product_size_id', 'image', 'price', 'discount', 'discounted_price', 'size']);
+                    });
+    
+                return $recommendedProducts;
+            } else {
+                return $this->getRelatedProduct($user_id); // fallback
+            }
+        } catch (\Exception $e) {
+            // Log lỗi nếu có ngoại lệ
+            \Log::error('Error fetching recommended products: ' . $e->getMessage());
+            return $this->getRelatedProduct($user_id); // fallback
+        }
+    }
     
 
 }

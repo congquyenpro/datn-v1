@@ -99,8 +99,8 @@ Route::prefix('admin')->group(function() {
     });
 
     //admin.product
-    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.product']], function() {
-        Route::get('/product', 'Manager\Product\ProductController@showProducts')->name('manager.product');
+    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.home']], function() {
+        Route::get('/product', 'Manager\Product\ProductController@showProducts')->middleware('permission.web:manager.product')->name('manager.product');
         Route::get('/product/get-all', 'Manager\Product\ProductController@getAllProducts')->name('manager.product.getAll');
         Route::get('/product/get/{id}', 'Manager\Product\ProductController@getProductDetail')->name('manager.product.show');
 
@@ -118,7 +118,7 @@ Route::prefix('admin')->group(function() {
         //add new value
         Route::post('/product/addNewValue', 'Manager\Product\ProductController@addNewValue');
         
-        Route::get('/product/category', 'Manager\Product\CategoryController@showCategories')->name('manager.category');
+        Route::get('/product/category', 'Manager\Product\CategoryController@showCategories')->middleware('permission.web:manager.category')->name('manager.category');
         Route::post('/product/category', 'Manager\Product\CategoryController@addCategory')->name('manager.category.add');
         Route::put('/product/category', 'Manager\Product\CategoryController@updateCategory')->name('manager.category.update');
         Route::delete('/product/category', 'Manager\Product\CategoryController@deleteCategory')->name('manager.category.delete');
@@ -128,18 +128,18 @@ Route::prefix('admin')->group(function() {
     });
 
     //admin promotion
-    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.promotion']], function() {
+    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.home']], function() {
         Route::prefix('promotions')->group(function() {
-            Route::get('/', 'Manager\Product\PromotionController@showAll')->name('manager.promotion');
+            Route::get('/', 'Manager\Product\PromotionController@showAll')->middleware('permission.web:manager.promotion')->middleware('permission.web:manager.promotion')->name('manager.promotion');
             Route::post('/store', 'Manager\Product\PromotionController@store')->name('manager.promotion.store');
             Route::get('/delete/{id}', 'Manager\Product\PromotionController@delete')->name('manager.promotion.delete');
         });
     });
 
     //admin order
-    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.order']], function() {
+    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.home']], function() {
         Route::prefix('order')->group(function() {
-            Route::get('/', 'Manager\Order\OrderController@index')->name('manager.order');
+            Route::get('/', 'Manager\Order\OrderController@index')->middleware('permission.web:manager.order')->name('manager.order');
             Route::get('/all', 'Manager\Order\OrderController@getOrders')->name('manager.order.getAll');
             Route::get('/detail/{id}', 'Manager\Order\OrderController@getOrderDetail')->name('manager.order.detail');
             Route::get('/type/{id}', 'Manager\Order\OrderController@getType')->name('manager.order.getType');
@@ -164,9 +164,9 @@ Route::prefix('admin')->group(function() {
     });
 
     /* warehouse */
-    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.order']], function() {
+    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.home']], function() {
         Route::prefix('warehouse')->group(function() {
-            Route::get('/', 'Manager\Warehouse\WarehouseController@index')->name('manager.warehouse');
+            Route::get('/', 'Manager\Warehouse\WarehouseController@index')->middleware('permission.web:manager.warehouse')->name('manager.warehouse');
             Route::get('/all-products', 'Manager\Warehouse\WarehouseController@getAllProducts')->name('manager.warehouse.getAll');
             Route::get('/get-sizes', 'Manager\Warehouse\WarehouseController@getProductSizes')->name('manager.warehouse.detail');
 
@@ -181,9 +181,9 @@ Route::prefix('admin')->group(function() {
     });
 
     /* Post and Comment */
-    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.order']], function() {
+    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.home']], function() {
         Route::prefix('blog')->group(function() {
-            Route::get('/', 'BlogController@showManagerBlog')->name('manager.blog');
+            Route::get('/', 'BlogController@showManagerBlog')->middleware('permission.web:manager.post')->name('manager.blog');
             Route::get('/detail/{id}', 'BlogController@editBog')->name('manager.blog.edit');
             Route::post('/create', 'BlogController@createBlog')->name('manager.blog.create');
             Route::post('/update', 'BlogController@updateBlog')->name('manager.blog.update');
@@ -192,11 +192,11 @@ Route::prefix('admin')->group(function() {
     });
 
     /* Report */
-    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.order']], function() {
+    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.home']], function() {
         Route::prefix('report')->group(function() {
-            Route::get('/transaction', 'Manager\Report\ReportController@showTransaction')->name('manager.report.transaction');
-            Route::get('/fin', 'Manager\Report\ReportController@showFin')->name('manager.report.fin');
-            Route::get('/sale', 'Manager\Report\ReportController@showSale')->name('manager.report.sale');
+            Route::get('/transaction', 'Manager\Report\ReportController@showTransaction')->middleware('permission.web:manager.transaction')->name('manager.report.transaction');
+            Route::get('/fin', 'Manager\Report\ReportController@showFin')->middleware('permission.web:manager.finance')->name('manager.report.fin');
+            Route::get('/sale', 'Manager\Report\ReportController@showSale')->middleware('permission.web:manager.sale')->name('manager.report.sale');
 
             Route::get('/revenue', 'Manager\Report\ReportController@getRevenue')->name('manager.report.revenue');
             Route::get('/revenue-by-month', 'Manager\Report\ReportController@getRevenueByMonth')->name('manager.report.revenue.month');
@@ -210,9 +210,9 @@ Route::prefix('admin')->group(function() {
     });
 
     //Quản lý người dùng
-    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.promotion']], function() {
+    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.home']], function() {
         Route::prefix('system')->group(function() {
-           Route::get('/users', 'Manager\System\UserController@index')->name('manager.users');
+           Route::get('/users', 'Manager\System\UserController@index')->middleware('permission.web:manager.user')->name('manager.users');
            Route::get('/user/{user_id}', 'Manager\System\UserController@getAdminUserDetail')->name('manager.users.detail');
            Route::post('/user/{user_id}', 'Manager\System\UserController@update')->name('manager.users.update');
            Route::post('/users', 'Manager\System\UserController@store')->name('manager.users.store');
@@ -225,9 +225,9 @@ Route::prefix('admin')->group(function() {
     });
 
     //Quản lý khách hàng
-    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.promotion']], function() {
+    Route::group(['middleware' => ['auth:sanctum', 'permission.web:manager.home']], function() {
         Route::prefix('system')->group(function() {
-           Route::get('/customers', 'Manager\System\CustomerController@index')->name('manager.customer');
+           Route::get('/customers', 'Manager\System\CustomerController@index')->middleware('permission.web:manager.customer')->name('manager.customer');
            Route::get('/customer/detail', 'Manager\System\CustomerController@getUserOrderDetail')->name('manager.customer.detail');
            Route::get('/customer/infor', 'Manager\System\CustomerController@getUserInfor')->name('manager.customer.infor');
            Route::post('/customer/status', 'Manager\System\CustomerController@setUserStatus')->name('manager.customer.status');
@@ -298,6 +298,7 @@ Route::prefix('/')->group(function() {
     /* Home */
     Route::get('/','Customer\DisplayController@displayHome')->name('customer.home');
     Route::get('/nuoc-hoa/{slug}','Customer\DisplayController@displayProduct')->name('customer.product');
+    Route::get('/about','Customer\DisplayController@about')->name('customer.about');
 
     /* Cart and Checkout */
     Route::get('/cart','Customer\DisplayController@cart')->name('customer.cart');

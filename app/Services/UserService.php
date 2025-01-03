@@ -25,7 +25,7 @@ class UserService
     {
         $users = User::with('roles')
         ->whereHas('roles', function ($query) {
-            $query->where('role_id', '<>', 3); // Lọc ra role_id không phải là 3
+            /* $query->where('role_id', '<>', 3);  */
         })
         ->get();
 

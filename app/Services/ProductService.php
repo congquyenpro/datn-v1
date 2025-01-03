@@ -115,6 +115,25 @@ class ProductService
         return $this->productRepository->getCollaborativeFiltering2($request);
     }
 
+    //Hàm lấy dữ liệu sản phẩm để gửi lên recommend_system_server
+    public function getRecommendData()
+    {
+        return $this->productRepository->getProductsForRecommend()();
+    }
+
+    public function getRecommendData2()
+    {
+        return $this->productRepository->getUserPurchasesForRecommend();
+    }
+
+    public function getSimilarProduct_Ngrok($product_id)
+    {
+        return $this->productRepository->getSimilarProducts_Ngrok($product_id);
+    }
+    public function getCollaborativeFiltering_Ngrok($request)
+    {
+        return $this->productRepository->getCollaborativeFiltering_Ngrok($request);
+    }
 
 
     

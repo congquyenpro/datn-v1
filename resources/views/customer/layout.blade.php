@@ -52,7 +52,7 @@
         <div class="container">
             <div class="top-bar-left">
                 <div class="header-message">
-                    Welcome to our online store!
+                   BKPerfume - Discover your signature scent
                 </div>
             </div>
             <div class="top-bar-right">
@@ -60,21 +60,14 @@
                     <div class="stelina-language stelina-dropdown">
                         <a href="#" class="active language-toggle" data-stelina="stelina-dropdown">
 									<span>
-										English (USD)
+										Vietnamese (VND)
 									</span>
                         </a>
                         <ul class="stelina-submenu">
                             <li class="switcher-option">
                                 <a href="#">
 											<span>
-												French (EUR)
-											</span>
-                                </a>
-                            </li>
-                            <li class="switcher-option">
-                                <a href="#">
-											<span>
-												Japanese (JPY)
+												English (USD)
 											</span>
                                 </a>
                             </li>
@@ -109,17 +102,24 @@
                                     <select title="cate" data-placeholder="All Categories" class="chosen-select"
                                             tabindex="1">
                                             <option value="perfume">Perfume</option>
-                                            <option value="trending">Trending</option>
-                                            <option value="male">Nước hoa Nam</option>
-                                            <option value="female">Nước hoa Nữ</option>
                                     </select>
                                 </div>
                                 <div class="inner">
-                                    <input type="text" class="input" name="s" value="" placeholder="Search here">
+                                    <input type="text" class="input" name="search" value="" placeholder="Search here">
                                 </div>
                                 <button class="btn-search" type="submit">
                                     <span class="icon-search"></span>
                                 </button>
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        var search = document.querySelector('.form-search');
+                                        search.addEventListener('submit', function (e) {
+                                            e.preventDefault();
+                                            var searchValue = search.querySelector('input[name="search"]').value;
+                                            window.location.href = '/shop?search=' + searchValue;
+                                        });
+                                    });
+                                </script>
                             </div>
                         </form>
                     </div>
@@ -468,18 +468,30 @@
                                         </ul>
                                     </li> --}}
                                     <li class="menu-item">
-                                        <a href="/blogs/kien-thuc-ve-nuoc-hoa" class="stelina-menu-item-title" title="Post Layout">Kinh thức về nước hoa</a>
+                                        <a href="/blogs/kien-thuc-ve-nuoc-hoa" class="stelina-menu-item-title" title="Kinh thức về nước hoa">Kinh thức về nước hoa</a>
                                     </li>
                                     <li class="menu-item">
-                                        <a href="/blogs/kinh-nghiem-chon-nuoc-hoa" class="stelina-menu-item-title" title="Post Layout">Kinh nghiệm chọn nước hoa</a>
+                                        <a href="/blogs/kinh-nghiem-chon-nuoc-hoa" class="stelina-menu-item-title" title="Kinh nghiệm chọn nước hoa">Kinh nghiệm chọn nước hoa</a>
                                     </li>
                                     <li class="menu-item">
-                                        <a href="/blogs/goc-review" class="stelina-menu-item-title" title="Post Layout">Góc review</a>
+                                        <a href="/blogs/goc-review" class="stelina-menu-item-title" title="Góc review<">Góc review</a>
+                                    </li>
+                                    <li class="menu-item menu-item-has-children">
+                                        <a href="#" class="stelina-menu-item-title" title="Mua hàng">Mua hàng</a>
+                                        <span class="toggle-submenu"></span>
+                                        <ul class="submenu">
+                                            <li class="menu-item">
+                                                <a href="/tra-cuu-don">Tra cứu đơn hàng</a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="#">Chính sách bán hàng</a>
+                                            </li>
+                                        </ul>
                                     </li>
                                 </ul>
                             </li>
                             <li class="menu-item">
-                                <a href="about.html" class="stelina-menu-item-title" title="About">About</a>
+                                <a href="{{route('customer.about')}}" class="stelina-menu-item-title" title="About">About</a>
                             </li>
                         </ul>
                     </div>
@@ -627,7 +639,7 @@
                                 <a href="#">FAQs</a>
                             </li>
                             <li class="menu-item">
-                                <a href="#">Track Order</a>
+                                <a href="/tra-cuu-don">Track Order</a>
                             </li>
                             <li class="menu-item">
                                 <a href="#">Delivery</a>

@@ -452,13 +452,13 @@ class OrderRepository extends BaseRepository implements IBaseRepository
             MAX(ps.discount) AS product_size_discount, -- Hàm tổng hợp
             p.images AS product_image
             FROM 
-                Orders o
+                orders o
             JOIN 
-                Order_Items oi ON oi.order_id = o.id
+                order_items oi ON oi.order_id = o.id
             JOIN 
-                Product_Sizes ps ON ps.id = oi.product_size_id
+                product_sizes ps ON ps.id = oi.product_size_id
             JOIN 
-                Products p ON p.id = ps.product_id
+                products p ON p.id = ps.product_id
             WHERE 
                 o.customer_id = ? AND (o.status = 3 OR o.status = 2)
             GROUP BY 
@@ -466,7 +466,37 @@ class OrderRepository extends BaseRepository implements IBaseRepository
             ORDER BY 
                 o.order_date DESC;    
             ";
-        }else{
+        }elseif ($status == 7 || $status == 6) {
+            $sql = "
+            SELECT 
+            o.id AS order_id,
+            o.value,
+            o.status,
+            GROUP_CONCAT(p.images) AS images,
+            ps.product_id,
+            p.name AS product_name,
+            ps.id AS product_size_id,
+            ps.volume AS product_size_name,
+            MAX(oi.item_value) AS product_size_price, -- Sử dụng MAX hoặc các hàm tổng hợp khác
+            MAX(ps.discount) AS product_size_discount, -- Hàm tổng hợp
+            p.images AS product_image
+            FROM 
+                orders o
+            JOIN 
+                order_Items oi ON oi.order_id = o.id
+            JOIN 
+                product_Sizes ps ON ps.id = oi.product_size_id
+            JOIN 
+                products p ON p.id = ps.product_id
+            WHERE 
+            o.customer_id = ? AND (o.status = 6 OR o.status = 7)
+            GROUP BY 
+                o.id, o.value, o.status, ps.product_id, ps.id, p.images, p.name, ps.volume
+            ORDER BY 
+                o.order_date DESC;    
+            ";
+        }
+        else{
             $sql = "
             SELECT 
             o.id AS order_id,

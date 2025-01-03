@@ -26,6 +26,9 @@ class DisplayController extends Controller
         //return dd($blog);
         return view('customer.home',compact('blogs'));
     }
+    public function about(){
+        return view('customer.about');
+    }
     
     public function displayProduct(Request $request){
         $product = $this->productService->getProductBySlug($request->slug);

@@ -656,8 +656,10 @@ const Order = {
                 var order_id = $(this).data('order-id');
                 console.log(order_id);
                 Api.Order.printTicket(order_id).done((response) => {
-                    if (response.status = 500) {
-                        alert('Đơn hàng liên kết đối tác vận chuyển ngoài !');
+                    if (response.status) {
+                        if (response.status = 500) {
+                            alert('Đơn hàng liên kết đối tác vận chuyển ngoài !');
+                        }
                     }
                     // Giả sử response chứa đường dẫn đến tệp in
                     var printUrl = response; // Thay đổi thành trường chính xác chứa URL

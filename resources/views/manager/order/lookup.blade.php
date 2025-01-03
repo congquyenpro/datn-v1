@@ -53,13 +53,13 @@
             <!-- Header START -->
             <div class="header">
                 <div class="logo logo-dark">
-                    <a href="index.html">
+                    <a href="/">
                         <img src="{{asset('admin_assets/images/logo_banner/BKP.png')}}" alt="Logo">
                         <img class="logo-fold m-l-5" src="{{asset('admin_assets/images/logo_banner/BKP.png')}}" alt="Logo">
                     </a>
                 </div>
                 <div class="logo logo-white">
-                    <a href="index.html">
+                    <a href="/">
                         <img src="{{asset('admin_assets/images/logo_banner/BKP.png')}}" alt="Logo">
                         <img class="logo-fold" src="{{asset('admin_assets/images/logo_banner/BKP.png')}}" alt="Logo">
                     </a>
@@ -315,7 +315,7 @@
                 var phone = $('#inputPhone').val();
                 
                 $.ajax({
-                    url: 'http://127.0.0.1:8000/api/webhook/order',
+                    url: '/api/webhook/order',
                     type: 'POST',
                     data: {
                         order_code: orderCode,

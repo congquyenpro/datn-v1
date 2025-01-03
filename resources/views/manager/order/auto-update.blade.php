@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>BKPerfume - Tra cứu đơn hàng</title>
+    <title>BKPerfume - Cập nhật đơn hàng</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{asset('admin_assets/images/logo_banner/BKP.png')}}">

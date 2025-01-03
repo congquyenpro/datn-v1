@@ -560,4 +560,25 @@ class ProductController extends Controller
         $productIds =  $this->productService->getCollaborativeFiltering2($request);
         return $productIds;
     }
+
+    //Hàm lấy dữ liệu sản phẩm để gửi lên recommend_system_server
+    public function getRecommendData()
+    {
+        return $this->productService->getRecommendData();
+    }
+    public function getRecommendData2()
+    {
+        return $this->productService->getRecommendData2();
+    }
+
+    public function getSimilarProduct_Ngrok(Request $request)
+    {
+        $product_id = $request->product_id;
+        return $this->productService->getSimilarProduct_Ngrok($product_id);
+    }
+    public function getCollaborativeFiltering_Ngrok(Request $request)
+    {
+        return $this->productService->getCollaborativeFiltering_Ngrok($request);
+    }
+
 }

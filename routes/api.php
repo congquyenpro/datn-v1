@@ -28,3 +28,12 @@ Route::post('/webhook/order', 'WebhookController@lookupOrderDetail')->name('webh
 Route::get('/webhook/order', 'WebhookController@updateOrderStatus')->name('webhook.order.update');
 
 Route::get('/webhook/order/all', 'Manager\Order\OrderController@getOrders')->name('webhook.order.update');
+
+
+
+
+Route::get('/product','Customer\ProductController@getRecommendData');
+Route::get('/product-2','Customer\ProductController@getRecommendData2');
+
+Route::get('/product-ngrok-1','Customer\ProductController@getSimilarProduct_Ngrok');
+Route::get('/product-ngrok-2','Customer\ProductController@getCollaborativeFiltering_Ngrok');
