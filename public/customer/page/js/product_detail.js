@@ -110,6 +110,7 @@ const ProductDetail = {
     
             $(document).on('click', '.single_add_to_cart_button', (event) => {
                 event.preventDefault();
+
                 const button = $(event.target);
                 const productCard = button.closest('.product-item');
                 const productId = productCard.data('id');
@@ -133,7 +134,13 @@ const ProductDetail = {
             //add to cart 2
             $(document).on('click', '.single_add_to_cart_button2', (event) => {
                 event.preventDefault();
-            
+
+                //Nếu chưa chọn size thì thông báo
+                if ($('.list-product-size-2 a.active').length === 0) {
+                    alert('Vui lòng chọn kích cỡ trước khi thêm vào giỏ hàng!');
+                    return;
+                } 
+
                 // Tìm phần tử cha gần nhất chứa thông tin sản phẩm
                 var $parent = $(event.currentTarget).closest('.details-product'); // Thay '.product-container' bằng selector phù hợp với cấu trúc của bạn
             

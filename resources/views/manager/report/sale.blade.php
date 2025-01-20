@@ -70,7 +70,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+{{--     <div class="row">
             <!-- 3 tables: type, age, sex -->
             <div class="col-md-12 col-lg-4">
                 <div class="card">
@@ -221,7 +221,7 @@
                     </div>
                 </div>
             </div>
-    </div>
+    </div> --}}
     
     <div class="row">
         <div class="col-md-12 col-lg-8">
@@ -238,7 +238,7 @@
                                         <th>ID</th>
                                         <th>Sản phẩm</th>
                                         <th>Đã bán</th>
-                                        <th>Doanh thu</th>
+                                       
                                     </tr>
                                 </thead>
                                 <tbody id="best-selling-body">
@@ -444,7 +444,7 @@
                                         <th>ID</th>
                                         <th>Sản phẩm</th>
                                         <th>Lượt xem</th>
-                                        <th>Doanh thu</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody id="top-view-body">

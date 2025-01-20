@@ -200,6 +200,7 @@ class ReportController extends Controller
         
         // Xác định năm (nếu có truyền vào từ request, nếu không sẽ mặc định lấy năm hiện tại)
         $year = $request->input('year', date('Y'));
+        //$year = '2024';
     
         // Lặp qua tất cả các tháng trong năm (từ tháng 1 đến tháng 12)
         for ($month = 1; $month <= 12; $month++) {

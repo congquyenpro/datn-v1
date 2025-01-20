@@ -5,6 +5,20 @@
     <div class="card-body">
       <h4 class="card-title">Thay đổi mật khẩu</h4>
       <!-- <p class="card-text">Some example text. Some example text.</p> -->
+      {{-- Thông báo lỗi haowjc thành công --}}
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                @foreach ($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach
+            </div>
+        @endif
+  
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
       <hr>
       <div class="form-edit" style="padding: 3rem;">
         <div class="row">

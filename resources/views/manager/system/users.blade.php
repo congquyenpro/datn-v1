@@ -104,9 +104,9 @@
                                             <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-edit-user" data-id="{{$user->id}}" data-toggle="modal" data-target=".bd-example-modal-lg-2">
                                                 <i class="anticon anticon-eye"></i>
                                             </button>
-                                            <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-delete-user" data-toggle="modal" data-target="#deleteModal" data-id="{{$user->id}}">
+           {{--                                  <button class="btn btn-icon btn-hover btn-sm btn-rounded btn-delete-user" data-toggle="modal" data-target="#deleteModal" data-id="{{$user->id}}">
                                                 <i class="anticon anticon-delete"></i>
-                                            </button>
+                                            </button> --}}
                                         </td>
                                     </tr>
                                     @endforeach

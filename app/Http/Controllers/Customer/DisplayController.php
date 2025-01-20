@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\ProductService;
 use App\Services\OrderService;
 use App\Services\BlogService;
+use App\Services\SettingService;
 
 
 class DisplayController extends Controller
@@ -14,20 +15,26 @@ class DisplayController extends Controller
     protected $productService;
     protected $orderService;
     protected $blogService;
+    protected $settingService;
 
-    public function __construct(ProductService $productService, OrderService $orderService, BlogService $blogService) {
+    public function __construct(ProductService $productService, OrderService $orderService, BlogService $blogService, SettingService $settingService) {
         $this->productService = $productService;
         $this->orderService = $orderService;
         $this->blogService = $blogService;
+        $this->settingService = $settingService;   
     }
 
     public function displayHome(){
         $blogs = $this->blogService->getLatestPosts();
-        //return dd($blog);
-        return view('customer.home',compact('blogs'));
+        $template_config = $this->settingService->getTemplateConfig();
+        //dd($template_config);
+        //dd($blog);
+        return view('customer.home',compact('blogs','template_config'));
     }
     public function about(){
-        return view('customer.about');
+        $contactConfig = $this->settingService->getContactConfig();
+        //dd($contactConfig);
+        return view('customer.about',compact('contactConfig'));
     }
     
     public function displayProduct(Request $request){

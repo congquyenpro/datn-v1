@@ -232,6 +232,16 @@ Route::prefix('admin')->group(function() {
            Route::get('/customer/infor', 'Manager\System\CustomerController@getUserInfor')->name('manager.customer.infor');
            Route::post('/customer/status', 'Manager\System\CustomerController@setUserStatus')->name('manager.customer.status');
            Route::get('/customers/orders', 'Manager\System\CustomerController@getCustomerOrderList')->name('manager.customer.order');
+
+           Route::get('/config', 'Manager\System\SettingController@index')->name('manager.config');
+
+           Route::post('/config/contact', 'Manager\System\SettingController@setContactConfig')->name('manager.config.contact');
+           Route::post('/config/shipping', 'Manager\System\SettingController@setShippingConfig')->name('manager.config.shipping');
+
+           Route::post('/config/noti', 'Manager\System\SettingController@setNotificationConfig')->name('manager.config.noti');
+
+           Route::post('/config-template/{type}/{name}', 'Manager\System\SettingController@setTemplateConfig')->name('manager.config.template');
+ 
         });
     });    
 

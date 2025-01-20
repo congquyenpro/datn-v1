@@ -329,6 +329,9 @@
                                 <li>
                                     <a href="{{route('manager.customer')}}">Khách hàng</a>
                                 </li>
+                                <li>
+                                    <a href="{{route('manager.config')}}">Cấu hình</a>
+                                </li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">

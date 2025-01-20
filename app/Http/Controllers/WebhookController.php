@@ -47,8 +47,109 @@ class WebhookController extends Controller
                 break;
         }
 
+        //Cập nhật status
+        $ref_status_code = [
+            'ready_to_pick' => 3,
+            'picking' => 3,
+            'money_collect_picking' => 3,
+
+            'cancel' => 6,
+
+            'picked' => 4,
+            'storing' => 4,
+            'transporting' => 4,
+            'sorting' => 4,
+            'delivering' => 4,
+            'money_collect_delivering' => 4,
+
+            'delivered' => 5,
+            'delivery_fail' => 4,  //Gh thất bại (giao lại 3 lần)
+            'waiting_to_return' => 4, //Giao lại
+
+            'return' => 7,
+            'return_transporting' => 7,
+            'return_sorting' => 7,
+            'returning' => 7,
+            'return_fail' => 7,
+
+            'returned' => 7,
+
+            'exception' => 6,
+            'damage' => 6,
+            'lost' => 6,
+        ];
+        //nếu không tồn tại $ref_status_code[$data['Status']]
+        if (!isset($ref_status_code[$data['Status']])) {
+            return response()->json([
+                'message' => 'Invalid status: status not found!',
+                'status' => 404
+            ], 404);
+        }
+        
+        $order_status = $ref_status_code[$data['Status']];
+        $order_code = $data['OrderCode'];
+
+        //Lấy ra thông tin order
+        $order = Order::where('shipping_code', $order_code)->first();
+        if (!$order) {
+            return response()->json([
+                'message' => 'Order not found',
+                'status' => 404
+            ], 404);
+        }
+/*         if ($order->delivery_company_code != 'GHN') {
+            return response()->json([
+                'message' => 'Only support GiaoHangNhanh',
+                'status' => 400
+            ], 400);
+        } */
+        //Lấy ra status hiện tại của đơn hàng
+        $current_status = $order->status;
+        if ($current_status == $order_status) {
+            return response()->json([
+                'message' => 'Order status is up to date',
+                'status' => 200
+            ], 200);
+        }else {
+            if ($order_status == 5) {
+                $order->payment_status = 1;
+            }
+            $order->status = $order_status;
+            $data_log_index = [
+                0 => 'Chờ xử lý',
+                1 => 'Đã xác nhận',
+                2 => 'Đã hoàn thiện',
+                3 => 'Chờ lấy hàng',
+                4 => 'Đang giao hàng',
+                5 => 'Đã giao hàng',
+                6 => 'Đã hủy',
+                7 => 'Hoàn trả',
+            ];
+            // Lấy log cũ
+            $log = json_decode($order->log);
+    
+            // Kiểm tra xem log đã được khởi tạo thành mảng chưa
+            if (!is_array($log)) {
+                //chuyển về log cũ về mảng
+                $log = [$log];
+    
+                //$log = []; // Khởi tạo lại thành mảng nếu không phải
+            }
+    
+            // Thêm log mới
+            $log[] = date('Y-m-d H:i:s') . ' - ' . $data_log_index[$order_status];
+            $order->log = json_encode($log);
+            $order->save();
+
+            return response()->json([
+                'message' => 'Order status updated successfully: ' . $data_log_index[$order_status],
+                'status' => 200,
+                'new_status' => $order_status
+            ], 200);
+        }               
+
         // Trả về HTTP Response 200 để GHN không gửi lại
-        return response()->json(['message' => 'Webhook handled successfully'], 200);
+/*         return response()->json(['message' => $type], 200); */
     }
 
     private function handleCreateOrder(array $data)
@@ -122,8 +223,8 @@ class WebhookController extends Controller
             'money_collect_delivering' => 4,
 
             'delivered' => 5,
-            'delivery_fail' => 5,  //Gh thất bại (giao lại 3 lần)
-            'waiting_to_return' => 5, //Giao lại
+            'delivery_fail' => 4,  //Gh thất bại (giao lại 3 lần)
+            'waiting_to_return' => 4, //Giao lại
 
             'return' => 7,
             'return_transporting' => 7,

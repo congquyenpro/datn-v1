@@ -33,11 +33,18 @@ const Product = {
                                 </div>
                             `).join('');
     
-                            const trendingStatus = `
+/*                             const trendingStatus = `
                                 <div class="d-flex align-items-center">
                                     <div class="switch m-t-5 m-l-10">
                                         <input type="checkbox" id="switch-${product.id}" ${product.trending ? 'checked' : ''}>
                                         <label for="switch-${product.id}"></label>
+                                    </div>
+                                </div>
+                            `; */
+                            const trendingStatus = `
+                                <div class="d-flex align-items-center">
+                                    <div class="switch m-t-5 m-l-10">
+                                    ${product.view}
                                     </div>
                                 </div>
                             `;
@@ -144,10 +151,10 @@ const Product = {
                 });
         
                 // Thêm option "Khác"
-                const otherOption = document.createElement('option');
+/*                 const otherOption = document.createElement('option');
                 otherOption.value = 'other';
                 otherOption.textContent = 'Khác (Thêm mới)';
-                selectElement.appendChild(otherOption);
+                selectElement.appendChild(otherOption); */
             }
         
             // Lấy tất cả thuộc tính sản phẩm từ API và gắn vào các select tương ứng

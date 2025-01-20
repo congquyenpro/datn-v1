@@ -54,7 +54,7 @@
                             <div>Tất cả</div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <div>(333)</div>
+                            <div></div>
                         </div>
                     </div>
                     <div class="status-event is-select" atr="Pending" data-id="0">
@@ -333,7 +333,7 @@
                         <div class="p-10" style="background-color: rgb(204 213 221 / 50%);">
                             <div class="row">
                                 <div class="col-sm-4 col-md-4 col-lg-4 text-bold">COD:</div>
-                                <div id="COD_cf" class="col-sm-4 col-md-4 col-lg-4">200.000</div>
+                                <div id="COD_cf" class="col-sm-4 col-md-4 col-lg-4">Đang tính...</div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-4 col-md-4 col-lg-4 text-bold">Trả phí:</div>
@@ -341,7 +341,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-4 col-md-4 col-lg-4 text-bold">Tổng phí:</div>
-                                <div class="col-sm-4 col-md-4 col-lg-4">44.000đ</div>
+                                <div class="col-sm-4 col-md-4 col-lg-4">Đang tính...</div>
                             </div>
                         </div>
                     </div>

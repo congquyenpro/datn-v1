@@ -11,10 +11,10 @@
 							<a href="/">Home</a>
 						</li>
 						<li class="trail-item">
-							<a href="#">Accents</a>
+							<a href="#">Product</a>
 						</li>
 						<li class="trail-item trail-end active">
-							Glorious Eau
+							{{$product->name}}
 						</li>
 					</ul>
 				</div>
@@ -93,7 +93,7 @@
 									<div class="size-text text-attribute">
 										Pots Size:
 									</div>
-                                    <div class="list-size list-item">
+                                    <div class="list-size list-item list-product-size-2">
                                         @php
                                             $sizes = $product->productSizes ?? []; // Lấy kích thước sản phẩm
                                             $selectedSize = !empty($sizes) ? $sizes->first()->volume : null; // Kích thước đầu tiên
@@ -210,8 +210,8 @@
                                 <div class="reviews-tab">
                                     <div class="comments">
                                         <h2 class="reviews-title">
-                                            11 review for
-                                            <span>Glorious Eau</span>
+                                            Reviews for
+                                            <span>{{$product->name}}</span>
                                         </h2>
                                         <div id="total-rating">
                                             <div class="row" style="display: flex; align-items: center; margin-bottom: 20px;">
@@ -225,7 +225,7 @@
                                                                 <div class="star-rating">
                                                                     <span class="star-5"></span>
                                                                 </div>
-                                                                <div style="margin-left: 8px;">(200 reviews)</div>
+                                                                <div style="margin-left: 8px;">(6 reviews)</div>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-12 col-md-12 col-xl-12">
@@ -233,7 +233,7 @@
                                                                 <div class="star-rating">
                                                                     <span class="star-4"></span>
                                                                 </div>
-                                                                <div style="margin-left: 8px;">(10 reviews)</div>
+                                                                <div style="margin-left: 8px;">(1 reviews)</div>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-12 col-md-12 col-xl-12">

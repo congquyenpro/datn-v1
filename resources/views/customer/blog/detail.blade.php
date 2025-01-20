@@ -131,7 +131,7 @@
                     </div>
                     <div class="comments-area">
                         <h3 class="custom_blog_title">
-                            Comments <span class="count">(2)</span>
+                            Comments <span class="count"></span>
                         </h3>
                         @if (!Auth::check())
                             <div style="margin-bottom: 10px; cursor:pointer;" id="view-more-comments">

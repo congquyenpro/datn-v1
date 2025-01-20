@@ -133,8 +133,8 @@ class OrderController extends Controller
             'pick_shift' => $order['pick_shift'] ?? [2], // Ca lấy hàng (tùy chọn, mặc định là [2])
             'items' => $order_items ?? [ // Thông tin sản phẩm, bắt buộc truyền items khi sử dụng gói dịch vụ Hàng nặng
                 [
-                    'name' => 'Áo Polo', // Tên sản phẩm
-                    'code' => 'Polo123', // Mã sản phẩm
+                    'name' => 'Nước hoa BKP', // Tên sản phẩm
+                    'code' => 'BKP1', // Mã sản phẩm
                     'quantity' => (int)($order['items'][0]['quantity'] ?? 1), // Số lượng sản phẩm
                     'price' => (int)($order['items'][0]['price'] ?? 200000), // Giá sản phẩm
                     'length' => (int)($order['items'][0]['length'] ?? 12), // Chiều dài sản phẩm

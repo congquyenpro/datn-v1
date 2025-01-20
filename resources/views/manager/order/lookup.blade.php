@@ -90,16 +90,18 @@
             <div class="container m-t-100">
                 <div class="card">
                     <div class="card-body ">
-                        <div class="m-t-20 m-b-50 text-center"><h1>TRA CỨU ĐƠN HÀNG</h1></div>
+                        <div class="m-t-20 text-center"><h1>TRA CỨU ĐƠN HÀNG</h1></div>
+                        <div class="m-t-20 text-center">(Vui lòng nhập mã vận đơn để tra cứu)</div>
+                        <div class="m-t-20 text-center"><img src="{{asset('customer/images/tra-cuu.png')}}" width="100%" alt=""></div>
                         <form>
                             <div class="form-group row">
                                 <!-- <label for="inputOrderCode" class="col-sm-2 col-form-label font-size-18">Mã đơn hàng</label> -->
-                                <div class="col-sm-12 col-md-6 m-t-15">
-                                    <input type="text" class="form-control" id="inputOrderCode" placeholder="Mã đơn">
+                                <div class="col-sm-12 col-md-12 m-t-15">
+                                    <input type="text" class="form-control" id="inputOrderCode" placeholder="Mã vận đơn">
                                 </div>
-                                <div class="col-sm-12 col-md-6 m-t-15">
+{{--                                 <div class="col-sm-12 col-md-6 m-t-15">
                                     <input type="text" class="form-control" id="inputPhone" placeholder="Số điện thoại">
-                                </div>
+                                </div> --}}
                             </div>
                             <div class="form-group">
                                 <a href="javascript:void(0)" type="submit" class="btn btn-primary float-right" id="lookup-btn">Tra cứu</a >
@@ -228,11 +230,11 @@
                 </div>
             </div>
 
-            <div class="m-t-25">
+{{--             <div class="m-t-25">
                 <button class="btn btn-icon btn-primary btn-rounded float-right m-r-15">
                     <i class="anticon anticon-google"></i>
                 </button>
-            </div>
+            </div> --}}
         </div>
     </div>
 

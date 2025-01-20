@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 use App\Services\ProductService;
 use App\Services\AttributeValueService;
+use App\Services\CategoryService;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,13 +16,17 @@ class ProductController extends Controller
 {
     protected $productService;
     protected $attributeValueService;
-    public function __construct(ProductService $productService, AttributeValueService $attributeValueService) {
+    protected $categoryService;
+    public function __construct(ProductService $productService, AttributeValueService $attributeValueService, CategoryService $categoryService) {
         $this->productService = $productService;
         $this->attributeValueService = $attributeValueService;
+        $this->categoryService = $categoryService;
     }
     //shop
     public function shop(){
-        return view('customer.shop');
+        $categories = $this->categoryService->getAll();
+        //dd($categories);
+        return view('customer.shop', compact('categories'));
     }
 
     //get product by type
@@ -389,14 +395,7 @@ class ProductController extends Controller
         //check tag
         if (isset($filters['tag'])) {
             switch ($filters['tag']) {
-                case 'trending':
-                    $query->where('trending', 1);
-                    break;
-                case 'new':
-                    break;
                 case 'all':
-                    break;
-                case 'best_selling':
                     break;
                 case 'for_you':
                     if (!isset(Auth::user()->id)) {
@@ -406,8 +405,23 @@ class ProductController extends Controller
                     $product_ids = $this->getCollaborativeFiltering2($request);
                     $query->whereIn('id', $product_ids);
                     break;
+                default:
+                    $query->where('category_id', $filters['tag']);
+                    break;
             }
         }
+
+        //check sort-by
+        if (isset($filters['sort_by'])) {
+            switch ($filters['sort_by']) {
+                case 'lateness':
+                    $query->orderBy('id', 'asc');
+                    break;
+                case 'newness':
+                    $query->orderBy('id', 'desc');
+                    break;
+        }}
+        $query->orderBy('id', 'desc');
 
         //Check xem filter search không
 /*         if (isset($filters['search'])) {
@@ -428,6 +442,14 @@ class ProductController extends Controller
                     break;
             }
             $query->where('gender', $gender);
+        }
+
+        //check price
+        if (isset($filters['price_min'] ) && isset($filters['price_max'])) {
+            $query->whereHas('productSizes', function ($query) use ($filters) {
+                $query->where('price', '>=', $filters['price_min'])
+                      ->where('price', '<=', $filters['price_max']);
+            });
         }
 
         if (isset($filters['concentration'])) {

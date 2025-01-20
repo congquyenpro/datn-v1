@@ -207,6 +207,7 @@
                                                 <option value="Kiến thức về nước hoa" selected>Kiến thức về nước hoa</option>
                                                 <option value="Kinh nghiệm chọn nước hoa" >Kinh nghiệm chọn nước hoa</option>
                                                 <option value="Góc review">Góc review</option>
+                                                <option value="Chính sách bán hàng">Chính sách của hàng</option>
                                             </select>
                                         </div>
                                         <div class="form-group">

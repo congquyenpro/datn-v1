@@ -70,5 +70,25 @@ class HelperService
         return $response->json();
     }
 
+    //Xử lý ảnh tải lên và get link
+    private function processUploadedImage($image,$path)
+{
+    // Kiểm tra xem file có phải là ảnh hay không
+    if ($image && $image->isValid() && in_array($image->getClientMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
+        // Tạo tên file ngẫu nhiên
+        $imageName = 'image_' . time() . rand(1000, 9999) . '.' . $image->getClientOriginalExtension();
+
+        // Lưu ảnh vào thư mục public/posts/images
+        $imagePath = public_path($path . $imageName);
+        $image->move(public_path($path), $imageName); // Di chuyển file vào thư mục
+
+        // Trả về đường dẫn URL của ảnh
+        return $path . $imageName;
+    }
+
+    // Nếu không phải ảnh hợp lệ, trả về null hoặc thông báo lỗi
+    return null;
+}
+
     
 }

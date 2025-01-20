@@ -49,7 +49,7 @@ const Order = {
                     id: order.id,
                     name: `
                         <p><i class="far fa-user m-r-10"></i>${order.name}</p>
-                        <p><i class="far fa-address-book m-r-10"></i>TEST</p>
+                        <p><i class="far fa-address-book m-r-10"></i>${JSON.parse(order.address).address.replace(/\//g, ',')}</p>
                         <p><i class="fas fa-phone-alt m-r-10"></i>${order.phone}</p>
                     `,
                     order_price: order.value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }), // Định dạng giá
@@ -191,6 +191,11 @@ const Order = {
             });
             
         },
+        formatAddress: (address) => {
+            var address = JSON.parse(address).address;
+            //thay / bằng dấu ,
+            return address.replace(/\//g, ',');
+        }
     },
     template: {
         showDefault: (id) => {
@@ -315,7 +320,7 @@ const Order = {
                 <option value="2" selected >Đã hoàn thiện</option>
                 <option value="3">Đang giao hàng</option>
                 <option value="4">Đã giao hàng</option>
-                <option value="5">Đã hủy</option>
+                <option value="6">Đã hủy</option>
             `);
             $('#order-detail-body').append(`
                 <div class="row">
@@ -325,7 +330,7 @@ const Order = {
                             
                             <select name="" id="" class="form-control shipping-partner">                             
                                 <option value="1">Giao Hàng Nhanh</option>
-                                <option value="2">Giao Hàng Tiết Kiệm</option>
+                                <option value="2" disabled>Giao Hàng Tiết Kiệm</option>
                                 <option value="3">Khác</option>
                             </select>
                             <button style="white-space: nowrap;" class="btn btn-primary btn-tone m-l-5">                                        
@@ -1311,10 +1316,11 @@ const Order = {
                             $('#provinceSelect').val(data.address.province).trigger("chosen:updated");
     
                             // Load districts based on the selected province
-                           Order.address.loadDistricts(data.address.province, data.address.district);
+                           Order.address.loadDistricts(data.address.province, data.address.district, data.address.ward);
     
                             // Set the ward based on the user's data
                            Order.address.loadWards(data.address.district, data.address.ward);
+                           console.log('goi lan 1');
                         }
                     });
     
@@ -1341,7 +1347,7 @@ const Order = {
 
         },
     
-        loadDistricts: (provinceId, selectedDistrictId = null) => {
+        loadDistricts: (provinceId, selectedDistrictId = null, selectedWardCode = null) => {
             Api.Address.getDistrict(provinceId).done(function(data) {
                 console.log(data);
                 $('#districtSelect').empty(); // Clear existing options
@@ -1354,7 +1360,7 @@ const Order = {
                     // Set the selected district if provided
                     if (selectedDistrictId) {
                         $('#districtSelect').val(selectedDistrictId).trigger("chosen:updated");
-                        Order.address.loadWards(selectedDistrictId); // Load wards based on the selected district
+                        Order.address.loadWards(selectedDistrictId, selectedWardCode); // Load wards based on the selected district
                     }
     
                     // Event listener for district change
@@ -1367,6 +1373,7 @@ const Order = {
         },
     
         loadWards: (districtId, selectedWardCode = null) => {
+            console.log('ton tai'+ selectedWardCode);
             Api.Address.getWard(districtId).done(function(data) {
                 console.log(data);
                 $('#wardSelect').empty(); // Clear existing options
@@ -1378,8 +1385,13 @@ const Order = {
     
                     // Set the selected ward if provided
                     if (selectedWardCode) {
+                        
                         $('#wardSelect').val(selectedWardCode).trigger("chosen:updated");
+
+                        //set selected cho ward cos value = selectedWardCode
+
                     }
+
                 }
             });
         }

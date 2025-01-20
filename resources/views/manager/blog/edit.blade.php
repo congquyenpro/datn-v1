@@ -78,6 +78,7 @@
                                                 <option value="Kiến thức về nước hoa" @if($post->category == 'Kiến thức về nước hoa') selected @endif>Kiến thức về nước hoa</option>
                                                 <option value="Kinh nghiệm chọn nước hoa" @if($post->category == 'Kinh nghiệm chọn nước hoa') selected @endif>Kinh nghiệm chọn nước hoa</option>
                                                 <option value="Góc review" @if($post->category == 'Góc review') selected @endif>Góc review</option>
+                                                <option value="Chính sách của hàng" @if($post->category == 'Chính sách của hàng') selected @endif>Chính sách của hàng</option>
                                             </select>
                                         </div>
                                         <div class="form-group">

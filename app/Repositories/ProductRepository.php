@@ -100,6 +100,7 @@ class ProductRepository extends BaseRepository
                         'inventory_quantity' => $size->inventory_quantity,
                     ];
                 }),
+                'view' => $product->view,
                 'trending' => $product->trending, // Hoặc 1/0 tùy vào logic
             ];
         });
@@ -377,7 +378,8 @@ class ProductRepository extends BaseRepository
         //$query = $this->product->with('productSizes')->limit($limit);
 
         //Thêm sắp xếp
-        //$query->orderBy('id', 'desc');
+        $query->orderBy('id', 'desc');
+  
     
         if ($productIds) {
             $query->whereIn('id', $productIds); // Thêm điều kiện nếu có productIds

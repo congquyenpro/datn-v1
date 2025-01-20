@@ -196,9 +196,12 @@ class BlogService {
             case 'goc-review':
                 $category = 'Góc review';
                 break;
+            case 'chinh-sach-ban-hang':
+                    $category = 'Chính sách bán hàng';
+                break;
         }
         return Post::where('category', $category)
-           ->select('id', 'title', 'summary', 'image','category')
+           ->select('id', 'title', 'summary', 'image','category','slug')
            ->get();
     }
     

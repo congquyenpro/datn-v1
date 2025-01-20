@@ -483,9 +483,9 @@ class OrderRepository extends BaseRepository implements IBaseRepository
             FROM 
                 orders o
             JOIN 
-                order_Items oi ON oi.order_id = o.id
+                order_items oi ON oi.order_id = o.id
             JOIN 
-                product_Sizes ps ON ps.id = oi.product_size_id
+                product_sizes ps ON ps.id = oi.product_size_id
             JOIN 
                 products p ON p.id = ps.product_id
             WHERE 
@@ -511,13 +511,13 @@ class OrderRepository extends BaseRepository implements IBaseRepository
             MAX(ps.discount) AS product_size_discount, -- Hàm tổng hợp
             p.images AS product_image
             FROM 
-                Orders o
+                orders o
             JOIN 
-                Order_Items oi ON oi.order_id = o.id
+                order_items oi ON oi.order_id = o.id
             JOIN 
-                Product_Sizes ps ON ps.id = oi.product_size_id
+                product_sizes ps ON ps.id = oi.product_size_id
             JOIN 
-                Products p ON p.id = ps.product_id
+                products p ON p.id = ps.product_id
             WHERE 
                 o.customer_id = ? AND o.status = ?
             GROUP BY 

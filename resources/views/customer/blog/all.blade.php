@@ -17,6 +17,8 @@
                                 Kinh nghiệm chọn nước hoa
                             @elseif ($slug == 'goc-review')
                                 Góc review
+                            @elseif ($slug == 'chinh-sach-ban-hang')
+                                Chính sách bán hàng
                             @endif
                         </li>
                     </ul>
@@ -33,6 +35,8 @@
                             Kinh nghiệm chọn nước hoa
                         @elseif ($slug == 'goc-review')
                             Góc review
+                        @elseif ($slug == 'chinh-sach-ban-hang')
+                            Chính sách bán hàng
                         @endif
                     </h3>
                     <div class="blog-list grid-style">
@@ -50,7 +54,7 @@
                                             <a href="#">{{$post->category}}</a>
                                         </div>
                                         <h3 class="post-title">
-                                            <a href="#">{{$post->title}}</a>
+                                            <a href="/post/{{$post->slug}}">{{$post->title}}</a>
                                         </h3>
                                         <div class="main-info-post">
                                             <p class="des">

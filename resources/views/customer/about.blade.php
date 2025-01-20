@@ -34,10 +34,10 @@
                                                 BKPerfume Shop<br/>
                                             </h2>
                                             <div class="sub-title">
-                                                Email: contact@bkperfume.shop <br/>
-                                                Phone: 0818666888 <br/>
-                                                Address: Nguyen An Ninh, Hoang Mai, HN <br/>
-                                                Facebook: <a href="https://www.facebook.com/" target="_blank">BKPerfume Shop</a>
+                                                Email: {{$contactConfig['email']}} <br/>
+                                                Phone: {{$contactConfig['phone']}}<br/>
+                                                Address: {{$contactConfig['address']}} <br/>
+                                                Facebook: <a href="https://www.facebook.com" target="_blank">{{$contactConfig['facebook_name']}}</a>
                                             </div>
                                             <div class="sub-title">
                                             </div>

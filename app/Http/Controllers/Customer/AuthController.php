@@ -126,9 +126,7 @@ class AuthController extends Controller
         ]);
         $user = User::find(Auth::id());
         if (!password_verify($request->old_password, $user->password)) {
-            return back()->withErrors([
-                'old_password' => 'Old password is incorrect.',
-            ]);
+            return back()->with('error', 'Old password is incorrect.');
         }
         $user->password = bcrypt($request->new_password);
         $user->save();

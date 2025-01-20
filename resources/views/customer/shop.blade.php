@@ -39,20 +39,18 @@
                     {{-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Tìm kiếm nâng cao</button> --}}
 
                     <div class="shop-top-control">
-                        <form class="select-item select-form">
+{{--                         <form class="select-item select-form">
                             <span class="title">Sort</span>
                             <select title="sort" id="sort" data-placeholder="12 Products/Page" class="chosen-select">
                                 <option value="1">9 Products/Page</option>
                                 <option value="2">15 Products/Page</option>
                             </select>
-                        </form>
+                        </form> --}}
                         <form class="filter-choice select-form">
                             <span class="title">Sort by</span>
                             <select id="sort-by" title="sort-by" data-placeholder="Price: Low to High" class="chosen-select">
-                                <option value="1">Price: Low to High</option>
-                                <option value="2">Price: High to Low</option>
-                                <option value="3">Sort by popularity</option>
-                                <option value="4">Sort by newness</option>
+                                <option value="newness">Sort By Newness</option>
+                                {{-- <option value="lateness">Sort By Lateness</option> --}}
                             </select>
                         </form>
                         <div class="grid-view-mode">
@@ -99,14 +97,20 @@
                                 <li class="tag-cloud-link" >
                                     <a href="javascript:void(0)" id="tag-all">All</a>
                                 </li>
-                                <li class="tag-cloud-link">
-                                    <a href="javascript:void(0)" id="tag-for_you">For You</a>
-                                </li>
-                                <li class="tag-cloud-link">
+
+{{--                                 <li class="tag-cloud-link">
                                     <a href="javascript:void(0)" id="tag-best_selling">Best Selling</a>
                                 </li>
                                 <li class="tag-cloud-link">
                                     <a href="javascript:void(0)" id="tag-trending">Trending</a>
+                                </li> --}}
+                                @foreach ($categories as $category)
+                                    <li class="tag-cloud-link">
+                                        <a href="javascript:void(0)" id="tag-{{$category->id}}">{{$category->name}}</a>
+                                    </li>
+                                @endforeach
+                                <li class="tag-cloud-link">
+                                    <a href="javascript:void(0)" id="tag-for_you">Gợi ý cho bạn</a>
                                 </li>
                             </ul>
                         </div>

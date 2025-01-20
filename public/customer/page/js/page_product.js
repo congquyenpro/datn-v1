@@ -423,10 +423,10 @@ const PageProduct = {
                                 </div>
                                 <div class="price">
                                     <del>
-                                    ${product.price}
+                                    ${product.price + product.price * product.discount/100}
                                     </del>
                                     <ins>
-                                    ${product.price + product.price * product.discount/100}
+                                    ${product.price}
                                     </ins>
                                 </div>
                             </div>

@@ -226,7 +226,7 @@
                     <div class="row m-b-15">
                         <div class="col-sm-4 col-md-4">
                             <div class="img-news m-t-5">
-                                <img src="https://placehold.co/100x100" alt="" srcset="" width="100%" height="50px">
+                                <img src="{{asset('admin_assets/images/news/News.png')}}" alt="" srcset="" width="100%" height="50px">
                             </div>
                         </div>
                         <div class="col-sm-8 col-md-8">
@@ -238,7 +238,7 @@
                     <div class="row m-b-15">
                         <div class="col-sm-4 col-md-4">
                             <div class="img-news m-t-5">
-                                <img src="https://placehold.co/100x100" alt="" srcset="" width="100%" height="50px">
+                                <img src="{{asset('admin_assets/images/news/News.png')}}" alt="" srcset="" width="100%" height="50px">
                             </div>
                         </div>
                         <div class="col-sm-8 col-md-8">

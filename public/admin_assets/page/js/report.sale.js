@@ -204,7 +204,7 @@ Report = {
     
 
 
-    customerChart : {
+/*     customerChart : {
       init : () => {
         const theme = {
           cyan: '#00bcd4',
@@ -249,7 +249,7 @@ Report = {
       );
       
       }
-    },
+    }, */
 
     product: {
       getBestSeller : () => {
@@ -319,7 +319,7 @@ Report = {
 
 Report.saleReport.init();
 Report.saleReport2.init();
-Report.customerChart.init();
+/* Report.customerChart.init(); */
 
 Report.product.getBestSeller();
 Report.product.getTopViewed();

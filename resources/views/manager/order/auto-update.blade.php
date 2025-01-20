@@ -55,6 +55,7 @@
                             <input type="text" class="form-control" id="inputOrderCode" placeholder="Mã đơn">
                             <button type="submit" class="btn btn-primary m-l-10" id="add-order">Add</button>
                             <button type="submit" class="btn btn-primary m-l-10" id="add-order-2">Database</button>
+                            <button type="submit" class="btn btn-primary m-l-10" id="add-order-3">Auto</button>
                         </div>
                     </div>
                 </form>
@@ -130,82 +131,91 @@
             e.preventDefault();
 
             // Gửi yêu cầu đến API để lấy danh sách đơn hàng
-            $.ajax({
-                url: 'http://127.0.0.1:8000/api/webhook/order/all?order_status=4', // API để lấy tất cả đơn hàng
-                type: 'GET',
-                success: function(response) {
-                    console.log(response);
-                    // Kiểm tra nếu có đơn hàng trong response
-                    if (response) {
-                        // Lặp qua tất cả các đơn hàng và thêm chúng vào queue
-                        response.forEach(function(order) {
-                            var orderCode = order.shipping_code; // Giả sử API trả về "order_code"
-                            $('#order-queue').append(`
-                                <li class="d-flex justify-content-between align-items-center" data-order="${orderCode}">
-                                    Đơn hàng ${orderCode}
-                                    <i class="anticon anticon-close-circle font-size-20"></i>
-                                </li>
-                            `);
-                        });
-                    } else {
-                        alert('Không có đơn hàng nào để hiển thị');
+            function fetchOrders(orderStatus) {
+                $.ajax({
+                    url: `/api/webhook/order/all?order_status=${orderStatus}&order_timeframe=all_months`, // API để lấy tất cả đơn hàng
+                    type: 'GET',
+                    success: function(response) {
+                        console.log(response);
+                        // Kiểm tra nếu có đơn hàng trong response
+                        if (response && response.length > 0) {
+                            // Lặp qua tất cả các đơn hàng và thêm chúng vào queue
+                            response.forEach(function(order) {
+                                var orderCode = order.shipping_code; // Giả sử API trả về "order_code"
+                                $('#order-queue').append(`
+                                    <li class="d-flex justify-content-between align-items-center" data-order="${orderCode}">
+                                        Đơn hàng ${orderCode}
+                                        <i class="anticon anticon-close-circle font-size-20"></i>
+                                    </li>
+                                `);
+                            });
+                        } else {
+                            
+                        }
+                    },
+                    error: function(err) {
+                        alert('Lỗi khi lấy dữ liệu đơn hàng: ' + err.statusText);
                     }
-                },
-                error: function(err) {
-                    alert('Lỗi khi lấy dữ liệu đơn hàng: ' + err.statusText);
-                }
-            });
-            $.ajax({
-                url: 'http://127.0.0.1:8000/api/webhook/order/all?order_status=2', // API để lấy tất cả đơn hàng
-                type: 'GET',
-                success: function(response) {
-                    console.log(response);
-                    // Kiểm tra nếu có đơn hàng trong response
-                    if (response) {
-                        // Lặp qua tất cả các đơn hàng và thêm chúng vào queue
-                        response.forEach(function(order) {
-                            var orderCode = order.shipping_code; // Giả sử API trả về "order_code"
-                            $('#order-queue').append(`
-                                <li class="d-flex justify-content-between align-items-center" data-order="${orderCode}">
-                                    Đơn hàng ${orderCode}
-                                    <i class="anticon anticon-close-circle font-size-20"></i>
-                                </li>
-                            `);
-                        });
-                    } else {
-                        alert('Không có đơn hàng nào để hiển thị');
-                    }
-                },
-                error: function(err) {
-                    alert('Lỗi khi lấy dữ liệu đơn hàng: ' + err.statusText);
-                }
-            });
-            $.ajax({
-                url: 'http://127.0.0.1:8000/api/webhook/order/all?order_status=3', // API để lấy tất cả đơn hàng
-                type: 'GET',
-                success: function(response) {
-                    console.log(response);
-                    // Kiểm tra nếu có đơn hàng trong response
-                    if (response) {
-                        // Lặp qua tất cả các đơn hàng và thêm chúng vào queue
-                        response.forEach(function(order) {
-                            var orderCode = order.shipping_code; // Giả sử API trả về "order_code"
-                            $('#order-queue').append(`
-                                <li class="d-flex justify-content-between align-items-center" data-order="${orderCode}">
-                                    Đơn hàng ${orderCode}
-                                    <i class="anticon anticon-close-circle font-size-20"></i>
-                                </li>
-                            `);
-                        });
-                    } else {
-                        alert('Không có đơn hàng nào để hiển thị');
-                    }
-                },
-                error: function(err) {
-                    alert('Lỗi khi lấy dữ liệu đơn hàng: ' + err.statusText);
-                }
-            });
+                });
+            }
+            // Gọi hàm cho từng trạng thái đơn hàng
+            fetchOrders(2); // Trạng thái đơn hàng = 2
+            fetchOrders(3); // Trạng thái đơn hàng = 3
+            fetchOrders(4); // Trạng thái đơn hàng = 4
+
         });
+
+        $('#add-order-3').click(function(e) {
+            e.preventDefault();
+
+            // Hàm để gửi yêu cầu lấy danh sách đơn hàng
+            function fetchOrders(orderStatus) {
+                $.ajax({
+                    url: `/api/webhook/order/all?order_status=${orderStatus}&order_timeframe=all_months`, // API để lấy tất cả đơn hàng
+                    type: 'GET',
+                    success: function(response) {
+                        console.log(response);
+                        // Kiểm tra nếu có đơn hàng trong response
+                        if (response && response.length > 0) {
+                            // Lặp qua tất cả các đơn hàng và thêm chúng vào queue nếu chưa có
+                            response.forEach(function(order) {
+                                var orderCode = order.shipping_code; // Giả sử API trả về "order_code"
+
+                                // Kiểm tra xem đơn hàng đã tồn tại trong #order-queue chưa
+                                if (!$('#order-queue').find(`li[data-order="${orderCode}"]`).length) {
+                                    $('#order-queue').append(`
+                                        <li class="d-flex justify-content-between align-items-center" data-order="${orderCode}">
+                                            Đơn hàng ${orderCode}
+                                            <i class="anticon anticon-close-circle font-size-20"></i>
+                                        </li>
+                                    `);
+                                }
+                            });
+                        } else {
+                            // Nếu không có đơn hàng, có thể thêm thông báo ở đây nếu cần
+                            console.log('Không có đơn hàng nào');
+                        }
+                    },
+                    error: function(err) {
+                        alert('Lỗi khi lấy dữ liệu đơn hàng: ' + err.statusText);
+                    }
+                });
+            }
+
+            // Gọi hàm cho từng trạng thái đơn hàng
+            fetchOrders(2); // Trạng thái đơn hàng = 2
+            fetchOrders(3); // Trạng thái đơn hàng = 3
+            fetchOrders(4); // Trạng thái đơn hàng = 4
+
+            // Thiết lập tự động cập nhật sau mỗi 60 giây (60000ms)
+            setInterval(function() {
+                fetchOrders(2); // Trạng thái đơn hàng = 2
+                fetchOrders(3); // Trạng thái đơn hàng = 3
+                fetchOrders(4); // Trạng thái đơn hàng = 4
+            }, 60000); // Cập nhật mỗi 60 giây
+        });
+
+
         
 
     
@@ -215,7 +225,7 @@
             if (orderQueue.length > 0) {
                 var orderCode = $(orderQueue[0]).data('order');
                 $.ajax({
-                    url: 'http://127.0.0.1:8000/api/webhook/order?order_code=' + orderCode,
+                    url: '/api/webhook/order?order_code=' + orderCode,
                     type: 'GET',
                     success: function(data) {
                         // Cập nhật giao diện với kết quả từ server

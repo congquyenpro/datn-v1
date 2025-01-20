@@ -25,22 +25,10 @@
                     <div class="d-md-flex">
                         <div class="m-b-10 m-r-15">
                             <select class="custom-select" style="min-width: 180px;">
-                                <option selected>Catergory</option>
-                                <option value="all">All</option>
-                                <option value="Burberry">Burberry</option>
-                                <option value="Calvin Klein">Calvin Klein</option>
-                                <option value="Christian Dior">Christian Dior</option>
+                                <option selected>Tất cả</option>
                             </select>
                         </div>
-                        <div class="m-b-10">
-                            <select class="custom-select" style="min-width: 180px;">
-                                <option selected>Status</option>
-                                <option value="all">All</option>
-                                <option value="inStock">In Stock</option>
-                                <option value="outOfStock">Out of Stock</option>
-                                <option value="outOfStock">Trending</option>
-                            </select>
-                        </div>
+
                     </div>
                 </div>
                 <div class="col-lg-4 text-right">
@@ -136,12 +124,12 @@
                             <input type="text" name="end_date" class="form-control" id="inputEndTime" placeholder="ngày/tháng/năm" required onchange="validateDates()" >
                         </div>
                     </div>
-                    <div class="form-group row">                        
+{{--                     <div class="form-group row">                        
                         <label for="inputEndTime" class="col-sm-2 col-form-label">Mã khuyến mại (Nếu có)</label>
                         <div class="col-sm-10">
                             <input type="text" name="code" class="form-control" id="inputEnđate" placeholder="Mã khuyến mãi">
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="form-group row">                        
                         <label for="inputEndTime" class="col-sm-2 col-form-label">Chiết khấu</label>
                         <div class="col-sm-10">

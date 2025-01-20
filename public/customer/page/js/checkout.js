@@ -62,7 +62,7 @@ const Checkout = {
                             $('#province').val(data.address.provinceId).trigger("chosen:updated");
     
                             // Load districts based on the selected province
-                            Checkout.getAddresses.loadDistricts(data.address.provinceId, data.address.districtId);
+                            Checkout.getAddresses.loadDistricts(data.address.provinceId, data.address.districtId, data.address.wardCode);
     
                             // Set the ward based on the user's data
                             Checkout.getAddresses.loadWards(data.address.districtId, data.address.wardCode);
@@ -92,7 +92,7 @@ const Checkout = {
             });
         },
     
-        loadDistricts: (provinceId, selectedDistrictId = null) => {
+        loadDistricts: (provinceId, selectedDistrictId = null, selectedWardCode = null) => {
             Api.Address.getDistrict(provinceId).done(function(data) {
                 console.log(data);
                 $('#district').empty(); // Clear existing options
@@ -105,7 +105,7 @@ const Checkout = {
                     // Set the selected district if provided
                     if (selectedDistrictId) {
                         $('#district').val(selectedDistrictId).trigger("chosen:updated");
-                        Checkout.getAddresses.loadWards(selectedDistrictId); // Load wards based on the selected district
+                        Checkout.getAddresses.loadWards(selectedDistrictId, selectedWardCode); // Load wards based on the selected district
                     }
     
                     // Event listener for district change
@@ -156,6 +156,14 @@ const Checkout = {
                         return;
                     }
                 }
+
+                //Kiểm tra sdt không hợp lệ (Không phải dạng số, không đủ 10 số ?? thay đổi theo thời gian)
+                var phone = $('#phone').val();
+                if (isNaN(phone) || phone.length != 10) {
+                    alert('Số điện thoại không hợp lệ');
+                    return;
+                }
+
                 var order_list = JSON.parse(localStorage.getItem('cart'));
                 //Kiểm tra nếu giỏ hàng trống thông báo giỏ hàng trống
                 if (order_list == null || order_list.length == 0) {

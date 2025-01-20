@@ -52,7 +52,8 @@
         <div class="container">
             <div class="top-bar-left">
                 <div class="header-message">
-                   BKPerfume - Discover your signature scent
+                  {{--  BKPerfume - Discover your signature scent --}}
+                   {{$template_config['slogan'] ??''}}
                 </div>
             </div>
             <div class="top-bar-right">
@@ -290,6 +291,12 @@
                                                     <p class="form-row form-row-wide">
                                                         <input type="password" class="input-text" placeholder="Confirm password" name="confirm_password" required>
                                                     </p>
+                                                    <p class="form-row form-row-wide">
+                                                    
+                                                            <input type="checkbox" id="cb2" name="agree_policy" required>
+                                                            <label for="cb2" class="label-text">Tôi đồng ý với <span>Điều khoản</span></label>
+                                                        
+                                                    </p>
                                                     <p class="form-row">
                                                         <input type="submit" class="button" value="Register">
                                                     </p>
@@ -484,7 +491,7 @@
                                                 <a href="/tra-cuu-don">Tra cứu đơn hàng</a>
                                             </li>
                                             <li class="menu-item">
-                                                <a href="#">Chính sách bán hàng</a>
+                                                <a href="/blogs/chinh-sach-ban-hang">Chính sách bán hàng</a>
                                             </li>
                                         </ul>
                                     </li>
