@@ -1,3 +1,60 @@
+## E-commerce Website for Perfume Products
+
+### 🚀 Features
+
+### ✨ User Features
+
+Purchase Products – Browse and buy perfumes easily, with online payment via SePay API
+
+Order History Tracking – View and manage past orders.
+
+Product Search – Search for perfumes using keywords and filters.
+
+Personalized Recommendations – AI-based suggestion system and chatbot assistance.
+
+### ✨ Admin Features
+
+Product Management – Add, update, and delete products, categories or sales promotions
+
+Post Management – Manage blog posts or sales policies
+
+Order Management – Track and process customer orders, integrate with shipping partners (Giao Hàng Nhanh).
+
+Inventory Management – Monitor and update stock levels.
+
+Customer Management – View purchase history, deactivate accounts.
+
+System Management – Configure website settings, roles, and permissions.
+
+Reports & Analytics – Generate sales reports, order statistics, and transaction statistics.
+
+### 🛠 Technologies Used
+
+Backend: Laravel (PHP), FastAPI (Python), Botpress (for Chatbot) 
+
+Frontend: HTML, CSS, JavaScript,  Ajax, jQuery, Bootstrap
+
+Database: MySQL
+
+
+### 🔗 Live Demo: https://bkperfume.asia/
+
+### 🔑 Test Accounts
+
+**Customer Account:
+
+Email: hust@gmail.com
+
+Password: hust
+
+**Admin Account:
+
+Admin Panel: https://bkperfume.asia/admin
+
+Email: admin@gmail.com
+
+Password: admin
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
